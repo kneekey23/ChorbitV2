@@ -1,0 +1,509 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		816609D91BE0B6BD008B797E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609D81BE0B6BD008B797E /* AppDelegate.swift */; };
+		816609DB1BE0B6BD008B797E /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609DA1BE0B6BD008B797E /* MasterViewController.swift */; };
+		816609DD1BE0B6BD008B797E /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609DC1BE0B6BD008B797E /* DetailViewController.swift */; };
+		816609E01BE0B6BD008B797E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 816609DE1BE0B6BD008B797E /* Main.storyboard */; };
+		816609E21BE0B6BD008B797E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 816609E11BE0B6BD008B797E /* Assets.xcassets */; };
+		816609E51BE0B6BD008B797E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 816609E31BE0B6BD008B797E /* LaunchScreen.storyboard */; };
+		816609F01BE0B6BD008B797E /* ChorbitV2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609EF1BE0B6BD008B797E /* ChorbitV2Tests.swift */; };
+		816609FB1BE0B6BD008B797E /* ChorbitV2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609FA1BE0B6BD008B797E /* ChorbitV2UITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		816609EC1BE0B6BD008B797E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 816609CD1BE0B6BD008B797E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 816609D41BE0B6BD008B797E;
+			remoteInfo = ChorbitV2;
+		};
+		816609F71BE0B6BD008B797E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 816609CD1BE0B6BD008B797E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 816609D41BE0B6BD008B797E;
+			remoteInfo = ChorbitV2;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		816609D51BE0B6BD008B797E /* ChorbitV2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChorbitV2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		816609D81BE0B6BD008B797E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		816609DA1BE0B6BD008B797E /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		816609DC1BE0B6BD008B797E /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		816609DF1BE0B6BD008B797E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		816609E11BE0B6BD008B797E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		816609E41BE0B6BD008B797E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		816609E61BE0B6BD008B797E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		816609EB1BE0B6BD008B797E /* ChorbitV2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChorbitV2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		816609EF1BE0B6BD008B797E /* ChorbitV2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChorbitV2Tests.swift; sourceTree = "<group>"; };
+		816609F11BE0B6BD008B797E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		816609F61BE0B6BD008B797E /* ChorbitV2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChorbitV2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		816609FA1BE0B6BD008B797E /* ChorbitV2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChorbitV2UITests.swift; sourceTree = "<group>"; };
+		816609FC1BE0B6BD008B797E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		816609D21BE0B6BD008B797E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		816609E81BE0B6BD008B797E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		816609F31BE0B6BD008B797E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		816609CC1BE0B6BD008B797E = {
+			isa = PBXGroup;
+			children = (
+				816609D71BE0B6BD008B797E /* ChorbitV2 */,
+				816609EE1BE0B6BD008B797E /* ChorbitV2Tests */,
+				816609F91BE0B6BD008B797E /* ChorbitV2UITests */,
+				816609D61BE0B6BD008B797E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		816609D61BE0B6BD008B797E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				816609D51BE0B6BD008B797E /* ChorbitV2.app */,
+				816609EB1BE0B6BD008B797E /* ChorbitV2Tests.xctest */,
+				816609F61BE0B6BD008B797E /* ChorbitV2UITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		816609D71BE0B6BD008B797E /* ChorbitV2 */ = {
+			isa = PBXGroup;
+			children = (
+				816609D81BE0B6BD008B797E /* AppDelegate.swift */,
+				816609DA1BE0B6BD008B797E /* MasterViewController.swift */,
+				816609DC1BE0B6BD008B797E /* DetailViewController.swift */,
+				816609DE1BE0B6BD008B797E /* Main.storyboard */,
+				816609E11BE0B6BD008B797E /* Assets.xcassets */,
+				816609E31BE0B6BD008B797E /* LaunchScreen.storyboard */,
+				816609E61BE0B6BD008B797E /* Info.plist */,
+			);
+			path = ChorbitV2;
+			sourceTree = "<group>";
+		};
+		816609EE1BE0B6BD008B797E /* ChorbitV2Tests */ = {
+			isa = PBXGroup;
+			children = (
+				816609EF1BE0B6BD008B797E /* ChorbitV2Tests.swift */,
+				816609F11BE0B6BD008B797E /* Info.plist */,
+			);
+			path = ChorbitV2Tests;
+			sourceTree = "<group>";
+		};
+		816609F91BE0B6BD008B797E /* ChorbitV2UITests */ = {
+			isa = PBXGroup;
+			children = (
+				816609FA1BE0B6BD008B797E /* ChorbitV2UITests.swift */,
+				816609FC1BE0B6BD008B797E /* Info.plist */,
+			);
+			path = ChorbitV2UITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		816609D41BE0B6BD008B797E /* ChorbitV2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 816609FF1BE0B6BD008B797E /* Build configuration list for PBXNativeTarget "ChorbitV2" */;
+			buildPhases = (
+				816609D11BE0B6BD008B797E /* Sources */,
+				816609D21BE0B6BD008B797E /* Frameworks */,
+				816609D31BE0B6BD008B797E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ChorbitV2;
+			productName = ChorbitV2;
+			productReference = 816609D51BE0B6BD008B797E /* ChorbitV2.app */;
+			productType = "com.apple.product-type.application";
+		};
+		816609EA1BE0B6BD008B797E /* ChorbitV2Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81660A021BE0B6BD008B797E /* Build configuration list for PBXNativeTarget "ChorbitV2Tests" */;
+			buildPhases = (
+				816609E71BE0B6BD008B797E /* Sources */,
+				816609E81BE0B6BD008B797E /* Frameworks */,
+				816609E91BE0B6BD008B797E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				816609ED1BE0B6BD008B797E /* PBXTargetDependency */,
+			);
+			name = ChorbitV2Tests;
+			productName = ChorbitV2Tests;
+			productReference = 816609EB1BE0B6BD008B797E /* ChorbitV2Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		816609F51BE0B6BD008B797E /* ChorbitV2UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81660A051BE0B6BD008B797E /* Build configuration list for PBXNativeTarget "ChorbitV2UITests" */;
+			buildPhases = (
+				816609F21BE0B6BD008B797E /* Sources */,
+				816609F31BE0B6BD008B797E /* Frameworks */,
+				816609F41BE0B6BD008B797E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				816609F81BE0B6BD008B797E /* PBXTargetDependency */,
+			);
+			name = ChorbitV2UITests;
+			productName = ChorbitV2UITests;
+			productReference = 816609F61BE0B6BD008B797E /* ChorbitV2UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		816609CD1BE0B6BD008B797E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = shortkey;
+				TargetAttributes = {
+					816609D41BE0B6BD008B797E = {
+						CreatedOnToolsVersion = 7.1;
+					};
+					816609EA1BE0B6BD008B797E = {
+						CreatedOnToolsVersion = 7.1;
+						TestTargetID = 816609D41BE0B6BD008B797E;
+					};
+					816609F51BE0B6BD008B797E = {
+						CreatedOnToolsVersion = 7.1;
+						TestTargetID = 816609D41BE0B6BD008B797E;
+					};
+				};
+			};
+			buildConfigurationList = 816609D01BE0B6BD008B797E /* Build configuration list for PBXProject "ChorbitV2" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 816609CC1BE0B6BD008B797E;
+			productRefGroup = 816609D61BE0B6BD008B797E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				816609D41BE0B6BD008B797E /* ChorbitV2 */,
+				816609EA1BE0B6BD008B797E /* ChorbitV2Tests */,
+				816609F51BE0B6BD008B797E /* ChorbitV2UITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		816609D31BE0B6BD008B797E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				816609E51BE0B6BD008B797E /* LaunchScreen.storyboard in Resources */,
+				816609E21BE0B6BD008B797E /* Assets.xcassets in Resources */,
+				816609E01BE0B6BD008B797E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		816609E91BE0B6BD008B797E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		816609F41BE0B6BD008B797E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		816609D11BE0B6BD008B797E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				816609DD1BE0B6BD008B797E /* DetailViewController.swift in Sources */,
+				816609DB1BE0B6BD008B797E /* MasterViewController.swift in Sources */,
+				816609D91BE0B6BD008B797E /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		816609E71BE0B6BD008B797E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				816609F01BE0B6BD008B797E /* ChorbitV2Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		816609F21BE0B6BD008B797E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				816609FB1BE0B6BD008B797E /* ChorbitV2UITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		816609ED1BE0B6BD008B797E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 816609D41BE0B6BD008B797E /* ChorbitV2 */;
+			targetProxy = 816609EC1BE0B6BD008B797E /* PBXContainerItemProxy */;
+		};
+		816609F81BE0B6BD008B797E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 816609D41BE0B6BD008B797E /* ChorbitV2 */;
+			targetProxy = 816609F71BE0B6BD008B797E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		816609DE1BE0B6BD008B797E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				816609DF1BE0B6BD008B797E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		816609E31BE0B6BD008B797E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				816609E41BE0B6BD008B797E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		816609FD1BE0B6BD008B797E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		816609FE1BE0B6BD008B797E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		81660A001BE0B6BD008B797E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = ChorbitV2/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shortkey.ChorbitV2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		81660A011BE0B6BD008B797E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = ChorbitV2/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shortkey.ChorbitV2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		81660A031BE0B6BD008B797E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = ChorbitV2Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shortkey.ChorbitV2Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ChorbitV2.app/ChorbitV2";
+			};
+			name = Debug;
+		};
+		81660A041BE0B6BD008B797E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = ChorbitV2Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shortkey.ChorbitV2Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ChorbitV2.app/ChorbitV2";
+			};
+			name = Release;
+		};
+		81660A061BE0B6BD008B797E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = ChorbitV2UITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shortkey.ChorbitV2UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = ChorbitV2;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		81660A071BE0B6BD008B797E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = ChorbitV2UITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.shortkey.ChorbitV2UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = ChorbitV2;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		816609D01BE0B6BD008B797E /* Build configuration list for PBXProject "ChorbitV2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				816609FD1BE0B6BD008B797E /* Debug */,
+				816609FE1BE0B6BD008B797E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		816609FF1BE0B6BD008B797E /* Build configuration list for PBXNativeTarget "ChorbitV2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81660A001BE0B6BD008B797E /* Debug */,
+				81660A011BE0B6BD008B797E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		81660A021BE0B6BD008B797E /* Build configuration list for PBXNativeTarget "ChorbitV2Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81660A031BE0B6BD008B797E /* Debug */,
+				81660A041BE0B6BD008B797E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		81660A051BE0B6BD008B797E /* Build configuration list for PBXNativeTarget "ChorbitV2UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81660A061BE0B6BD008B797E /* Debug */,
+				81660A071BE0B6BD008B797E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 816609CD1BE0B6BD008B797E /* Project object */;
+}
