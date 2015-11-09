@@ -34,6 +34,10 @@ class BasicMapAnnotation : MKAnnotation {
         coords = value;
     }
     
+    init () {
+        
+    }
+    
     init (coordinate: CLLocationCoordinate2D, title: String, subtitle: String, placeId: String, errandText: String, errandOrder: Int?) {
         self.coords = coordinate
         self.title = title

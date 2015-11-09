@@ -14,6 +14,10 @@ class Copyright {
     var imageUrl: String = ""
     var imageAltText: String = ""
     
+    init () {
+        
+    }
+    
     init (text: String, imageUrl: String, imageAltText: String) {
         self.text = text
         self.imageUrl = imageUrl

@@ -19,6 +19,10 @@ class Coordinates {
     var errandText: String = ""
     var errandOrder: Int? = 0
     
+    init () {
+        
+    }
+    
     init (lat: Double, long: Double, title: String, subtitle: String, errandTermId: Int, placeId: String, errandText: String, errandOrder: Int?) {
         self.lat = lat
         self.long = long

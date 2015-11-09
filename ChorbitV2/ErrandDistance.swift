@@ -10,9 +10,13 @@ import Foundation
 
 class ErrandDistance {
     
-    var locations: [Coordinates] = Coordinates()
+    var locations: [Coordinates] = [Coordinates()]
     var distances: [[Double]] = [[0.0]]
     var startIndex: Int = 0
+    
+    init () {
+        
+    }
     
     init (locations: [Coordinates], distances: [[Double]], startIndex: Int) {
         self.locations = locations

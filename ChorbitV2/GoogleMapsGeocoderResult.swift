@@ -13,6 +13,10 @@ public class GoogleMapsGeocoderResult
     var results: [Result] = [Result()]
     var status: String = ""
     
+    init () {
+        
+    }
+    
     init (results: [Result], status: String) {
         self.results = results
         self.status = status
@@ -23,6 +27,10 @@ public class GoogleMapsGeocoderResult
         var long_name: String = ""
         var short_name: String = ""
         var types: [String] = [""]
+        
+        init () {
+        
+        }
         
         init (long_name: String, short_name: String, types: [String]) {
             self.long_name = long_name
@@ -35,18 +43,40 @@ public class GoogleMapsGeocoderResult
     {
         var lat: Double = 0.0
         var lng: Double = 0.0
+        
+        init (lat: Double, lng: Double) {
+            self.lat = lat
+            self.lng = lng
+        }
+        
+        init () {
+            
+        }
     }
     
     public class Southwest
     {
         var lat: Double = 0.0
         var lng: Double = 0.0
+        
+        init (lat: Double, lng: Double) {
+            self.lat = lat
+            self.lng = lng
+        }
+        
+        init () {
+            
+        }
     }
     
     public class Bounds
     {
         var northeast: Northeast = Northeast()
         var southwest: Southwest = Southwest()
+        
+        init () {
+            
+        }
         
         init (northeast: Northeast, southwest: Southwest) {
             self.northeast = northeast
@@ -58,24 +88,55 @@ public class GoogleMapsGeocoderResult
     {
         var lat: Double = 0.0
         var lng: Double = 0.0
+        
+        init (lat: Double, lng: Double) {
+            self.lat = lat
+            self.lng = lng
+        }
+        
+        init () {
+            
+        }
     }
     
     public class Northeast2
     {
         var lat: Double = 0.0
         var lng: Double = 0.0
+        
+        init (lat: Double, lng: Double) {
+            self.lat = lat
+            self.lng = lng
+        }
+        
+        init () {
+            
+        }
     }
     
     public class Southwest2
     {
         var lat: Double = 0.0
         var lng: Double = 0.0
+        
+        init (lat: Double, lng: Double) {
+            self.lat = lat
+            self.lng = lng
+        }
+        
+        init () {
+            
+        }
     }
     
     public class Viewport
     {
         var northeast: Northeast2 = Northeast2()
         var southwest: Southwest2 = Southwest2()
+        
+        init () {
+            
+        }
         
         init (northeast: Northeast2, southwest: Southwest2) {
             self.northeast = northeast
@@ -89,6 +150,10 @@ public class GoogleMapsGeocoderResult
         var location: Location = Location()
         var location_type: String = ""
         var viewport: Viewport = Viewport()
+        
+        init () {
+            
+        }
         
         init (bounds: Bounds, location: Location, location_type: String, viewport: Viewport) {
             self.bounds = bounds
@@ -106,6 +171,10 @@ public class GoogleMapsGeocoderResult
         var partial_match: Bool = false
         var place_id: String = ""
         var types: [String] = [""]
+        
+        init () {
+            
+        }
         
         init (address_components: [AddressComponent], formatted_address: String, geometry: Geometry, partial_match: Bool, place_id: String, types: [String]) {
             self.address_components = address_components

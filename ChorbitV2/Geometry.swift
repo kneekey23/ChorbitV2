@@ -12,6 +12,10 @@ class Geometry {
     
     var location: Location = Location()
     
+    init () {
+        
+    }
+    
     init (location: Location) {
         self.location = location
     }

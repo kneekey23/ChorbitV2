@@ -13,7 +13,11 @@ class ErrandResults {
     var locationSearchResults: NearbySearch = NearbySearch()
     var errandTermId: Int = 0
     var errandText: String = ""
-    var usedPlaceIds: [String] = ""
+    var usedPlaceIds: [String] = [""]
+    
+    init () {
+        
+    }
     
     init (searchResults: NearbySearch, errandTermId: Int, usedPlaceIds: [String], errandText: String)
     {

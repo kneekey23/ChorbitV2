@@ -17,9 +17,9 @@ class RouteService {
     
     func getOptimizedRoute (origin: Coordinates, errands: [[Coordinates]], destination: Coordinates) -> [Coordinates] {
         
-        var errandA: ErrandDistance = ErrandDistance();
-        var errandB: ErrandDistance = ErrandDistance();
-        var errandC: ErrandDistance = ErrandDistance();
+        let errandA: ErrandDistance = ErrandDistance();
+        let errandB: ErrandDistance = ErrandDistance();
+        let errandC: ErrandDistance = ErrandDistance();
         var bestRoute: [Coordinates];
         var bestRouteSequence: [Int];
         var bestRouteCombo: [Coordinates];
@@ -40,5 +40,11 @@ class RouteService {
         var routeTest: RouteTest  = RouteTest();
         var param: String  = "";
         
+        let allErrandLocations: [Coordinates] = errands.flatMap {$0};
+        
+        
+        
+        
+        return bestRoute;
     }
 }
