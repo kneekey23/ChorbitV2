@@ -15,6 +15,16 @@
 		816609E51BE0B6BD008B797E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 816609E31BE0B6BD008B797E /* LaunchScreen.storyboard */; };
 		816609F01BE0B6BD008B797E /* ChorbitV2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609EF1BE0B6BD008B797E /* ChorbitV2Tests.swift */; };
 		816609FB1BE0B6BD008B797E /* ChorbitV2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609FA1BE0B6BD008B797E /* ChorbitV2UITests.swift */; };
+		8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294201BEFFA3A0067059C /* RouteService.swift */; settings = {ASSET_TAGS = (); }; };
+		8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294241BF00D3A0067059C /* Coordinates.swift */; settings = {ASSET_TAGS = (); }; };
+		8B2294271BF011DE0067059C /* BasicMapAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294261BF011DE0067059C /* BasicMapAnnotation.swift */; settings = {ASSET_TAGS = (); }; };
+		8B2294291BF017210067059C /* Copyright.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294281BF017210067059C /* Copyright.swift */; settings = {ASSET_TAGS = (); }; };
+		8B22942B1BF017AD0067059C /* ErrandDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22942A1BF017AD0067059C /* ErrandDistance.swift */; settings = {ASSET_TAGS = (); }; };
+		8B22942D1BF01C1F0067059C /* ErrandResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22942C1BF01C1F0067059C /* ErrandResults.swift */; settings = {ASSET_TAGS = (); }; };
+		8B22942F1BF01DC80067059C /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22942E1BF01DC80067059C /* Geometry.swift */; settings = {ASSET_TAGS = (); }; };
+		8B2294311BF01E570067059C /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294301BF01E570067059C /* Location.swift */; settings = {ASSET_TAGS = (); }; };
+		8B2294331BF01F820067059C /* GoogleMapsGeocoderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294321BF01F820067059C /* GoogleMapsGeocoderResult.swift */; settings = {ASSET_TAGS = (); }; };
+		8B2294371BF02A3C0067059C /* RouteTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294361BF02A3C0067059C /* RouteTest.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +59,16 @@
 		816609F61BE0B6BD008B797E /* ChorbitV2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChorbitV2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		816609FA1BE0B6BD008B797E /* ChorbitV2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChorbitV2UITests.swift; sourceTree = "<group>"; };
 		816609FC1BE0B6BD008B797E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8B2294201BEFFA3A0067059C /* RouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteService.swift; sourceTree = "<group>"; };
+		8B2294241BF00D3A0067059C /* Coordinates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinates.swift; sourceTree = "<group>"; };
+		8B2294261BF011DE0067059C /* BasicMapAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicMapAnnotation.swift; sourceTree = "<group>"; };
+		8B2294281BF017210067059C /* Copyright.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Copyright.swift; sourceTree = "<group>"; };
+		8B22942A1BF017AD0067059C /* ErrandDistance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrandDistance.swift; sourceTree = "<group>"; };
+		8B22942C1BF01C1F0067059C /* ErrandResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrandResults.swift; sourceTree = "<group>"; };
+		8B22942E1BF01DC80067059C /* Geometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
+		8B2294301BF01E570067059C /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		8B2294321BF01F820067059C /* GoogleMapsGeocoderResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapsGeocoderResult.swift; sourceTree = "<group>"; };
+		8B2294361BF02A3C0067059C /* RouteTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +119,8 @@
 		816609D71BE0B6BD008B797E /* ChorbitV2 */ = {
 			isa = PBXGroup;
 			children = (
+				8B2294231BF00CB50067059C /* Models */,
+				8B2294221BEFFA470067059C /* Services */,
 				816609D81BE0B6BD008B797E /* AppDelegate.swift */,
 				816609DA1BE0B6BD008B797E /* MasterViewController.swift */,
 				816609DC1BE0B6BD008B797E /* DetailViewController.swift */,
@@ -126,6 +148,30 @@
 				816609FC1BE0B6BD008B797E /* Info.plist */,
 			);
 			path = ChorbitV2UITests;
+			sourceTree = "<group>";
+		};
+		8B2294221BEFFA470067059C /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8B2294201BEFFA3A0067059C /* RouteService.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		8B2294231BF00CB50067059C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8B2294241BF00D3A0067059C /* Coordinates.swift */,
+				8B2294261BF011DE0067059C /* BasicMapAnnotation.swift */,
+				8B2294281BF017210067059C /* Copyright.swift */,
+				8B22942A1BF017AD0067059C /* ErrandDistance.swift */,
+				8B22942C1BF01C1F0067059C /* ErrandResults.swift */,
+				8B22942E1BF01DC80067059C /* Geometry.swift */,
+				8B2294301BF01E570067059C /* Location.swift */,
+				8B2294321BF01F820067059C /* GoogleMapsGeocoderResult.swift */,
+				8B2294361BF02A3C0067059C /* RouteTest.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,8 +306,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				816609DD1BE0B6BD008B797E /* DetailViewController.swift in Sources */,
+				8B2294371BF02A3C0067059C /* RouteTest.swift in Sources */,
+				8B2294311BF01E570067059C /* Location.swift in Sources */,
+				8B2294331BF01F820067059C /* GoogleMapsGeocoderResult.swift in Sources */,
+				8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */,
+				8B2294271BF011DE0067059C /* BasicMapAnnotation.swift in Sources */,
+				8B22942D1BF01C1F0067059C /* ErrandResults.swift in Sources */,
 				816609DB1BE0B6BD008B797E /* MasterViewController.swift in Sources */,
+				8B2294291BF017210067059C /* Copyright.swift in Sources */,
 				816609D91BE0B6BD008B797E /* AppDelegate.swift in Sources */,
+				8B22942B1BF017AD0067059C /* ErrandDistance.swift in Sources */,
+				8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */,
+				8B22942F1BF01DC80067059C /* Geometry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,6 +542,7 @@
 				81660A011BE0B6BD008B797E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		81660A021BE0B6BD008B797E /* Build configuration list for PBXNativeTarget "ChorbitV2Tests" */ = {
 			isa = XCConfigurationList;
@@ -494,6 +551,7 @@
 				81660A041BE0B6BD008B797E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		81660A051BE0B6BD008B797E /* Build configuration list for PBXNativeTarget "ChorbitV2UITests" */ = {
 			isa = XCConfigurationList;
@@ -502,6 +560,7 @@
 				81660A071BE0B6BD008B797E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
