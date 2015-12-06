@@ -7,14 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4597898F88109FBC05793991 /* Pods_ChorbitV2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */; };
+		8146768F1C0B9C0500EA06F3 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8146768E1C0B9C0500EA06F3 /* MainViewController.swift */; };
+		814676931C0BA56000EA06F3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814676921C0BA56000EA06F3 /* MapViewController.swift */; };
+		814C98D21C0D63C500F008C4 /* GooglePlacesAutoComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814C98D11C0D63C500F008C4 /* GooglePlacesAutoComplete.swift */; };
+		814C98D41C0D6D5900F008C4 /* GooglePlacesAutocomplete.xib in Resources */ = {isa = PBXBuildFile; fileRef = 814C98D31C0D6D5900F008C4 /* GooglePlacesAutocomplete.xib */; };
+		814C98D61C0D77E600F008C4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814C98D51C0D77E600F008C4 /* Extensions.swift */; };
 		816609D91BE0B6BD008B797E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609D81BE0B6BD008B797E /* AppDelegate.swift */; };
-		816609DB1BE0B6BD008B797E /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609DA1BE0B6BD008B797E /* MasterViewController.swift */; };
-		816609DD1BE0B6BD008B797E /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609DC1BE0B6BD008B797E /* DetailViewController.swift */; };
 		816609E01BE0B6BD008B797E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 816609DE1BE0B6BD008B797E /* Main.storyboard */; };
 		816609E21BE0B6BD008B797E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 816609E11BE0B6BD008B797E /* Assets.xcassets */; };
 		816609E51BE0B6BD008B797E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 816609E31BE0B6BD008B797E /* LaunchScreen.storyboard */; };
 		816609F01BE0B6BD008B797E /* ChorbitV2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609EF1BE0B6BD008B797E /* ChorbitV2Tests.swift */; };
 		816609FB1BE0B6BD008B797E /* ChorbitV2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609FA1BE0B6BD008B797E /* ChorbitV2UITests.swift */; };
+		817139741C012C4700BA541F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139731C012C4700BA541F /* SearchViewController.swift */; };
+		817139761C012CEE00BA541F /* FeaturedRouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139751C012CEE00BA541F /* FeaturedRouteController.swift */; };
+		817139781C012D1C00BA541F /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139771C012D1C00BA541F /* UserProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,10 +42,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		050E9BC6060A6D7D80C26E0B /* Pods-ChorbitV2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChorbitV2.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2.debug.xcconfig"; sourceTree = "<group>"; };
+		8146768E1C0B9C0500EA06F3 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		814676921C0BA56000EA06F3 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		814C98D11C0D63C500F008C4 /* GooglePlacesAutoComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GooglePlacesAutoComplete.swift; sourceTree = "<group>"; };
+		814C98D31C0D6D5900F008C4 /* GooglePlacesAutocomplete.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GooglePlacesAutocomplete.xib; sourceTree = "<group>"; };
+		814C98D51C0D77E600F008C4 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		816609D51BE0B6BD008B797E /* ChorbitV2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChorbitV2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		816609D81BE0B6BD008B797E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		816609DA1BE0B6BD008B797E /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
-		816609DC1BE0B6BD008B797E /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		816609DF1BE0B6BD008B797E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		816609E11BE0B6BD008B797E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		816609E41BE0B6BD008B797E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -49,6 +60,11 @@
 		816609F61BE0B6BD008B797E /* ChorbitV2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChorbitV2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		816609FA1BE0B6BD008B797E /* ChorbitV2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChorbitV2UITests.swift; sourceTree = "<group>"; };
 		816609FC1BE0B6BD008B797E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		817139731C012C4700BA541F /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		817139751C012CEE00BA541F /* FeaturedRouteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturedRouteController.swift; sourceTree = "<group>"; };
+		817139771C012D1C00BA541F /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChorbitV2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E6F9E8513D70B29EF3C0119 /* Pods-ChorbitV2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChorbitV2.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4597898F88109FBC05793991 /* Pods_ChorbitV2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +93,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		273B16F5D2D3B890C788982D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		816609CC1BE0B6BD008B797E = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +108,8 @@
 				816609EE1BE0B6BD008B797E /* ChorbitV2Tests */,
 				816609F91BE0B6BD008B797E /* ChorbitV2UITests */,
 				816609D61BE0B6BD008B797E /* Products */,
+				A0E03B18FA6956A06A73A0CD /* Pods */,
+				273B16F5D2D3B890C788982D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,12 +127,18 @@
 			isa = PBXGroup;
 			children = (
 				816609D81BE0B6BD008B797E /* AppDelegate.swift */,
-				816609DA1BE0B6BD008B797E /* MasterViewController.swift */,
-				816609DC1BE0B6BD008B797E /* DetailViewController.swift */,
 				816609DE1BE0B6BD008B797E /* Main.storyboard */,
+				814676921C0BA56000EA06F3 /* MapViewController.swift */,
 				816609E11BE0B6BD008B797E /* Assets.xcassets */,
 				816609E31BE0B6BD008B797E /* LaunchScreen.storyboard */,
 				816609E61BE0B6BD008B797E /* Info.plist */,
+				817139731C012C4700BA541F /* SearchViewController.swift */,
+				8146768E1C0B9C0500EA06F3 /* MainViewController.swift */,
+				817139751C012CEE00BA541F /* FeaturedRouteController.swift */,
+				817139771C012D1C00BA541F /* UserProfileViewController.swift */,
+				814C98D11C0D63C500F008C4 /* GooglePlacesAutoComplete.swift */,
+				814C98D31C0D6D5900F008C4 /* GooglePlacesAutocomplete.xib */,
+				814C98D51C0D77E600F008C4 /* Extensions.swift */,
 			);
 			path = ChorbitV2;
 			sourceTree = "<group>";
@@ -128,6 +161,15 @@
 			path = ChorbitV2UITests;
 			sourceTree = "<group>";
 		};
+		A0E03B18FA6956A06A73A0CD /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				050E9BC6060A6D7D80C26E0B /* Pods-ChorbitV2.debug.xcconfig */,
+				9E6F9E8513D70B29EF3C0119 /* Pods-ChorbitV2.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -135,9 +177,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 816609FF1BE0B6BD008B797E /* Build configuration list for PBXNativeTarget "ChorbitV2" */;
 			buildPhases = (
+				C72059F25D6222D3143F7C25 /* Check Pods Manifest.lock */,
 				816609D11BE0B6BD008B797E /* Sources */,
 				816609D21BE0B6BD008B797E /* Frameworks */,
 				816609D31BE0B6BD008B797E /* Resources */,
+				64CC488D098D0074C4755EC8 /* Embed Pods Frameworks */,
+				4A43AB32A4494E4EEE454FD3 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -196,6 +241,12 @@
 				TargetAttributes = {
 					816609D41BE0B6BD008B797E = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 9EVWV3K6BK;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					816609EA1BE0B6BD008B797E = {
 						CreatedOnToolsVersion = 7.1;
@@ -234,6 +285,7 @@
 			files = (
 				816609E51BE0B6BD008B797E /* LaunchScreen.storyboard in Resources */,
 				816609E21BE0B6BD008B797E /* Assets.xcassets in Resources */,
+				814C98D41C0D6D5900F008C4 /* GooglePlacesAutocomplete.xib in Resources */,
 				816609E01BE0B6BD008B797E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,14 +306,67 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4A43AB32A4494E4EEE454FD3 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		64CC488D098D0074C4755EC8 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C72059F25D6222D3143F7C25 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		816609D11BE0B6BD008B797E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				816609DD1BE0B6BD008B797E /* DetailViewController.swift in Sources */,
-				816609DB1BE0B6BD008B797E /* MasterViewController.swift in Sources */,
+				814C98D21C0D63C500F008C4 /* GooglePlacesAutoComplete.swift in Sources */,
+				814C98D61C0D77E600F008C4 /* Extensions.swift in Sources */,
+				817139761C012CEE00BA541F /* FeaturedRouteController.swift in Sources */,
+				817139781C012D1C00BA541F /* UserProfileViewController.swift in Sources */,
+				817139741C012C4700BA541F /* SearchViewController.swift in Sources */,
 				816609D91BE0B6BD008B797E /* AppDelegate.swift in Sources */,
+				8146768F1C0B9C0500EA06F3 /* MainViewController.swift in Sources */,
+				814676931C0BA56000EA06F3 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,10 +504,14 @@
 		};
 		81660A001BE0B6BD008B797E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 050E9BC6060A6D7D80C26E0B /* Pods-ChorbitV2.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = ChorbitV2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[arch=*]" = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortkey.ChorbitV2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -410,8 +519,11 @@
 		};
 		81660A011BE0B6BD008B797E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9E6F9E8513D70B29EF3C0119 /* Pods-ChorbitV2.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = ChorbitV2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortkey.ChorbitV2;
@@ -486,6 +598,7 @@
 				81660A011BE0B6BD008B797E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		81660A021BE0B6BD008B797E /* Build configuration list for PBXNativeTarget "ChorbitV2Tests" */ = {
 			isa = XCConfigurationList;
@@ -494,6 +607,7 @@
 				81660A041BE0B6BD008B797E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		81660A051BE0B6BD008B797E /* Build configuration list for PBXNativeTarget "ChorbitV2UITests" */ = {
 			isa = XCConfigurationList;
@@ -502,6 +616,7 @@
 				81660A071BE0B6BD008B797E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

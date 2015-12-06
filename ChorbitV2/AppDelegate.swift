@@ -7,25 +7,28 @@
 //
 
 import UIKit
+import GoogleMaps
+import Contacts
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
 
     var window: UIWindow?
-
+    var contactStore = CNContactStore()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
-        let splitViewController = self.window!.rootViewController as! UISplitViewController
-        let navigationController = splitViewController.viewControllers[splitViewController.viewControllers.count-1] as! UINavigationController
-        navigationController.topViewController!.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem()
-        splitViewController.delegate = self
+
+        GMSServices.provideAPIKey("AIzaSyA-qG_Wky75SL9NQ7sRalZxWF9sLGuY2ZY")
         return true
     }
 
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    }
+    
+    class func getAppDelegate() -> AppDelegate {
+        return UIApplication.sharedApplication().delegate as! AppDelegate
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
@@ -44,18 +47,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+//    func requestForAccess(completionHandler: (accessGranted: Bool) -> Void) {
+//        let authorizationStatus = CNContactStore.authorizationStatusForEntityType(CNEntityType.Contacts)
+//        
+//        switch authorizationStatus {
+//        case .Authorized:
+//            completionHandler(accessGranted: true)
+//            
+//        case .Denied, .NotDetermined:
+//            self.contactStore.requestAccessForEntityType(CNEntityType.Contacts, completionHandler: { (access, accessError) -> Void in
+//                if access {
+//                    completionHandler(accessGranted: access)
+//                }
+//                else {
+//                    if authorizationStatus == CNAuthorizationStatus.Denied {
+//                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                            let message = "\(accessError!.localizedDescription)\n\nPlease allow the app to access your contacts through the Settings."
+//                            self.showMessage(message, title: "Unauthorized access")
+//                        })
+//                    }
+//                }
+//            })
+//            
+//        default:
+//            completionHandler(accessGranted: false)
+//        }
+//    }
+//    
+//    func showMessage(message: String, title: String) {
+//        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+//        
+//        let dismissAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { (action) -> Void in
+//        }
+//        
+//        alertController.addAction(dismissAction)
+//        
+//        let pushedViewControllers = (self.window?.rootViewController as! UINavigationController).viewControllers
+//        let presentedViewController = pushedViewControllers[pushedViewControllers.count - 1]
+//        
+//        presentedViewController.presentViewController(alertController, animated: true, completion: nil)
+//    }
 
-    // MARK: - Split view
-
-    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController:UIViewController, ontoPrimaryViewController primaryViewController:UIViewController) -> Bool {
-        guard let secondaryAsNavController = secondaryViewController as? UINavigationController else { return false }
-        guard let topAsDetailController = secondaryAsNavController.topViewController as? DetailViewController else { return false }
-        if topAsDetailController.detailItem == nil {
-            // Return true to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
-            return true
-        }
-        return false
-    }
 
 }
 
