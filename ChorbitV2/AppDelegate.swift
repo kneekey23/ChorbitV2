@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMaps
 import Contacts
+import AWSCore
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
@@ -19,6 +20,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
         GMSServices.provideAPIKey("AIzaSyA-qG_Wky75SL9NQ7sRalZxWF9sLGuY2ZY")
+        // Override point for customization after application launch.
+        let credentialProvider = AWSCognitoCredentialsProvider(regionType: CognitoRegionType, identityPoolId: CognitoIdentityPoolId)
+        
+        let configuration = AWSServiceConfiguration(
+            region: DefaultServiceRegionType,
+            credentialsProvider: credentialProvider)
+        
+        
+        AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = configuration
         return true
     }
 

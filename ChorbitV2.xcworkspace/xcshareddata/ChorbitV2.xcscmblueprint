@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "D02DD9E09BE2D3A04555B85662BE718249030184",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "D02DD9E09BE2D3A04555B85662BE718249030184" : 0,
+    "AB78E62FF4B67F4B0D53DA60677E6273A0FC5BBA" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "D666A060-7C5F-4A0C-962A-00FED663728D",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "D02DD9E09BE2D3A04555B85662BE718249030184" : "ChorbitV2\/",
+    "AB78E62FF4B67F4B0D53DA60677E6273A0FC5BBA" : ".."
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "ChorbitV2",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ChorbitV2.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com:443\/kneekey23\/twobirdsmobile",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "AB78E62FF4B67F4B0D53DA60677E6273A0FC5BBA"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/kneekey23\/ChorbitV2.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D02DD9E09BE2D3A04555B85662BE718249030184"
+    }
+  ]
+}

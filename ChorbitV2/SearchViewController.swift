@@ -15,6 +15,8 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     //any declarations of the class go up here like usual NJK
     //IBActions are actions connected with clicks or touches on the UI. IBOutlets are just variable names for things on the UI so you can refer to it. NJK    
     var myGeoLocatedCoords: CLLocation = CLLocation()
+    var isAddressOnly: Bool = false;
+
     @IBOutlet weak var errandTableView: UITableView!
     let locMan: CLLocationManager = CLLocationManager()
 
@@ -44,11 +46,14 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     @IBAction func chooseStartingPoint(sender: AnyObject) {
         let segmentedControl: UISegmentedControl = sender as! UISegmentedControl
         if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Use New Location"{
-            (self.parentViewController?.parentViewController as! MainViewController).errandSelection.removeFirst()
+            if((parentViewController?.parentViewController as! MainViewController).errandSelection.count > 0){
+            (parentViewController?.parentViewController as! MainViewController).errandSelection.removeFirst()
+            }
+            isAddressOnly = true
             let gpaViewController = GooglePlacesAutocomplete(
                 apiKey: "AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY",
                 placeType: .Address,
-                isAddressOnly: true
+                isAddressOnly: isAddressOnly
             )
             
             gpaViewController.placeDelegate = self
@@ -101,7 +106,11 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         //reloads TableData when you return to page in case you updated from another page. NJK
-        self.errandTableView.reloadData()
+        if(self.errandTableView != nil){
+            self.errandTableView.reloadData()
+        }
+        
+        locMan.startUpdatingLocation()
     }
     
     override func viewDidLoad() {
@@ -111,7 +120,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         locMan.requestWhenInUseAuthorization()
         locMan.startUpdatingLocation()
         //this gets rid of ui issue where image blocks line from showing up completely NJK
-        self.errandTableView.separatorInset = UIEdgeInsetsZero;
+        if(self.errandTableView != nil){
+             self.errandTableView!.separatorInset = UIEdgeInsetsZero;
+        }
+       
         
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -129,7 +141,14 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     //for a table view to work, you first declare a count of the number of items NJK
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (parentViewController?.parentViewController as! MainViewController).errandSelection.count
+    
+        if((self.parentViewController?.parentViewController as! MainViewController).errandSelection.count > 0){
+            return (parentViewController?.parentViewController as! MainViewController).errandSelection.count
+        }
+        else{
+            return 0
+        }
+      
     }
     //then you declare what you want to display in the cell NJK
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -165,7 +184,9 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
             geocoder.reverseGeocodeLocation(myGeoLocatedCoords,
                 completionHandler: { (array:[CLPlacemark]?, error:NSError?) -> Void in
                 var addressString : String = ""
-                let myPlacemark: CLPlacemark = array![0]
+                    if(array!.count > 0){
+                        let myPlacemark: CLPlacemark = array![0]
+                    
             
                     if myPlacemark.subThoroughfare != nil {
                         addressString = myPlacemark.subThoroughfare! + " "
@@ -179,9 +200,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
                     if myPlacemark.administrativeArea != nil {
                         addressString = addressString + myPlacemark.administrativeArea!
                     }
+                    }
 
                     if((self.parentViewController?.parentViewController as! MainViewController).errandSelection.count == 0){
-                    (self.parentViewController?.parentViewController as! MainViewController).errandSelection.append(addressString)
+                    (self.parentViewController?.parentViewController as! MainViewController).errandSelection.insert(addressString, atIndex: 0)
                         self.errandTableView.reloadData()
                     }
                   
@@ -212,9 +234,17 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
 extension SearchViewController: GooglePlacesAutocompleteDelegate {
     //when you pick something on autocomplete this gets called. NJK
     func placeSelected(place: Place) {
-        //print(place.description)
+  
+        if((parentViewController?.parentViewController as! MainViewController).errandSelection.count <= 10){
+            if(!self.isAddressOnly){
         (parentViewController?.parentViewController as! MainViewController).errandSelection.append(place.description)
+            }
+            else{
+                (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(place.description, atIndex: 0)
+            }
+        }
         dismissViewControllerAnimated(true, completion: nil)
+
         
     }
     //if you click the X on the autocomplete modal, this gets called NJK
