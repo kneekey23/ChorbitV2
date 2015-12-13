@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4597898F88109FBC05793991 /* Pods_ChorbitV2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */; };
+		81438E5D1C16989800551718 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81438E5C1C16989800551718 /* Constants.swift */; };
+		81438E5F1C169DEF00551718 /* DynamoDbManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81438E5E1C169DEF00551718 /* DynamoDbManager.swift */; };
+		81438E611C16A1F400551718 /* ThemedRouteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81438E601C16A1F400551718 /* ThemedRouteDetailViewController.swift */; };
 		8146768F1C0B9C0500EA06F3 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8146768E1C0B9C0500EA06F3 /* MainViewController.swift */; };
 		814676931C0BA56000EA06F3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814676921C0BA56000EA06F3 /* MapViewController.swift */; };
 		814C98D21C0D63C500F008C4 /* GooglePlacesAutoComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814C98D11C0D63C500F008C4 /* GooglePlacesAutoComplete.swift */; };
@@ -43,6 +46,9 @@
 
 /* Begin PBXFileReference section */
 		050E9BC6060A6D7D80C26E0B /* Pods-ChorbitV2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChorbitV2.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2.debug.xcconfig"; sourceTree = "<group>"; };
+		81438E5C1C16989800551718 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		81438E5E1C169DEF00551718 /* DynamoDbManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamoDbManager.swift; sourceTree = "<group>"; };
+		81438E601C16A1F400551718 /* ThemedRouteDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemedRouteDetailViewController.swift; sourceTree = "<group>"; };
 		8146768E1C0B9C0500EA06F3 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		814676921C0BA56000EA06F3 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		814C98D11C0D63C500F008C4 /* GooglePlacesAutoComplete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GooglePlacesAutoComplete.swift; sourceTree = "<group>"; };
@@ -139,6 +145,9 @@
 				814C98D11C0D63C500F008C4 /* GooglePlacesAutoComplete.swift */,
 				814C98D31C0D6D5900F008C4 /* GooglePlacesAutocomplete.xib */,
 				814C98D51C0D77E600F008C4 /* Extensions.swift */,
+				81438E5C1C16989800551718 /* Constants.swift */,
+				81438E5E1C169DEF00551718 /* DynamoDbManager.swift */,
+				81438E601C16A1F400551718 /* ThemedRouteDetailViewController.swift */,
 			);
 			path = ChorbitV2;
 			sourceTree = "<group>";
@@ -361,12 +370,15 @@
 			files = (
 				814C98D21C0D63C500F008C4 /* GooglePlacesAutoComplete.swift in Sources */,
 				814C98D61C0D77E600F008C4 /* Extensions.swift in Sources */,
+				81438E611C16A1F400551718 /* ThemedRouteDetailViewController.swift in Sources */,
 				817139761C012CEE00BA541F /* FeaturedRouteController.swift in Sources */,
 				817139781C012D1C00BA541F /* UserProfileViewController.swift in Sources */,
 				817139741C012C4700BA541F /* SearchViewController.swift in Sources */,
+				81438E5F1C169DEF00551718 /* DynamoDbManager.swift in Sources */,
 				816609D91BE0B6BD008B797E /* AppDelegate.swift in Sources */,
 				8146768F1C0B9C0500EA06F3 /* MainViewController.swift in Sources */,
 				814676931C0BA56000EA06F3 /* MapViewController.swift in Sources */,
+				81438E5D1C16989800551718 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,6 @@
+framework module GooglePlacesAutocomplete {
+  umbrella header "GooglePlacesAutocomplete-umbrella.h"
+
+  export *
+  module * { export * }
+}

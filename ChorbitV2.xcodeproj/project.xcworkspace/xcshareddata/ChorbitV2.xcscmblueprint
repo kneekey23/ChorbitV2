@@ -1,0 +1,24 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "D02DD9E09BE2D3A04555B85662BE718249030184",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "D02DD9E09BE2D3A04555B85662BE718249030184" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "C72D5598-CE3E-438A-A51B-9E9586BEBD8F",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "D02DD9E09BE2D3A04555B85662BE718249030184" : "ChorbitV2\/",
+    "AB78E62FF4B67F4B0D53DA60677E6273A0FC5BBA" : ".."
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "ChorbitV2",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "ChorbitV2.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/kneekey23\/ChorbitV2.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D02DD9E09BE2D3A04555B85662BE718249030184"
+    }
+  ]
+}

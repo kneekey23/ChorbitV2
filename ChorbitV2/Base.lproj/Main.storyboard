@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15C47a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="uqh-U5-e7V">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15C48a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="uqh-U5-e7V">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
@@ -41,7 +41,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="76" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Wzk-VK-JTm">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                                 <animations/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -82,7 +82,7 @@
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <segue destination="AbK-M7-Kym" kind="show" trigger="accessoryAction" id="7rT-IO-ZMA"/>
+                                            <segue destination="AbK-M7-Kym" kind="show" identifier="ThemedRouteDetailViewController" trigger="accessoryAction" id="7rT-IO-ZMA"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -94,7 +94,7 @@
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" title="Themed Routes" id="bZ3-nj-BwO"/>
@@ -110,7 +110,7 @@
         <!--Route Details-->
         <scene sceneID="GfB-KV-ckk">
             <objects>
-                <viewController title="Route Details" id="AbK-M7-Kym" customClass="FeaturedRouteViewController" customModule="ChorbitV2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Route Details" id="AbK-M7-Kym" customClass="ThemedRouteDetailViewController" customModule="ChorbitV2" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Vw0-6S-wIg"/>
                         <viewControllerLayoutGuide type="bottom" id="izh-tj-5fS"/>
@@ -118,10 +118,60 @@
                     <view key="view" contentMode="scaleToFill" id="0Sq-eW-7OW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="themedRoutebg" translatesAutoresizingMaskIntoConstraints="NO" id="Unp-Fc-mGg">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <animations/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3vN-Cc-MYi">
+                                <rect key="frame" x="22" y="102" width="118" height="97"/>
+                                <animations/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Ft-2f-3qo">
+                                <rect key="frame" x="215" y="200" width="118" height="97"/>
+                                <animations/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t4Q-lg-Xzt">
+                                <rect key="frame" x="40" y="352" width="118" height="97"/>
+                                <animations/>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.90000000000000002" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="description of themed route" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="98p-tZ-pl5">
+                                <rect key="frame" x="22" y="468" width="341" height="87"/>
+                                <animations/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Zq-jw-XWO">
+                                <rect key="frame" x="20" y="572" width="343" height="30"/>
+                                <animations/>
+                                <color key="backgroundColor" red="0.21960784310000001" green="0.83529411760000005" blue="0.75294117650000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="15"/>
+                                <state key="normal" title="Launch this Rocket!">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" red="0.21960784310000001" green="0.83529411760000005" blue="0.75294117650000003" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="launchThemedRoute:" destination="AbK-M7-Kym" eventType="touchUpInside" id="Daw-6j-CPG"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Details" id="zAA-Tl-Vj3"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="place1Image" destination="3vN-Cc-MYi" id="BdI-Fh-5xa"/>
+                        <outlet property="place2Image" destination="4Ft-2f-3qo" id="lkM-TH-iRh"/>
+                        <outlet property="place3Image" destination="t4Q-lg-Xzt" id="DV3-pN-GY8"/>
+                        <outlet property="routeDescription" destination="98p-tZ-pl5" id="SAh-w4-phC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c1x-rr-FLP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -130,7 +180,7 @@
         <!--Search-->
         <scene sceneID="V3V-VL-5H9">
             <objects>
-                <viewController id="2Z4-X0-iNg" userLabel="Search" customClass="SearchViewController" customModule="ChorbitV2" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SearchViewController" id="2Z4-X0-iNg" userLabel="Search" customClass="SearchViewController" customModule="ChorbitV2" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sRG-xc-xNu"/>
                         <viewControllerLayoutGuide type="bottom" id="Kvg-kV-G3k"/>
@@ -322,7 +372,7 @@
         <!--Main View Controller-->
         <scene sceneID="z95-xf-70g">
             <objects>
-                <tabBarController id="uqh-U5-e7V" customClass="MainViewController" customModule="ChorbitV2" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="Main" id="uqh-U5-e7V" customClass="MainViewController" customModule="ChorbitV2" customModuleProvider="target" sceneMemberID="viewController">
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="g6b-Xb-rBb">
@@ -426,6 +476,7 @@
         <image name="Route Sign Filled-32" width="32" height="32"/>
         <image name="Street View Filled-32" width="32" height="32"/>
         <image name="Waypoint Map Filled-32" width="32" height="32"/>
+        <image name="themedRoutebg" width="500" height="625"/>
     </resources>
     <color key="tintColor" red="0.2196078431372549" green="0.83529411764705885" blue="0.75294117647058822" alpha="1" colorSpace="calibratedRGB"/>
 </document>
