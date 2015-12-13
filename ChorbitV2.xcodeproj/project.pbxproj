@@ -435,7 +435,6 @@
 				8B22942D1BF01C1F0067059C /* ErrandResults.swift in Sources */,
 				816609DB1BE0B6BD008B797E /* MasterViewController.swift in Sources */,
 				8B2294291BF017210067059C /* Copyright.swift in Sources */,
-				816609D91BE0B6BD008B797E /* AppDelegate.swift in Sources */,
 				8B22942B1BF017AD0067059C /* ErrandDistance.swift in Sources */,
 				8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */,
 				8B22942F1BF01DC80067059C /* Geometry.swift in Sources */,
