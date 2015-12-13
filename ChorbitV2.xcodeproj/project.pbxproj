@@ -137,6 +137,7 @@
 				A0E03B18FA6956A06A73A0CD /* Pods */,
 				273B16F5D2D3B890C788982D /* Frameworks */,
 			);
+            name = Frameworks;
 			sourceTree = "<group>";
 		};
 		816609D61BE0B6BD008B797E /* Products */ = {
@@ -199,6 +200,8 @@
 				9E6F9E8513D70B29EF3C0119 /* Pods-ChorbitV2.release.xcconfig */,
 			);
 			name = Pods;
+            sourceTree = "<group>";
+        };
 		8B2294221BEFFA470067059C /* Services */ = {
 			isa = PBXGroup;
 			children = (
