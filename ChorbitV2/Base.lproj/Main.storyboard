@@ -264,7 +264,7 @@
                                 </state>
                                 <connections>
                                     <action selector="launchButton:" destination="2Z4-X0-iNg" eventType="touchUpInside" id="Iz2-eP-5oH"/>
-                                    <segue destination="1vX-gY-hQA" kind="show" animates="NO" id="qIh-7x-1c7"/>
+                                    <segue destination="1vX-gY-hQA" kind="show" identifier="searchToMapIndentifier" animates="NO" id="qIh-7x-1c7"/>
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="xJc-RE-ReQ">

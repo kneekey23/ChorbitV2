@@ -10,15 +10,16 @@ import Foundation
 import UIKit
 import GoogleMaps
 
-class MapViewController: UIViewController{
+class MapViewController: UIViewController, CLLocationManagerDelegate {
     
- weak var firstViewController : SearchViewController?
+    var firstViewController : SearchViewController? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let camera = GMSCameraPosition.cameraWithLatitude(-33.868,
-            longitude:151.2086, zoom:6)
-        let mapView = GMSMapView.mapWithFrame(CGRectMake(0, 60, 375, 600), camera:camera)
+        
+        let myLocation: CLLocation = (firstViewController!.myGeoLocatedCoords) as CLLocation!
+        let camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom:6)
+        let mapView = GMSMapView.mapWithFrame(UIScreen.mainScreen().bounds, camera:camera)
         
         let marker = GMSMarker()
         marker.position = camera.target
@@ -30,5 +31,5 @@ class MapViewController: UIViewController{
         self.view.addSubview(mapView)
     }
     
-
+   
 }
