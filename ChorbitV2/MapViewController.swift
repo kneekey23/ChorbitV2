@@ -11,7 +11,9 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 
-class MapViewController: UIViewController{
+class MapViewController: UIViewController, CLLocationManagerDelegate {
+    
+    var firstViewController : SearchViewController? = nil
     
     let firstViewController: SearchViewController = SearchViewController()
     var origin: Coordinates?
@@ -23,9 +25,10 @@ class MapViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let myLocation: CLLocation = (firstViewController!.myGeoLocatedCoords) as CLLocation!
+        let camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom:6)
 
-        let camera = GMSCameraPosition.cameraWithLatitude(-33.868,
-            longitude:151.2086, zoom:6)
         let mapView = GMSMapView.mapWithFrame(UIScreen.mainScreen().bounds, camera:camera)
         
         let marker = GMSMarker()

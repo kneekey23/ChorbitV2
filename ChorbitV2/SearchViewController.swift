@@ -185,6 +185,8 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         if newLocation.horizontalAccuracy >= 0 {
             myGeoLocatedCoords = CLLocation(latitude: newLocation.coordinate.latitude, longitude: newLocation.coordinate.longitude)
             
+            print(String(myGeoLocatedCoords.coordinate.latitude) + " " + String(myGeoLocatedCoords.coordinate.longitude));
+            
             geocoder.reverseGeocodeLocation(myGeoLocatedCoords,
                 completionHandler: { (array:[CLPlacemark]?, error:NSError?) -> Void in
               
@@ -231,7 +233,14 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         }
     }
     
-    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "searchToMapIndentifier"{
+            let mapViewController = segue.destinationViewController as! MapViewController
+            mapViewController.firstViewController = self
+            
+    }
+
+    }
 }
 
 //extension methods of our controller that get called by the autocomplete class NJK
