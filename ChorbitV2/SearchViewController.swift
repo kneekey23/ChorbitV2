@@ -16,7 +16,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     //IBActions are actions connected with clicks or touches on the UI. IBOutlets are just variable names for things on the UI so you can refer to it. NJK    
     var myGeoLocatedCoords: CLLocation = CLLocation()
     var isAddressOnly: Bool = false;
+    var addressString : String = ""
 
+    @IBOutlet weak var destinationToggle: UISwitch!
+    @IBOutlet weak var startingLocationControl: UISegmentedControl!
     @IBOutlet weak var errandTableView: UITableView!
     let locMan: CLLocationManager = CLLocationManager()
 
@@ -103,6 +106,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
 
     }
     
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         //reloads TableData when you return to page in case you updated from another page. NJK
@@ -183,7 +187,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
             
             geocoder.reverseGeocodeLocation(myGeoLocatedCoords,
                 completionHandler: { (array:[CLPlacemark]?, error:NSError?) -> Void in
-                var addressString : String = ""
+              
                     if(array!.count > 0){
                         let myPlacemark: CLPlacemark = array![0]
                     
