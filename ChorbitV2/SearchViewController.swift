@@ -16,7 +16,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     //IBActions are actions connected with clicks or touches on the UI. IBOutlets are just variable names for things on the UI so you can refer to it. NJK    
     var myGeoLocatedCoords: CLLocation = CLLocation()
     var isAddressOnly: Bool = false;
+    var addressString : String = ""
 
+    @IBOutlet weak var destinationToggle: UISwitch!
+    @IBOutlet weak var startingLocationControl: UISegmentedControl!
     @IBOutlet weak var errandTableView: UITableView!
     let locMan: CLLocationManager = CLLocationManager()
 
@@ -186,27 +189,27 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
             
             geocoder.reverseGeocodeLocation(myGeoLocatedCoords,
                 completionHandler: { (array:[CLPlacemark]?, error:NSError?) -> Void in
-                var addressString : String = ""
+              
                     if(array!.count > 0){
                         let myPlacemark: CLPlacemark = array![0]
                     
             
                     if myPlacemark.subThoroughfare != nil {
-                        addressString = myPlacemark.subThoroughfare! + " "
+                        self.addressString = myPlacemark.subThoroughfare! + " "
                     }
                     if myPlacemark.thoroughfare != nil {
-                        addressString = addressString + myPlacemark.thoroughfare! + ", "
+                        self.addressString = self.addressString + myPlacemark.thoroughfare! + ", "
                     }
                     if myPlacemark.locality != nil {
-                        addressString = addressString + myPlacemark.locality! + ", "
+                        self.addressString = self.addressString + myPlacemark.locality! + ", "
                     }
                     if myPlacemark.administrativeArea != nil {
-                        addressString = addressString + myPlacemark.administrativeArea!
+                        self.addressString = self.addressString + myPlacemark.administrativeArea!
                     }
                     }
 
                     if((self.parentViewController?.parentViewController as! MainViewController).errandSelection.count == 0){
-                    (self.parentViewController?.parentViewController as! MainViewController).errandSelection.insert(addressString, atIndex: 0)
+                    (self.parentViewController?.parentViewController as! MainViewController).errandSelection.insert(self.addressString, atIndex: 0)
                         self.errandTableView.reloadData()
                     }
                   

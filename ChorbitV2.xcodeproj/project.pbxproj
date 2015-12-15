@@ -25,16 +25,17 @@
 		817139741C012C4700BA541F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139731C012C4700BA541F /* SearchViewController.swift */; };
 		817139761C012CEE00BA541F /* FeaturedRouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139751C012CEE00BA541F /* FeaturedRouteController.swift */; };
 		817139781C012D1C00BA541F /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139771C012D1C00BA541F /* UserProfileViewController.swift */; };
-		8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294201BEFFA3A0067059C /* RouteService.swift */; settings = {ASSET_TAGS = (); }; };
-		8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294241BF00D3A0067059C /* Coordinates.swift */; settings = {ASSET_TAGS = (); }; };
-		8B2294271BF011DE0067059C /* BasicMapAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294261BF011DE0067059C /* BasicMapAnnotation.swift */; settings = {ASSET_TAGS = (); }; };
-		8B2294291BF017210067059C /* Copyright.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294281BF017210067059C /* Copyright.swift */; settings = {ASSET_TAGS = (); }; };
-		8B22942B1BF017AD0067059C /* ErrandDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22942A1BF017AD0067059C /* ErrandDistance.swift */; settings = {ASSET_TAGS = (); }; };
-		8B22942D1BF01C1F0067059C /* ErrandResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22942C1BF01C1F0067059C /* ErrandResults.swift */; settings = {ASSET_TAGS = (); }; };
-		8B22942F1BF01DC80067059C /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22942E1BF01DC80067059C /* Geometry.swift */; settings = {ASSET_TAGS = (); }; };
-		8B2294311BF01E570067059C /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294301BF01E570067059C /* Location.swift */; settings = {ASSET_TAGS = (); }; };
-		8B2294331BF01F820067059C /* GoogleMapsGeocoderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294321BF01F820067059C /* GoogleMapsGeocoderResult.swift */; settings = {ASSET_TAGS = (); }; };
-		8B2294371BF02A3C0067059C /* RouteTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294361BF02A3C0067059C /* RouteTest.swift */; settings = {ASSET_TAGS = (); }; };
+		81FD6AC21C1E2F15008A94DF /* NearbySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */; };
+		8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294201BEFFA3A0067059C /* RouteService.swift */; };
+		8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294241BF00D3A0067059C /* Coordinates.swift */; };
+		8B2294271BF011DE0067059C /* BasicMapAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294261BF011DE0067059C /* BasicMapAnnotation.swift */; };
+		8B2294291BF017210067059C /* Copyright.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294281BF017210067059C /* Copyright.swift */; };
+		8B22942B1BF017AD0067059C /* ErrandDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22942A1BF017AD0067059C /* ErrandDistance.swift */; };
+		8B22942D1BF01C1F0067059C /* ErrandResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22942C1BF01C1F0067059C /* ErrandResults.swift */; };
+		8B22942F1BF01DC80067059C /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22942E1BF01DC80067059C /* Geometry.swift */; };
+		8B2294311BF01E570067059C /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294301BF01E570067059C /* Location.swift */; };
+		8B2294331BF01F820067059C /* GoogleMapsGeocoderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294321BF01F820067059C /* GoogleMapsGeocoderResult.swift */; };
+		8B2294371BF02A3C0067059C /* RouteTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294361BF02A3C0067059C /* RouteTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,8 +80,8 @@
 		817139731C012C4700BA541F /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		817139751C012CEE00BA541F /* FeaturedRouteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturedRouteController.swift; sourceTree = "<group>"; };
 		817139771C012D1C00BA541F /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbySearch.swift; sourceTree = "<group>"; };
 		87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChorbitV2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9E6F9E8513D70B29EF3C0119 /* Pods-ChorbitV2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChorbitV2.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2.release.xcconfig"; sourceTree = "<group>"; };
 		8B2294201BEFFA3A0067059C /* RouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteService.swift; sourceTree = "<group>"; };
 		8B2294241BF00D3A0067059C /* Coordinates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinates.swift; sourceTree = "<group>"; };
 		8B2294261BF011DE0067059C /* BasicMapAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicMapAnnotation.swift; sourceTree = "<group>"; };
@@ -91,6 +92,7 @@
 		8B2294301BF01E570067059C /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		8B2294321BF01F820067059C /* GoogleMapsGeocoderResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapsGeocoderResult.swift; sourceTree = "<group>"; };
 		8B2294361BF02A3C0067059C /* RouteTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteTest.swift; sourceTree = "<group>"; };
+		9E6F9E8513D70B29EF3C0119 /* Pods-ChorbitV2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChorbitV2.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,7 +129,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		816609CC1BE0B6BD008B797E = {
+		816609CC1BE0B6BD008B797E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				816609D71BE0B6BD008B797E /* ChorbitV2 */,
@@ -137,7 +139,7 @@
 				A0E03B18FA6956A06A73A0CD /* Pods */,
 				273B16F5D2D3B890C788982D /* Frameworks */,
 			);
-            name = Frameworks;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		816609D61BE0B6BD008B797E /* Products */ = {
@@ -193,15 +195,6 @@
 			path = ChorbitV2UITests;
 			sourceTree = "<group>";
 		};
-		A0E03B18FA6956A06A73A0CD /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				050E9BC6060A6D7D80C26E0B /* Pods-ChorbitV2.debug.xcconfig */,
-				9E6F9E8513D70B29EF3C0119 /* Pods-ChorbitV2.release.xcconfig */,
-			);
-			name = Pods;
-            sourceTree = "<group>";
-        };
 		8B2294221BEFFA470067059C /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -222,8 +215,18 @@
 				8B2294301BF01E570067059C /* Location.swift */,
 				8B2294321BF01F820067059C /* GoogleMapsGeocoderResult.swift */,
 				8B2294361BF02A3C0067059C /* RouteTest.swift */,
+				81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		A0E03B18FA6956A06A73A0CD /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				050E9BC6060A6D7D80C26E0B /* Pods-ChorbitV2.debug.xcconfig */,
+				9E6F9E8513D70B29EF3C0119 /* Pods-ChorbitV2.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -322,7 +325,7 @@
 				en,
 				Base,
 			);
-			mainGroup = 816609CC1BE0B6BD008B797E;
+			mainGroup = 816609CC1BE0B6BD008B797E /* Frameworks */;
 			productRefGroup = 816609D61BE0B6BD008B797E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -424,16 +427,15 @@
 				81438E5F1C169DEF00551718 /* DynamoDbManager.swift in Sources */,
 				816609D91BE0B6BD008B797E /* AppDelegate.swift in Sources */,
 				8146768F1C0B9C0500EA06F3 /* MainViewController.swift in Sources */,
+				81FD6AC21C1E2F15008A94DF /* NearbySearch.swift in Sources */,
 				814676931C0BA56000EA06F3 /* MapViewController.swift in Sources */,
 				81438E5D1C16989800551718 /* Constants.swift in Sources */,
-				816609DD1BE0B6BD008B797E /* DetailViewController.swift in Sources */,
 				8B2294371BF02A3C0067059C /* RouteTest.swift in Sources */,
 				8B2294311BF01E570067059C /* Location.swift in Sources */,
 				8B2294331BF01F820067059C /* GoogleMapsGeocoderResult.swift in Sources */,
 				8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */,
 				8B2294271BF011DE0067059C /* BasicMapAnnotation.swift in Sources */,
 				8B22942D1BF01C1F0067059C /* ErrandResults.swift in Sources */,
-				816609DB1BE0B6BD008B797E /* MasterViewController.swift in Sources */,
 				8B2294291BF017210067059C /* Copyright.swift in Sources */,
 				8B22942B1BF017AD0067059C /* ErrandDistance.swift in Sources */,
 				8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */,
