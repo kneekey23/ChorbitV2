@@ -12,11 +12,11 @@ import Foundation
 
 class NearbySearch {
     
-    let html_attributions: [AnyObject]
+    var html_attributions: [AnyObject]?
     
-    let results: [Results]
+    var results: [Results]
     
-    let status: String
+    var status: String
     
     init (_ json: [String: AnyObject]) {
         
@@ -32,7 +32,8 @@ class NearbySearch {
         
         if let status = json["status"] as? String { self.status = status }
         else { self.status = "" }
-    }
+    
+}
 }
 
 class Results {
@@ -47,32 +48,17 @@ class Results {
     /** name: "Rhythmboat Cruises" */
     let name: String
     
-    /**
-     * height: 480
-     * html_attributions: ["<a href=\"https://maps.google.com/maps/contrib/104066891898402903288/photos\">Rhythmboat Cruises</a>"]
-     * photo_reference: "CmRdAAAA7tGN49d3rNcnfA9D7VCEG-Xpe7gX8i3albYVrhzM-85aTssO0YcSmP2HFwnwcXVGGJexAftd1LNcwijIoa_ypvZMOjXugbj1jtcRIAOazjc-UJJ5EhST-94sPAjrJ1l5EhDFSo6uCiGwj9a6qFmKZqgeGhQ7hZln7_-osyn08rNE6qSPcujSSw"
-     * width: 640
-     */
     let photos: [Photos]
     
     /** place_id: "ChIJyWEHuEmuEmsRm9hTkapTCrk" */
     let place_id: String
-    
-    /** reference: "CnRmAAAAm7YSFsmzQjb2YgzVk81Ww7wSJT7eDh_UXtpjXkrsNVwpYtEch0ugm8EmwTKOnWr3RKn2dWadwLWIf-wb28FBHpqcR_wamA3JJMxL553zqmyVRlL7hcInTvG-OMLgIlRpD39xVo58WDhfv3YP5EVTmBIQxRa-_A6lxgUhDwcuo3Td6hoUq0pHuQGcXl92n6uAyAMi_tZ1t9Q" */
+
     let reference: String
     
-    /** scope: "GOOGLE" */
     let scope: String
     
-    /** types: [
-     * 	  "restaurant",
-     * 	  "food",
-     * 	  ...
-     * 	]
-     */
     let types: [String]
-    
-    /** vicinity: "Pyrmont Bay Wharf (Near Australia Maritime Museum), Pyrmont, NSW 2009" */
+  
     let vicinity: String
     
     init (_ json: [String: AnyObject]) {

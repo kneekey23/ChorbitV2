@@ -8,16 +8,16 @@
 
 import Foundation
 
-class Geometry {
-    
-    var location: Location = Location()
-    
-    init () {
-        
-    }
-    
-    init (location: Location) {
-        self.location = location
-    }
-    
-}
+//class Geometry {
+//    
+//    var location: Location = Location()
+//    
+//    init () {
+//        
+//    }
+//    
+//    init (location: Location) {
+//        self.location = location
+//    }
+//    
+//}

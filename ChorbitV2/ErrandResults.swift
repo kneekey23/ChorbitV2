@@ -10,7 +10,7 @@ import Foundation
 
 class ErrandResults {
     
-    var locationSearchResults: NearbySearch = NearbySearch()
+    var locationSearchResults: NearbySearch?
     var errandTermId: Int = 0
     var errandText: String = ""
     var usedPlaceIds: [String] = [""]
