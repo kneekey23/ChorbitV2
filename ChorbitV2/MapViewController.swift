@@ -70,11 +70,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             destination = origin
         }
         else{
+              //geocode last item in errand selection array to find the coordinates NJK
             let index: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
             let destinationString = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[index - 1]
                 destination = GetLatLng(destinationString)
                 destination!.title = "My Final Destination"
-            //geocode last item in errand selection arrayto find the coordinates
+          
         }
         locationResults.removeAll()
         closestLocationsPerErrand.removeAll()
@@ -85,36 +86,57 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             
             numErrands = 0
             for(var i = 0; i < (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count; i++){
-                if(firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count > 0{
+                
+                let totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
+                if totalNumberOfErrands == 0 || i == 0 || i == (totalNumberOfErrands - 1) {
                 continue
                 }
                 
                 numErrands++
                 let errandString: String = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[i]
             let location = CLLocationCoordinate2D(latitude: lat, longitude:lng)
-            let l: NearbySearch = fetchPlacesNearCoordinate(location, name:errandString )
-                if(l.results.count == 0){
+            var l: NearbySearch?
+                fetchPlacesNearCoordinate(location, name:errandString ) { (data, error) -> Void in
+                    do{
+                        if(data != nil){
+                        if let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary {
+                            
+                            l =  NearbySearch(json as! [String : AnyObject])
+                        }
+                        }
+                        else{
+                            print(error)
+                        }
+                    } catch let error as NSError {
+                        print(error.localizedDescription)
+                    }
+                    
+                }
+                
+                
+                if(l == nil || l!.results.count == 0){
                     continue
                 }
                 
                 let errandTermId: Int = i
                 
                 if !errandString.isEmpty{
-                    let closestLocations: [Coordinates] = GetClosestLocationsForErrand(l, errandTermId: errandTermId , errandText: errandString, excludedPlaceIds: nil )
+                    let closestLocations: [Coordinates] = GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errandString, excludedPlaceIds: nil )
                     
                     if closestLocations.count > 0{
                         closestLocationsPerErrand += closestLocations
                         let usedPlaceIds: [String] = []
-                        locationResults.append(ErrandResults(searchResults: l, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errandString))
+                        locationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errandString))
                             haveFoundLocations = true
                     }
                 }
                 
                 
             }
-            if !haveFoundLocations{
+            if !haveFoundLocations {
                 let locationsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
                 mapErroredOut = true
+                DisplayErrorAlert(locationsNotFound)
                 return
             }
             
@@ -185,33 +207,31 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
        
    }
     
-   func fetchPlacesNearCoordinate(coordinate: CLLocationCoordinate2D, name: String) -> NearbySearch{
+    func fetchPlacesNearCoordinate(coordinate: CLLocationCoordinate2D, name: String, completionHandler: ((NSData!, NSError!) -> Void)){
         var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&location=\(coordinate.latitude),\(coordinate.longitude)&rankby=distance&sensor=true"
         urlString += "&name=\(name)"
         
-        urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        //urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLHostAllowedCharacterSet())!
         print(urlString)
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 
             let session = NSURLSession.sharedSession()
-        var results: NearbySearch?
-            let placesTask = try session.dataTaskWithURL(NSURL(string: urlString)!) {(data: NSData?, response: NSURLResponse?, error: NSError?)  -> Void in
-                print("inside.")
-                do{
-                if let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary {
-                   
-                 results =  NearbySearch(json as! [String : AnyObject])
+    
+            let sessionTask = session.dataTaskWithURL(NSURL(string: urlString)!) { data, response, error in
+              
+                dispatch_async(dispatch_get_main_queue()) {
+                    if(data != nil){
+                        completionHandler(data, error)
+                    }
+                    else{
+                        completionHandler(nil, error)
+                    }
+                    
                 }
-                }catch{
-                    print(error)
-                }
-                
-             
-
-        }
-           placesTask.resume()
-        return results!
+            }
+    
+           sessionTask.resume()
     }
     
     func GetLatLng(address:String) -> Coordinates{
