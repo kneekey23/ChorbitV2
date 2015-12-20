@@ -345,12 +345,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 _errandLocations.Add (_errandLocations [0]);
             }
             
-            totalDistance = 0.0;
-            routeDistance = 0.0;
-            travelTime = 0.0;
-            responsesAwaiting = 0;
-            allRequestsSent = false;
-            int directionRequests = _errandLocations.Count - 1;
+            var totalDistance: Double = 0.0
+            var routeDistance: Double = 0.0
+            var travelTime: Double = 0.0
+            var responsesAwaiting: Int = 0
+            var allRequestsSent: Bool = false
+            var directionRequests: Int = _errandLocations.count - 1;
             listGroupDict = new Dictionary<int, List<DirectionStep>> ();
             
             for (int i = 0; i < directionRequests; i++) {
