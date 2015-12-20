@@ -8,17 +8,17 @@
 
 import Foundation
 
-class Location {
-    
-    var lat: Double = 0.0
-    var lng: Double = 0.0
-    
-    init () {
-        
-    }
-    
-    init (lat: Double, lng: Double) {
-        self.lat = lat
-        self.lng = lng
-    }
-}
+//class Location {
+//    
+//    var lat: Double = 0.0
+//    var lng: Double = 0.0
+//    
+//    init () {
+//        
+//    }
+//    
+//    init (lat: Double, lng: Double) {
+//        self.lat = lat
+//        self.lng = lng
+//    }
+//}
