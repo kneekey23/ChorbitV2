@@ -24,6 +24,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
     
+    var noresultsAlertController: UIAlertController
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -318,14 +320,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                     }
                     
                 }
-                let noresultsAlertController = UIAlertController(title: "No Results Found", message: noResultsMsg, preferredStyle: UIAlertControllerStyle.Alert);
+                noresultsAlertController = UIAlertController(title: "No Results Found", message: noResultsMsg, preferredStyle: UIAlertControllerStyle.Alert)
                 let tryAgainAction = UIAlertAction(title: "Go Back and Re-enter", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
                     self.navigationController?.popToRootViewControllerAnimated(true)
                 })
                 //Add Actions
                 if (noResults.count != numErrands) {
                     let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
-                        console.writeLine ("Okay was clicked")
+                        print("Okay was clicked")
                     })
                     
                     noresultsAlertController.addAction(okAction)
@@ -339,60 +341,65 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             }
             
             //Create Origin and Dest Place Marks and Map Items to use for directions
-            var emptyDict = new NSDictionary ();
+            var emptyDict = NSDictionary()
             
-            if (AddressPage.roundTripSwitch.IsToggled && _errandLocations.Count > 0) {
-                _errandLocations.Add (_errandLocations [0]);
-            }
+//            if (AddressPage.roundTripSwitch.IsToggled && _errandLocations.Count > 0) {
+//                _errandLocations.append(_errandLocations[0]);
+//            }
             
             var totalDistance: Double = 0.0
             var routeDistance: Double = 0.0
             var travelTime: Double = 0.0
             var responsesAwaiting: Int = 0
             var allRequestsSent: Bool = false
-            var directionRequests: Int = _errandLocations.count - 1;
-            listGroupDict = new Dictionary<int, List<DirectionStep>> ();
+            var directionRequests: Int //= _errandLocations.count - 1;
+            var listGroupDict = [Int: [DirectionStep]]()
             
-            for (int i = 0; i < directionRequests; i++) {
-                var orignPlaceMark = new MKPlacemark (_errandLocations [i].Coordinate, emptyDict);
-                var sourceItem = new MKMapItem (orignPlaceMark);
+//            for (index, value) in directionRequests.enumerate() { 
+            for var i = 0; i < directionRequests; i++ {
+//                var originPlaceMark = MKPlacemark(_errandLocations[i].Coordinate, emptyDict)
+//                var sourceItem = MKMapItem(originPlaceMark)
+//                
+//                var destPlaceMark = new MKPlacemark (_errandLocations [i + 1].Coordinate, emptyDict);
+//                var destItem = new MKMapItem (destPlaceMark);
+//                
+//                var request = new MKDirectionsRequest {
+//                    Source = sourceItem,
+//                    Destination = destItem
+//                };
+//                
+//                var directions = new MKDirections (request);
                 
-                var destPlaceMark = new MKPlacemark (_errandLocations [i + 1].Coordinate, emptyDict);
-                var destItem = new MKMapItem (destPlaceMark);
-                
-                var request = new MKDirectionsRequest {
-                    Source = sourceItem,
-                    Destination = destItem
-                };
-                
-                var directions = new MKDirections (request);
                 //Keep track of response count in async call
-                responsesAwaiting++;
-                if (i == directionRequests - 1)
-                allRequestsSent = true;
+                responsesAwaiting++
+                if (i == directionRequests - 1) {
+                    allRequestsSent = true;
+                }
                 
-                try {
-                    GetDirections (directions, i);
-                } catch (Exception ex) {
-                    DisplayErrorAlert (string.Empty);
+                do {
+//                    GetDirections(directions, i);
+                } catch {
+                    DisplayErrorAlert("");
                 }
                 
             }
             
-            if (_errandLocations.Count == 0) {
-                string locationsNotFound = "Unable to find locations for your errands. Please go back and try again.";
-                DisplayErrorAlert (locationsNotFound);
-                mapErroredOut = true;
-                return;
+            if (_errandLocations.count == 0) {
+                let locationsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
+                DisplayErrorAlert(locationsNotFound)
+                mapErroredOut = true
+                return
             }
+            
             //TODO: move region code to a new method
-            CLLocationCoordinate2D mapCenter = new CLLocationCoordinate2D (_errandLocations [1].Coordinate.Latitude, _errandLocations [1].Coordinate.Longitude);
-            MKCoordinateRegion mapRegion = GetRegionForAnnotations (_errandLocations, mapCenter);
-            map.CenterCoordinate = mapCenter;
-            map.Region = mapRegion;
+//            CLLocationCoordinate2D mapCenter = new CLLocationCoordinate2D (_errandLocations[1].Coordinate.Latitude, _errandLocations[1].Coordinate.Longitude);
+//            MKCoordinateRegion mapRegion = GetRegionForAnnotations (_errandLocations, mapCenter);
+//            map.CenterCoordinate = mapCenter;
+//            map.Region = mapRegion;
+            
             //Present Alert
-            if (noresultsAlertController != null) {
-                PresentViewController (noresultsAlertController, true, null);
+            if (noResults.count > 0) {
+                self.presentViewController(noresultsAlertController, animated: true, completion: nil)
             }
         }
     }
