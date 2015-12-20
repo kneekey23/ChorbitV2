@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import GoogleMaps
 
-class MapViewController: UIViewController, CLLocationManagerDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
     
     var firstViewController : SearchViewController? = nil
 
@@ -19,7 +19,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     var noResults: [String] = []
     var locationResults: [ErrandResults] = []
     var numErrands: Int = 0
-    var closestLocationsPerErrand:[Coordinates] = []
+    var closestLocationsPerErrand:[[Coordinates]] = [[]]
+    var _errandLocations: [BasicMapAnnotation] = []
+    var currentRouteLocations: [Coordinates?] = []
+    var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
     
     override func viewDidLoad() {
@@ -28,7 +31,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         let myLocation: CLLocation = (firstViewController!.myGeoLocatedCoords) as CLLocation!
         let camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom:6)
 
-        let mapView = GMSMapView.mapWithFrame(UIScreen.mainScreen().bounds, camera:camera)
+        var mapView = GMSMapView.mapWithFrame(UIScreen.mainScreen().bounds, camera:camera)
+        mapView.delegate = self
         
         let marker = GMSMarker()
         marker.position = camera.target
@@ -89,13 +93,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 
                 let totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
                 if totalNumberOfErrands == 0 || i == 0 || i == (totalNumberOfErrands - 1) {
-                continue
+                    continue
                 }
                 
                 numErrands++
                 let errandString: String = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[i]
-            let location = CLLocationCoordinate2D(latitude: lat, longitude:lng)
-            var l: NearbySearch?
+                let location = CLLocationCoordinate2D(latitude: lat, longitude:lng)
+                var l: NearbySearch?
                 fetchPlacesNearCoordinate(location, name:errandString ) { (data, error) -> Void in
                     do{
                         if(data != nil){
@@ -124,7 +128,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                     let closestLocations: [Coordinates] = GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errandString, excludedPlaceIds: nil )
                     
                     if closestLocations.count > 0{
-                        closestLocationsPerErrand += closestLocations
+                        closestLocationsPerErrand.append(closestLocations)
                         let usedPlaceIds: [String] = []
                         locationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errandString))
                             haveFoundLocations = true
@@ -140,7 +144,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 return
             }
             
-            //create route insert here
+            CreateRoute()
             
             let buttonRect: UIButton = UIButton(frame: CGRect(x: 0, y: self.view.frame.maxY - 55, width: self.view.frame.width, height: 55))
             buttonRect.setTitle("DIRECTIONS", forState: UIControlState.Normal)
@@ -253,6 +257,149 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         return coords
     }
     
+    func CreateRoute()
+    {
+        var locations: [Coordinates?] = [Coordinates()]
+        locations.append(origin)
+        
+        do {
+            //Only hit up mapquest api for optimized route if there are 2 or more errands
+            if (closestLocationsPerErrand.count > 1) {
+//                HomegrownRouteService routeService = new HomegrownRouteService ();
+//                currentRouteLocations = routeService.GetOptimizedRoute (origin, closestLocationsPerErrand, destination);
+                
+                if(currentRouteLocations.count < 1) {
+                    let errandsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
+                    DisplayErrorAlert(errandsNotFound)
+                    mapErroredOut = true;
+                    return;
+                }
+                
+                locations += currentRouteLocations;
+            } else {
+                //This just means that there's only one errand
+                for locationList in closestLocationsPerErrand {
+                    if(locationList.count > 0) {
+                        locations.append(locationList[0]);
+                        currentRouteLocations = locationList;
+                        break;
+                    }
+                }
+            }
+            
+        } catch {
+            DisplayErrorAlert("");
+        }
+        
+        if (!_isRoundTrip) {
+            locations.append(destination);
+        }
+        
+        var errandCount: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
+        
+        for (index, value) in locations.enumerate() {
+            let errandText: String = value!.errandText.uppercaseString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            var locationTitle: String = value!.title
+            
+            // Temporary fix: in future move to filter method and add filters for other known title issues
+            if (errandText == "CVS" && locationTitle.characters.count > 3 && locationTitle.uppercaseString.containsString("CVS")) {
+                locationTitle = "CVS"
+            }
+            if (errandText == "CVS" && locationTitle.uppercaseString.containsString("ATM")) {
+                locationTitle = "CVS"
+            }
+            // End Temporary fix
+            
+            _errandLocations.append(BasicMapAnnotation(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
+            
+            var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+            if (noResults.count > 0) {
+                var noResultsMsg: String = ""
+                for nr in noResults {
+                    //Create Alert
+                    if (!nr.isEmpty) {
+                        noResultsMsg += nr + " did not return any results. "
+                    }
+                    
+                }
+                
+                noresultsAlertController = UIAlertController(title: "No Results Found", message: noResultsMsg, preferredStyle: UIAlertControllerStyle.Alert)
+                let tryAgainAction = UIAlertAction(title: "Go Back and Re-enter", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                    self.navigationController?.popToRootViewControllerAnimated(true)
+                })
+                //Add Actions
+                if (noResults.count != numErrands) {
+                    let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                        print("Okay was clicked")
+                    })
+                    
+                    noresultsAlertController.addAction(okAction)
+                    noresultsAlertController.addAction(tryAgainAction)
+                    
+                } else {
+                    mapErroredOut = true;
+                    noresultsAlertController.addAction(tryAgainAction)
+                }
+                
+            }
+            
+            //Create Origin and Dest Place Marks and Map Items to use for directions
+//            var emptyDict = NSDictionary()
+        
+            if (_isRoundTrip && _errandLocations.count > 0) {
+                _errandLocations.append(_errandLocations[0]);
+            }
+            
+            var totalDistance: Double = 0.0
+            var routeDistance: Double = 0.0
+            var travelTime: Double = 0.0
+            var responsesAwaiting: Int = 0
+            var allRequestsSent: Bool = false
+            var directionRequests: Int = _errandLocations.count - 1;
+            var listGroupDict = [Int: [DirectionStep]]()
+            
+            for var i = 0; i < directionRequests; i++ {
+                var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&origin=\(_errandLocations[i].position.latitude),\(_errandLocations[i].position.longitude)&destination=\(_errandLocations[i + 1].position.latitude),\(_errandLocations[i + 1].position.longitude)"
+                
+                //Keep track of response count in async call
+                responsesAwaiting++
+                if (i == directionRequests - 1) {
+                    allRequestsSent = true;
+                }
+                
+                do {
+                    GetDirections(url, i: i);
+                } catch {
+                    DisplayErrorAlert("");
+                }
+                
+            }
+            
+            if (_errandLocations.count == 0) {
+                let locationsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
+                DisplayErrorAlert(locationsNotFound)
+                mapErroredOut = true
+                return
+            }
+            
+            //TODO: move region code to a new method
+//            CLLocationCoordinate2D mapCenter = new CLLocationCoordinate2D (_errandLocations[1].Coordinate.Latitude, _errandLocations[1].Coordinate.Longitude);
+//            MKCoordinateRegion mapRegion = GetRegionForAnnotations (_errandLocations, mapCenter);
+//            map.CenterCoordinate = mapCenter;
+//            map.Region = mapRegion;
+            
+            //Present Alert
+            if (noResults.count > 0) {
+                self.presentViewController(noresultsAlertController, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func GetDirections(url: String, i: Int)
+    {
+        
+    }
+    
     func DisplayErrorAlert(var errorMessage: String)
     {
         if(errorMessage.isEmpty){
@@ -269,6 +416,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         
         self.presentViewController(alertController, animated: true, completion: nil)
         
+    }
+    
+    func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
+        print("You tapped at \(coordinate.latitude), \(coordinate.longitude)")
     }
 
 }
