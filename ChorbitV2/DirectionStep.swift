@@ -13,6 +13,7 @@ class DirectionStep {
     var errandGroupNumber: String = ""
     var directionText: String = ""
     var distance: String = ""
+    var duration: String = ""
     var stepIndex: Int = 0
     
     init () {
