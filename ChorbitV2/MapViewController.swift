@@ -453,6 +453,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             }
                         }
                         
+                        // TODO: Add all steps to directions page
+                        
+                        
+                        
+                        
                         // accomplishing 1 decimal place with * 10 / 10
                         totalDistance = Double(round(totalDistance * 0.000621371 * 10)/10)
                         let timeInt: Int = round(travelTime / 60)
