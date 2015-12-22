@@ -26,6 +26,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var currentRouteLocations: [Coordinates?] = []
     var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
+    var placeResponsesAwaiting: Int = 0;
+    var allPlaceRequestsSent: Bool = false;
     
     var totalDistanceMeters: Int = 0
     var totalDistanceMiles: Double = 0.0
@@ -98,7 +100,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             
             numErrands = 0
             for(var i = 0; i < (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count; i++){
-                
+                placeResponsesAwaiting++
                 let totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
                 if totalNumberOfErrands == 0 || i == 0 || i == (totalNumberOfErrands - 1) {
                     continue
@@ -111,48 +113,62 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 fetchPlacesNearCoordinate(location, name:errandString ) { (data, error) -> Void in
                     do{
                         if(data != nil){
-                        if let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary {
-                            
-                            l =  NearbySearch(json as! [String : AnyObject])
-                        }
+                            if let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary {
+                                self.placeResponsesAwaiting--
+                                l =  NearbySearch(json as! [String : AnyObject])
+                                
+                                if(l != nil || l!.results.count != 0){
+                                    
+                                    
+                                    
+                                    let errandTermId: Int = i
+                                    
+                                    if !errandString.isEmpty{
+                                        let closestLocations: [Coordinates] = self.GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errandString, excludedPlaceIds: nil )
+                                        
+                                        if closestLocations.count > 0{
+                                            self.closestLocationsPerErrand.append(closestLocations)
+                                            let usedPlaceIds: [String] = []
+                                            self.locationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errandString))
+                                            haveFoundLocations = true
+                                        }
+                                    }
+                                    
+                                    if !haveFoundLocations {
+                                        let locationsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
+                                        self.mapErroredOut = true
+                                        self.DisplayErrorAlert(locationsNotFound)
+                                        return
+                                    }
+                                    
+                                    if i == totalNumberOfErrands - 1{
+                                        self.allPlaceRequestsSent = true
+                                    }
+                                    
+                                    
+                                    if(self.allPlaceRequestsSent && self.placeResponsesAwaiting == 0){
+                                        self.CreateRoute()
+                                    }
+                                    
+                                 
+                                    
+                                }
+                            }
                         }
                         else{
                             print(error)
                         }
+                    
                     } catch let error as NSError {
                         print(error.localizedDescription)
                     }
                     
                 }
                 
-                
-                if(l == nil || l!.results.count == 0){
-                    continue
-                }
-                
-                let errandTermId: Int = i
-                
-                if !errandString.isEmpty{
-                    let closestLocations: [Coordinates] = GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errandString, excludedPlaceIds: nil )
-                    
-                    if closestLocations.count > 0{
-                        closestLocationsPerErrand.append(closestLocations)
-                        let usedPlaceIds: [String] = []
-                        locationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errandString))
-                            haveFoundLocations = true
-                    }
-                }
-                
-                
+
             }
-            if !haveFoundLocations {
-                let locationsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
-                mapErroredOut = true
-                DisplayErrorAlert(locationsNotFound)
-                return
-            }
-            
-            CreateRoute()
+         
+          
             
             let buttonRect: UIButton = UIButton(frame: CGRect(x: 0, y: self.view.frame.maxY - 55, width: self.view.frame.width, height: 55))
             buttonRect.setTitle("DIRECTIONS", forState: UIControlState.Normal)
@@ -192,7 +208,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if maxResults < 1 {
                     break
                 }
-                if(excludedPlaceIds!.count > 0){
+                if excludedPlaceIds != nil && excludedPlaceIds!.count > 0 {
                     var isExcluded: Bool = false
                     for id in excludedPlaceIds!{
                         if id == result.place_id{
@@ -220,17 +236,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
    }
     
     func fetchPlacesNearCoordinate(coordinate: CLLocationCoordinate2D, name: String, completionHandler: ((NSData!, NSError!) -> Void)){
+        
         var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&location=\(coordinate.latitude),\(coordinate.longitude)&rankby=distance&sensor=true"
         urlString += "&name=\(name)"
-        
-        //urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLHostAllowedCharacterSet())!
+
+        urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         print(urlString)
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 
-            let session = NSURLSession.sharedSession()
+        let session = NSURLSession.sharedSession()
     
-            let sessionTask = session.dataTaskWithURL(NSURL(string: urlString)!) { data, response, error in
+        let sessionTask = session.dataTaskWithURL(NSURL(string: urlString)!) { data, response, error in
               
                 dispatch_async(dispatch_get_main_queue()) {
                     if(data != nil){
@@ -243,7 +260,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 }
             }
     
-           sessionTask.resume()
+        sessionTask.resume()
     }
     
     func GetLatLng(address:String) -> Coordinates{
