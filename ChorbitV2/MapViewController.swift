@@ -141,6 +141,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                         return
                                     }
                                     
+                                    if i == totalNumberOfErrands - 1{
+                                        self.allPlaceRequestsSent = true
+                                    }
+                                    
+                                    
+                                    if(self.allPlaceRequestsSent && self.placeResponsesAwaiting == 0){
+                                        self.CreateRoute()
+                                    }
+                                    
                                  
                                     
                                 }
@@ -156,14 +165,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                 }
                 
-                if i == totalNumberOfErrands - 1{
-                    allPlaceRequestsSent = true
-                }
-                
-                
-                if(allPlaceRequestsSent && placeResponsesAwaiting == 0){
-                    self.CreateRoute()
-                }
+
             }
          
           
@@ -206,7 +208,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if maxResults < 1 {
                     break
                 }
-                if(excludedPlaceIds!.count > 0){
+                if excludedPlaceIds != nil && excludedPlaceIds!.count > 0 {
                     var isExcluded: Bool = false
                     for id in excludedPlaceIds!{
                         if id == result.place_id{
