@@ -349,7 +349,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "185"
             endingLineNumber = "185"
-            landmarkName = "GetClosestLocationsForErrand(_:errandTermId:errandText:excludedPlaceIds:)"
+            landmarkName = "GetLocationInformation()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -381,24 +381,9 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "257"
             endingLineNumber = "257"
-            landmarkName = "GetLatLng(_:)"
+            landmarkName = "fetchPlacesNearCoordinate(_:name:completionHandler:)"
             landmarkType = "5">
             <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChorbitV2.MapViewController.GetLatLng (ChorbitV2.MapViewController)(Swift.String) -&gt; ChorbitV2.Coordinates"
-                  moduleName = "ChorbitV2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nicki/Projects/ChorbitV2/ChorbitV2/ChorbitV2/MapViewController.swift"
-                  timestampString = "472447990.931354"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "257"
-                  endingLineNumber = "257"
-                  offsetFromSymbolStart = "84">
-               </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
@@ -429,7 +414,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "256"
             endingLineNumber = "256"
-            landmarkName = "GetLatLng(_:)"
+            landmarkName = "fetchPlacesNearCoordinate(_:name:completionHandler:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -463,21 +448,6 @@
                   endingLineNumber = "177"
                   offsetFromSymbolStart = "8868">
                </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChorbitV2.MapViewController.GetLocationInformation (ChorbitV2.MapViewController)() -&gt; ()"
-                  moduleName = "ChorbitV2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nicki/Projects/ChorbitV2/ChorbitV2/ChorbitV2/MapViewController.swift"
-                  timestampString = "472447990.932661"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "177"
-                  endingLineNumber = "177"
-                  offsetFromSymbolStart = "8900">
-               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -496,21 +466,6 @@
             landmarkName = "GetLocationInformation()"
             landmarkType = "5">
             <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ChorbitV2.MapViewController.GetLocationInformation (ChorbitV2.MapViewController)() -&gt; ()"
-                  moduleName = "ChorbitV2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nicki/Projects/ChorbitV2/ChorbitV2/ChorbitV2/MapViewController.swift"
-                  timestampString = "472447990.935161"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "177"
-                  endingLineNumber = "177"
-                  offsetFromSymbolStart = "8868">
-               </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
@@ -557,7 +512,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "228"
             endingLineNumber = "228"
-            landmarkName = "fetchPlacesNearCoordinate(_:name:completionHandler:)"
+            landmarkName = "GetClosestLocationsForErrand(_:errandTermId:errandText:excludedPlaceIds:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

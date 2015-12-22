@@ -23,6 +23,8 @@ pod 'AWSDynamoDB', '~> 2.2.0'
 
 pod 'AWSiOSSDKv2'
 
+pod 'Polyline', '~> 3.0'
+
 end
 
 target 'ChorbitV2Tests' do
