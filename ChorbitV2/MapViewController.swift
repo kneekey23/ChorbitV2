@@ -27,9 +27,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
     
-    var totalDistance: Double = 0.0
+    var totalDistanceMeters: Int = 0
+    var totalDistanceMiles: Double = 0.0
     var routeDistance: Double = 0.0
-    var travelTime: Double = 0.0
+    var durationSeconds: Int = 0
     var listGroupDict = [Int: [DirectionStep]]()
     
     override func viewDidLoad() {
@@ -403,49 +404,51 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 
                 if let json = response.result.value {
                     print("JSON: \(json)")
+                    let directionsResponse: GoogleDirectionsResponse = GoogleDirectionsResponse(json as! [String : AnyObject])
                     
-                    for route in json.routes {
-                        let polylinePts: String = ""
-                        if (route.overview_polyline != nil && !route.overview_polyine.isEmpty) {
+                    for route in directionsResponse.routes {
+                        var polylinePts: String = ""
+//                        if (route.overview_polyline != nil) {
                             polylinePts = route.overview_polyline.points
-                        }
+//                        }
                         
                         if (!polylinePts.isEmpty) {
                             let polylineCoords: [CLLocationCoordinate2D]? = decodePolyline(polylinePts)
                             
                             let path = GMSMutablePath()
-                            for polylineCoord in polylineCoords {
+                            for polylineCoord in polylineCoords! {
                                 path.addCoordinate(polylineCoord)
                             }
                                 
                             let polyline = GMSPolyline(path: path)
-                            polyline.map = mapView
+                            // TODO: figure out how to initialize mapView as global class variable:
+//                            polyline.map = mapView
                         }
                         
                         // Bounds contains the viewport bounding box of the overview_polyline
                         let bounds = route.bounds
                         
                         for leg in route.legs {
-                            if (leg.distance && leg.distance.value) {
-                                totalDistance += leg.distance.value
-                            }
+//                            if (leg.distance != nil) {
+                                self.totalDistanceMeters += leg.distance.value
+//                            }
                             
-                            if(leg.duration_in_traffic && leg.duration_in_traffic.value) {
-                                travelTime += leg.duration_in_traffic.value
-                            } else if(leg.duration && leg.duration.value) {
-                                travelTime += leg.duration.value
-                            }
+//                            if(leg.duration_in_traffic && leg.duration_in_traffic.value) {
+//                                durationSeconds += leg.duration_in_traffic.value
+//                            } else if(leg.duration && leg.duration.value) {
+                                self.durationSeconds += leg.duration.value
+//                            }
                             
                             var instructionIndex: Int = 1;
                             for step in leg.steps {
-                                var directionStep: DirectionStep
-                                directionStep.errandGroupNumber = string.Format ("{0} {1}", "To", _errandLocations [i + 1].Title);
+                                let directionStep: DirectionStep = DirectionStep()
+//                                directionStep.errandGroupNumber = string.Format ("{0} {1}", "To", _errandLocations [i + 1].Title);
 //                                directionStep.directionText = step.html_instructions;
                                 directionStep.stepIndex = instructionIndex;
                                 if(instructionIndex != 1)
                                 {
-                                    directionStep.distance = step.distance && step.distance.value ? step.distance.value : ""
-                                    directionStep.duration = step.duration && step.duration.value ? step.duration.value : ""
+                                    directionStep.distance = step.distance.value
+                                    directionStep.duration = step.duration.value
                                 }
                                 
                                 temp.append(directionStep);
@@ -459,20 +462,21 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         
                         
                         // accomplishing 1 decimal place with * 10 / 10
-                        totalDistance = Double(round(totalDistance * 0.000621371 * 10)/10)
-                        let timeInt: Int = round(travelTime / 60)
+                        self.totalDistanceMiles = Double(round(Double(self.totalDistanceMeters) * 0.000621371 * 10)/10)
+//                        let timeInt: Int = round(self.durationSeconds / 60)
+                        let timeInt: Int = self.durationSeconds / 60
                         var timeText: String = ""
                         var hrs: Int = 0
-                        var mins: Int = travelTime
-                        var boxWidth: Double = map.Frame.Width - 140
-                        if (travelTime >= 60) {
-                            let hrsDecimal: Double = timeInt / 60
-                            hrs = floor(hrsDecimal)
+                        var mins: Int = self.durationSeconds
+                        var boxWidth: Double = Double(UIScreen.mainScreen().bounds.width) - 140
+                        if (self.durationSeconds >= 60) {
+                            let hrsDecimal: Double = Double(timeInt) / 60
+                            hrs = Int(floor(hrsDecimal))
                             mins = timeInt - (hrs * 60);
-                            timeText = hrs + " hr " + mins + " min";
-                            boxWidth = map.Frame.Width - 125;
+                            timeText = String(hrs) + " hr " + String(mins) + " min";
+                            boxWidth = Double(UIScreen.mainScreen().bounds.width) - 125;
                         } else {
-                            timeText = mins + " min";
+                            timeText = String(mins) + " min";
                         }
                         
                         
@@ -480,7 +484,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         
             
                         
-                        for routeLocation in _errandLocations {
+                        for routeLocation in self._errandLocations {
                             // Add markers to map:
                             let marker = GMSMarker()
                             marker.position = routeLocation.position
@@ -488,8 +492,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             marker.snippet = routeLocation.snippet
                             marker.appearAnimation = kGMSMarkerAnimationPop
                             marker.icon = UIImage(named: "Marker Filled-25")
-                            marker.map = mapView
+                            // TODO: figure out how to initialize mapView as global class variable:
+//                            marker.map = mapView
                         }
+                        
+                        // Only interested in routes[0] right now
+                        break;
                     }
                 }
                 
