@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import GoogleMaps
+import Alamofire
+import Polyline
 
 class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
     
@@ -24,6 +26,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var currentRouteLocations: [Coordinates?] = []
     var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
+    
+    var totalDistanceMeters: Int = 0
+    var totalDistanceMiles: Double = 0.0
+    var routeDistance: Double = 0.0
+    var durationSeconds: Int = 0
+    var listGroupDict = [Int: [DirectionStep]]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -350,25 +358,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 _errandLocations.append(_errandLocations[0]);
             }
             
-            var totalDistance: Double = 0.0
-            var routeDistance: Double = 0.0
-            var travelTime: Double = 0.0
-            var responsesAwaiting: Int = 0
-            var allRequestsSent: Bool = false
             var directionRequests: Int = _errandLocations.count - 1;
-            var listGroupDict = [Int: [DirectionStep]]()
             
             for var i = 0; i < directionRequests; i++ {
                 var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&origin=\(_errandLocations[i].position.latitude),\(_errandLocations[i].position.longitude)&destination=\(_errandLocations[i + 1].position.latitude),\(_errandLocations[i + 1].position.longitude)"
                 
-                //Keep track of response count in async call
-                responsesAwaiting++
-                if (i == directionRequests - 1) {
-                    allRequestsSent = true;
-                }
-                
                 do {
-                    GetDirections(url, i: i);
+                    GetDirections(url);
                 } catch {
                     DisplayErrorAlert("");
                 }
@@ -395,9 +391,118 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
     
-    func GetDirections(url: String, i: Int)
+    func GetDirections(url: String)
     {
+        var temp: [DirectionStep] = []
         
+        Alamofire.request(.GET, url)
+            .responseJSON { response in
+                print(response.request)  // original URL request
+                print(response.response) // URL response
+                print(response.data)     // server data
+                print(response.result)   // result of response serialization
+                
+                if let json = response.result.value {
+                    print("JSON: \(json)")
+                    let directionsResponse: GoogleDirectionsResponse = GoogleDirectionsResponse(json as! [String : AnyObject])
+                    
+                    for route in directionsResponse.routes {
+                        var polylinePts: String = ""
+//                        if (route.overview_polyline != nil) {
+                            polylinePts = route.overview_polyline.points
+//                        }
+                        
+                        if (!polylinePts.isEmpty) {
+                            let polylineCoords: [CLLocationCoordinate2D]? = decodePolyline(polylinePts)
+                            
+                            let path = GMSMutablePath()
+                            for polylineCoord in polylineCoords! {
+                                path.addCoordinate(polylineCoord)
+                            }
+                                
+                            let polyline = GMSPolyline(path: path)
+                            // TODO: figure out how to initialize mapView as global class variable:
+//                            polyline.map = mapView
+                        }
+                        
+                        // Bounds contains the viewport bounding box of the overview_polyline
+                        let bounds = route.bounds
+                        
+                        for leg in route.legs {
+//                            if (leg.distance != nil) {
+                                self.totalDistanceMeters += leg.distance.value
+//                            }
+                            
+//                            if(leg.duration_in_traffic && leg.duration_in_traffic.value) {
+//                                durationSeconds += leg.duration_in_traffic.value
+//                            } else if(leg.duration && leg.duration.value) {
+                                self.durationSeconds += leg.duration.value
+//                            }
+                            
+                            var instructionIndex: Int = 1;
+                            for step in leg.steps {
+                                let directionStep: DirectionStep = DirectionStep()
+//                                directionStep.errandGroupNumber = string.Format ("{0} {1}", "To", _errandLocations [i + 1].Title);
+//                                directionStep.directionText = step.html_instructions;
+                                directionStep.stepIndex = instructionIndex;
+                                if(instructionIndex != 1)
+                                {
+                                    directionStep.distance = step.distance.value
+                                    directionStep.duration = step.duration.value
+                                }
+                                
+                                temp.append(directionStep);
+                                instructionIndex++;
+                            }
+                        }
+                        
+                        // TODO: Add all steps to directions page
+                        
+                        
+                        
+                        
+                        // accomplishing 1 decimal place with * 10 / 10
+                        self.totalDistanceMiles = Double(round(Double(self.totalDistanceMeters) * 0.000621371 * 10)/10)
+//                        let timeInt: Int = round(self.durationSeconds / 60)
+                        let timeInt: Int = self.durationSeconds / 60
+                        var timeText: String = ""
+                        var hrs: Int = 0
+                        var mins: Int = self.durationSeconds
+                        var boxWidth: Double = Double(UIScreen.mainScreen().bounds.width) - 140
+                        if (self.durationSeconds >= 60) {
+                            let hrsDecimal: Double = Double(timeInt) / 60
+                            hrs = Int(floor(hrsDecimal))
+                            mins = timeInt - (hrs * 60);
+                            timeText = String(hrs) + " hr " + String(mins) + " min";
+                            boxWidth = Double(UIScreen.mainScreen().bounds.width) - 125;
+                        } else {
+                            timeText = String(mins) + " min";
+                        }
+                        
+                        
+                        // TODO: Add infoOverlay with distance and duration here
+                        
+            
+                        
+                        for routeLocation in self._errandLocations {
+                            // Add markers to map:
+                            let marker = GMSMarker()
+                            marker.position = routeLocation.position
+                            marker.title = routeLocation.title
+                            marker.snippet = routeLocation.snippet
+                            marker.appearAnimation = kGMSMarkerAnimationPop
+                            marker.icon = UIImage(named: "Marker Filled-25")
+                            // TODO: figure out how to initialize mapView as global class variable:
+//                            marker.map = mapView
+                        }
+                        
+                        // Only interested in routes[0] right now
+                        break;
+                    }
+                }
+                
+                
+        }
     }
     
     func DisplayErrorAlert(var errorMessage: String)
