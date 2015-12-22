@@ -37,6 +37,7 @@
 		8B2294331BF01F820067059C /* GoogleMapsGeocoderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294321BF01F820067059C /* GoogleMapsGeocoderResult.swift */; };
 		8B2294371BF02A3C0067059C /* RouteTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294361BF02A3C0067059C /* RouteTest.swift */; };
 		8B85A26D1C2649290090B4D3 /* DirectionStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B85A26C1C2649290090B4D3 /* DirectionStep.swift */; };
+		8B85A26F1C2896E60090B4D3 /* GoogleDirectionsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B85A26E1C2896E60090B4D3 /* GoogleDirectionsResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -94,6 +95,7 @@
 		8B2294321BF01F820067059C /* GoogleMapsGeocoderResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapsGeocoderResult.swift; sourceTree = "<group>"; };
 		8B2294361BF02A3C0067059C /* RouteTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteTest.swift; sourceTree = "<group>"; };
 		8B85A26C1C2649290090B4D3 /* DirectionStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionStep.swift; sourceTree = "<group>"; };
+		8B85A26E1C2896E60090B4D3 /* GoogleDirectionsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleDirectionsResponse.swift; sourceTree = "<group>"; };
 		9E6F9E8513D70B29EF3C0119 /* Pods-ChorbitV2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChorbitV2.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -219,6 +221,7 @@
 				8B2294361BF02A3C0067059C /* RouteTest.swift */,
 				81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */,
 				8B85A26C1C2649290090B4D3 /* DirectionStep.swift */,
+				8B85A26E1C2896E60090B4D3 /* GoogleDirectionsResponse.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -438,6 +441,7 @@
 				8B2294331BF01F820067059C /* GoogleMapsGeocoderResult.swift in Sources */,
 				8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */,
 				8B2294271BF011DE0067059C /* BasicMapAnnotation.swift in Sources */,
+				8B85A26F1C2896E60090B4D3 /* GoogleDirectionsResponse.swift in Sources */,
 				8B22942D1BF01C1F0067059C /* ErrandResults.swift in Sources */,
 				8B85A26D1C2649290090B4D3 /* DirectionStep.swift in Sources */,
 				8B2294291BF017210067059C /* Copyright.swift in Sources */,

@@ -99,6 +99,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-ChorbitV2/AWSSimpleDB.framework"
   install_framework "Pods-ChorbitV2/Alamofire.framework"
   install_framework "Pods-ChorbitV2/GooglePlacesAutocomplete.framework"
+  install_framework "Pods-ChorbitV2/Polyline.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-ChorbitV2/AWSAutoScaling.framework"
@@ -116,4 +117,5 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-ChorbitV2/AWSSimpleDB.framework"
   install_framework "Pods-ChorbitV2/Alamofire.framework"
   install_framework "Pods-ChorbitV2/GooglePlacesAutocomplete.framework"
+  install_framework "Pods-ChorbitV2/Polyline.framework"
 fi
