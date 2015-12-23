@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import Contacts
+import SwiftAddressBook
+import AddressBook
 
 
 public let ErrorDomain: String! = "GooglePlacesAutocompleteErrorDomain"
@@ -119,9 +120,7 @@ public class PlaceDetails: CustomStringConvertible {
     optional func placeViewClosed()
 }
 
-protocol ContactViewControllerDelegate {
-    func didFetchContacts(contacts: [CNContact])
-}
+
 
 // MARK: - GooglePlacesAutocomplete
 public class GooglePlacesAutocomplete: UINavigationController {
@@ -187,12 +186,22 @@ public class GooglePlacesAutocompleteContainer: UIViewController {
     var placeType: PlaceType = .All
     var isAddressOnly: Bool = false
     var locationBias: LocationBias?
-    //var contacts = [CNContact]()
-    var AutoCompleteList = [String]()
-    //let contactViewControllerDelegate as ContactViewControllerDelegate
-    //contactViewControllerDelegate.delegate = self
-    //AutoCompleteList.append(contacts)
-    //AutoCompleteList.append(places)
+  
+    var AutoCompleteList:Array<String> = []
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+
+    for p in places{
+    AutoCompleteList.append(p.description)
+    }
+
+    let people = swiftAddressBook?.allPeople
+    
+    for person in people {
+               AutoCompleteList.append(person)
+        }
+    
+
+    
     
     convenience init(apiKey: String, placeType: PlaceType = .All, isAddressOnly: Bool = false) {
         let bundle = NSBundle(forClass: GooglePlacesAutocompleteContainer.self)
@@ -238,12 +247,6 @@ public class GooglePlacesAutocompleteContainer: UIViewController {
             self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero
         }
     }
-//    func didFetchContacts(contacts: [CNContact]) {
-//        for contact in contacts {
-//            self.contacts.append(contact)
-//        }
-//    
-//    }
 }
 
 // MARK: - GooglePlacesAutocompleteContainer (UITableViewDataSource / UITableViewDelegate)
