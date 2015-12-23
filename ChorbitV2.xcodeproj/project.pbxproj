@@ -22,6 +22,7 @@
 		816609E51BE0B6BD008B797E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 816609E31BE0B6BD008B797E /* LaunchScreen.storyboard */; };
 		816609F01BE0B6BD008B797E /* ChorbitV2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609EF1BE0B6BD008B797E /* ChorbitV2Tests.swift */; };
 		816609FB1BE0B6BD008B797E /* ChorbitV2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609FA1BE0B6BD008B797E /* ChorbitV2UITests.swift */; };
+		816895991C2A547300CA5B87 /* AutoCompleteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 816895981C2A547300CA5B87 /* AutoCompleteCell.xib */; };
 		817139741C012C4700BA541F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139731C012C4700BA541F /* SearchViewController.swift */; };
 		817139761C012CEE00BA541F /* FeaturedRouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139751C012CEE00BA541F /* FeaturedRouteController.swift */; };
 		817139781C012D1C00BA541F /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139771C012D1C00BA541F /* UserProfileViewController.swift */; };
@@ -79,6 +80,7 @@
 		816609F61BE0B6BD008B797E /* ChorbitV2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChorbitV2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		816609FA1BE0B6BD008B797E /* ChorbitV2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChorbitV2UITests.swift; sourceTree = "<group>"; };
 		816609FC1BE0B6BD008B797E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		816895981C2A547300CA5B87 /* AutoCompleteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AutoCompleteCell.xib; path = ../AutoCompleteCell.xib; sourceTree = "<group>"; };
 		817139731C012C4700BA541F /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		817139751C012CEE00BA541F /* FeaturedRouteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturedRouteController.swift; sourceTree = "<group>"; };
 		817139771C012D1C00BA541F /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 		816609D71BE0B6BD008B797E /* ChorbitV2 */ = {
 			isa = PBXGroup;
 			children = (
+				816895981C2A547300CA5B87 /* AutoCompleteCell.xib */,
 				8B2294231BF00CB50067059C /* Models */,
 				8B2294221BEFFA470067059C /* Services */,
 				816609D81BE0B6BD008B797E /* AppDelegate.swift */,
@@ -352,6 +355,7 @@
 				816609E21BE0B6BD008B797E /* Assets.xcassets in Resources */,
 				814C98D41C0D6D5900F008C4 /* GooglePlacesAutocomplete.xib in Resources */,
 				816609E01BE0B6BD008B797E /* Main.storyboard in Resources */,
+				816895991C2A547300CA5B87 /* AutoCompleteCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

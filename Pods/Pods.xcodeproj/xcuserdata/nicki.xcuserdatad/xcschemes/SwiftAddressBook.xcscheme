@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'F3C431070420966A11BB5847'
-               BlueprintName = 'AWSElasticLoadBalancing'
+               BlueprintIdentifier = '6434807551CE814E32BDF9B3'
+               BlueprintName = 'SwiftAddressBook'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'AWSElasticLoadBalancing.framework'>
+               BuildableName = 'SwiftAddressBook.framework'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

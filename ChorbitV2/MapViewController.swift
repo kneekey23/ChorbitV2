@@ -180,11 +180,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let buttonRect: UIButton = UIButton(frame: CGRect(x: 0, y: self.view.frame.maxY - 55, width: self.view.frame.width, height: 55))
             buttonRect.setTitle("DIRECTIONS", forState: UIControlState.Normal)
             buttonRect.layer.borderWidth = 1
+            
             //set font here
             buttonRect.layer.borderColor = UIColor(hexString: "#64D8C4").CGColor
             buttonRect.backgroundColor = UIColor(hexString: "#64D8C4")
             buttonRect.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Highlighted)
-            self.view.addSubview(buttonRect)
+            self.view.insertSubview(buttonRect, aboveSubview: mapView!)
+            //self.view.addSubview(buttonRect)
             //buttonRect.targetForAction(<#T##action: Selector##Selector#>, withSender: <#T##AnyObject?#>)
         }
         catch{

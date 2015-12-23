@@ -8,14 +8,15 @@
 
 import UIKit
 import GoogleMaps
-import Contacts
 import AWSCore
+import SwiftAddressBook
+import AddressBook
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var contactStore = CNContactStore()
+    var contactAccess: Bool = false
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
@@ -29,6 +30,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         
         
         AWSServiceManager.defaultServiceManager().defaultServiceConfiguration = configuration
+        
+        swiftAddressBook?.requestAccessWithCompletion({ (success, error) -> Void in
+            if success {
+                //do something with swiftAddressBook
+                self.contactAccess = true
+            }
+            else {
+                //no success. Optionally evaluate error
+                self.contactAccess = false
+            }
+        })
         return true
     }
 
@@ -58,46 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
     
-//    func requestForAccess(completionHandler: (accessGranted: Bool) -> Void) {
-//        let authorizationStatus = CNContactStore.authorizationStatusForEntityType(CNEntityType.Contacts)
-//        
-//        switch authorizationStatus {
-//        case .Authorized:
-//            completionHandler(accessGranted: true)
-//            
-//        case .Denied, .NotDetermined:
-//            self.contactStore.requestAccessForEntityType(CNEntityType.Contacts, completionHandler: { (access, accessError) -> Void in
-//                if access {
-//                    completionHandler(accessGranted: access)
-//                }
-//                else {
-//                    if authorizationStatus == CNAuthorizationStatus.Denied {
-//                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                            let message = "\(accessError!.localizedDescription)\n\nPlease allow the app to access your contacts through the Settings."
-//                            self.showMessage(message, title: "Unauthorized access")
-//                        })
-//                    }
-//                }
-//            })
-//            
-//        default:
-//            completionHandler(accessGranted: false)
-//        }
-//    }
-//    
-//    func showMessage(message: String, title: String) {
-//        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-//        
-//        let dismissAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { (action) -> Void in
-//        }
-//        
-//        alertController.addAction(dismissAction)
-//        
-//        let pushedViewControllers = (self.window?.rootViewController as! UINavigationController).viewControllers
-//        let presentedViewController = pushedViewControllers[pushedViewControllers.count - 1]
-//        
-//        presentedViewController.presentViewController(alertController, animated: true, completion: nil)
-//    }
 
 
 }

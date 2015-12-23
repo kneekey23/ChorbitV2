@@ -25,6 +25,8 @@ pod 'AWSiOSSDKv2'
 
 pod 'Polyline', '~> 3.0'
 
+pod "SwiftAddressBook"
+
 end
 
 target 'ChorbitV2Tests' do

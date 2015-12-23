@@ -249,11 +249,23 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
     func placeSelected(place: Place) {
   
         if((parentViewController?.parentViewController as! MainViewController).errandSelection.count <= 10){
-            if(!self.isAddressOnly){
-        (parentViewController?.parentViewController as! MainViewController).errandSelection.append(place.description)
+            if(!place.isAddressOnly){
+                if(place.isContact){
+                     (parentViewController?.parentViewController as! MainViewController).errandSelection.append(place.contactAddress!)
+                }
+                else{
+                     (parentViewController?.parentViewController as! MainViewController).errandSelection.append(place.description)
+                }
             }
             else{
-                (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(place.description, atIndex: 0)
+                let lastIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count - 1
+                if(self.destinationToggle.on){
+                    (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(place.description, atIndex: lastIndex)
+                }
+                else{
+                     (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(place.description, atIndex: 0)
+                }
+               
             }
         }
         dismissViewControllerAnimated(true, completion: nil)
