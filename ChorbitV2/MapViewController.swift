@@ -15,7 +15,8 @@ import Polyline
 class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
     
     var firstViewController : SearchViewController? = nil
-
+    
+    var mapView: GMSMapView?
     var origin: Coordinates?
     var destination: Coordinates?
     var noResults: [String] = []
@@ -42,8 +43,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         let myLocation: CLLocation = (firstViewController!.myGeoLocatedCoords) as CLLocation!
         let camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom:6)
 
-        var mapView = GMSMapView.mapWithFrame(UIScreen.mainScreen().bounds, camera:camera)
-        mapView.delegate = self
+        mapView = GMSMapView.mapWithFrame(UIScreen.mainScreen().bounds, camera:camera)
+        mapView!.delegate = self
         
         let marker = GMSMarker()
         marker.position = camera.target
@@ -52,7 +53,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         marker.icon = UIImage(named: "Marker Filled-25")
         marker.map = mapView
         GetLocationInformation()
-        self.view.addSubview(mapView)
+        self.view.addSubview(mapView!)
     }
     
     func GetLocationInformation() {
@@ -154,8 +155,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                         return
                                     }
                                     
-                                    print(self.allPlaceRequestsSent)
-                                    print(self.placeResponsesAwaiting)
                                     if(self.allPlaceRequestsSent && self.placeResponsesAwaiting == 0){
                                         self.CreateRoute()
                                     }
@@ -301,6 +300,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //                HomegrownRouteService routeService = new HomegrownRouteService ();
 //                currentRouteLocations = routeService.GetOptimizedRoute (origin, closestLocationsPerErrand, destination);
                 
+                // TODO: Remove this hardcoded crap thats only here instead of calling HomegrownRouteService:
+                for locationList in closestLocationsPerErrand {
+                    currentRouteLocations.append(locationList[0])
+                }
+                print(currentRouteLocations.count)
+                
                 if(currentRouteLocations.count < 1) {
                     let errandsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
                     DisplayErrorAlert(errandsNotFound)
@@ -344,6 +349,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             // End Temporary fix
             
             _errandLocations.append(BasicMapAnnotation(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
+        }
             
             var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
             if (noResults.count > 0) {
@@ -386,7 +392,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let directionRequests: Int = _errandLocations.count - 1;
             
             for var i = 0; i < directionRequests; i++ {
-                var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&origin=\(_errandLocations[i].position.latitude),\(_errandLocations[i].position.longitude)&destination=\(_errandLocations[i + 1].position.latitude),\(_errandLocations[i + 1].position.longitude)"
+                var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(_errandLocations[i].position.latitude),\(_errandLocations[i].position.longitude)&destination=\(_errandLocations[i + 1].position.latitude),\(_errandLocations[i + 1].position.longitude)"
                 url = url.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
                 print(url)
                 
@@ -415,7 +421,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             if (noResults.count > 0) {
                 self.presentViewController(noresultsAlertController, animated: true, completion: nil)
             }
-        }
+//        }
     }
     
     func GetDirections(url: String)
@@ -449,7 +455,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 
                             let polyline = GMSPolyline(path: path)
                             // TODO: figure out how to initialize mapView as global class variable:
-//                            polyline.map = mapView
+                            polyline.map = self.mapView
                         }
                         
                         // Bounds contains the viewport bounding box of the overview_polyline
@@ -520,7 +526,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             marker.appearAnimation = kGMSMarkerAnimationPop
                             marker.icon = UIImage(named: "Marker Filled-25")
                             // TODO: figure out how to initialize mapView as global class variable:
-//                            marker.map = mapView
+                            marker.map = self.mapView
                         }
                         
                         // Only interested in routes[0] right now
