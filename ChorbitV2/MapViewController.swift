@@ -26,6 +26,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var currentRouteLocations: [Coordinates?] = []
     var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
+    
     var placeResponsesAwaiting: Int = 0;
     var allPlaceRequestsSent: Bool = false;
     
@@ -98,11 +99,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         do{
             
+            let totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
             numErrands = 0
-            for(var i = 0; i < (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count; i++){
-                placeResponsesAwaiting++
-                let totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
-                if totalNumberOfErrands == 0 || i == 0 || i == (totalNumberOfErrands - 1) {
+            placeResponsesAwaiting = 0;
+            self.allPlaceRequestsSent = false;
+            
+            for(var i = 0; i < totalNumberOfErrands; i++){
+                
+                if totalNumberOfErrands == 0 || i == 0 {
                     continue
                 }
                 
@@ -110,18 +114,27 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 let errandString: String = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[i]
                 let location = CLLocationCoordinate2D(latitude: lat, longitude:lng)
                 var l: NearbySearch?
-                fetchPlacesNearCoordinate(location, name:errandString ) { (data, error) -> Void in
+                
+                // Keeping track of async requests and responses
+                placeResponsesAwaiting++
+                if i == totalNumberOfErrands - 1{
+                    self.allPlaceRequestsSent = true
+                }
+                
+                fetchPlacesNearCoordinate(location, name:errandString, count: i) { (data, error, count) -> Void in
                     do{
                         if(data != nil){
+                            self.placeResponsesAwaiting--
+                            
                             if let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary {
-                                self.placeResponsesAwaiting--
+                                
                                 l =  NearbySearch(json as! [String : AnyObject])
                                 
                                 if(l != nil || l!.results.count != 0){
                                     
                                     
                                     
-                                    let errandTermId: Int = i
+                                    let errandTermId: Int = count
                                     
                                     if !errandString.isEmpty{
                                         let closestLocations: [Coordinates] = self.GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errandString, excludedPlaceIds: nil )
@@ -141,16 +154,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                         return
                                     }
                                     
-                                    if i == totalNumberOfErrands - 1{
-                                        self.allPlaceRequestsSent = true
-                                    }
-                                    
-                                    
+                                    print(self.allPlaceRequestsSent)
+                                    print(self.placeResponsesAwaiting)
                                     if(self.allPlaceRequestsSent && self.placeResponsesAwaiting == 0){
                                         self.CreateRoute()
                                     }
-                                    
-                                 
                                     
                                 }
                             }
@@ -235,7 +243,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
        
    }
     
-    func fetchPlacesNearCoordinate(coordinate: CLLocationCoordinate2D, name: String, completionHandler: ((NSData!, NSError!) -> Void)){
+    func fetchPlacesNearCoordinate(coordinate: CLLocationCoordinate2D, name: String, count: Int, completionHandler: ((NSData!, NSError!, count: Int) -> Void)){
         
         var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&location=\(coordinate.latitude),\(coordinate.longitude)&rankby=distance&sensor=true"
         urlString += "&name=\(name)"
@@ -251,10 +259,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
               
                 dispatch_async(dispatch_get_main_queue()) {
                     if(data != nil){
-                        completionHandler(data, error)
+                        completionHandler(data, error, count: count)
                     }
                     else{
-                        completionHandler(nil, error)
+                        completionHandler(nil, error, count: count)
                     }
                     
                 }
@@ -375,10 +383,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 _errandLocations.append(_errandLocations[0]);
             }
             
-            var directionRequests: Int = _errandLocations.count - 1;
+            let directionRequests: Int = _errandLocations.count - 1;
             
             for var i = 0; i < directionRequests; i++ {
                 var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&origin=\(_errandLocations[i].position.latitude),\(_errandLocations[i].position.longitude)&destination=\(_errandLocations[i + 1].position.latitude),\(_errandLocations[i + 1].position.longitude)"
+                url = url.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+                print(url)
                 
                 do {
                     GetDirections(url);
