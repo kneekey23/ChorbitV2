@@ -53,26 +53,39 @@ public class Place: NSObject {
     //public let id: String
     public let desc: String
     public var apiKey: String?
+    public let contactAddress: String?
+    public let isContact: Bool
+    public let isAddressOnly: Bool
     
     override public var description: String {
         get { return desc }
     }
     
-    public init(description: String) {
+    public init(description: String, contactAddress: String, isContact: Bool, isAddressOnly: Bool = false) {
         //self.id = id
         self.desc = description
+        self.contactAddress = contactAddress
+        self.isContact = isContact
+        self.isAddressOnly = isAddressOnly
     }
     
     public convenience init(prediction: [String: AnyObject], apiKey: String?, isAddressOnly: Bool = false) {
         if(isAddressOnly){
             self.init(
                 //id: prediction["place_id"] as! String,
-                description: prediction["description"] as! String
+                description: prediction["description"] as! String,
+                contactAddress: "",
+                isContact: false,
+                isAddressOnly: isAddressOnly
             )
         }else{
             self.init(
              
-                description: prediction["terms"]![0]["value"]! as! String
+                description: prediction["terms"]![0]["value"]! as! String,
+                contactAddress: "",
+                isContact: false,
+                isAddressOnly: isAddressOnly
+               
             )
         }
         
@@ -190,15 +203,45 @@ public class GooglePlacesAutocompleteContainer: UIViewController {
     var AutoCompleteList:Array<String> = []
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
-    for p in places{
-    AutoCompleteList.append(p.description)
+
+    let people : [SwiftAddressBookPerson]? = swiftAddressBook?.allPeople
+
+    func addContacts(){
+        
+        if(appDelegate.contactAccess){
+            //access variables on any entry of allPeople array just like always
+            for person in people! {
+                if(person.addresses?.count > 0){
+                    for add in person.addresses!{
+                        var contactAddress: String = ""
+                        var street: String = ""
+                        var state: String = ""
+                        var city: String = ""
+
+                        for (key, value) in add.value{
+                            if key == SwiftAddressBookAddressProperty.street{
+                                street = (value as! String)
+                            }
+                            if key == SwiftAddressBookAddressProperty.city{
+                                city = (value as! String)
+                            }
+                            if(key == SwiftAddressBookAddressProperty.state){
+                                state = (value as! String)
+                            }
+                            
+                        }
+                        contactAddress = street + " " + city + " " + state
+                        let place = Place(description: person.compositeName!, contactAddress: contactAddress, isContact: true)
+                        places.append(place)
+                    }
+                  
+                }
+             
+            }
+        }
+
     }
 
-    let people = swiftAddressBook?.allPeople
-    
-    for person in people {
-               AutoCompleteList.append(person)
-        }
     
 
     
@@ -210,6 +253,7 @@ public class GooglePlacesAutocompleteContainer: UIViewController {
         self.apiKey = apiKey
         self.placeType = placeType
         self.isAddressOnly = isAddressOnly
+       
     }
     
     deinit {
@@ -227,7 +271,8 @@ public class GooglePlacesAutocompleteContainer: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil)
         
         searchBar.becomeFirstResponder()
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        //tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.registerNib(UINib(nibName: "AutoCompleteCell", bundle: nil), forCellReuseIdentifier: "AutoCompleteCell")
     }
     
     func keyboardWasShown(notification: NSNotification) {
@@ -256,14 +301,16 @@ extension GooglePlacesAutocompleteContainer: UITableViewDataSource, UITableViewD
     }
     
     public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("AutoCompleteCell", forIndexPath: indexPath)
         
         // Get the corresponding candy from our candies array
         let place = self.places[indexPath.row]
         
         // Configure the cell
         cell.textLabel!.text = place.description
-        
+      
+        cell.detailTextLabel?.text = place.contactAddress
+    
         
         return cell
     }
@@ -282,9 +329,11 @@ extension GooglePlacesAutocompleteContainer: UISearchBarDelegate {
         } else {
             if(self.isAddressOnly){
             getPlaces(searchText, isAddressOnly: true)
+            
             }
             else{
                 getPlaces(searchText)
+             
             }
         }
     }
@@ -326,6 +375,7 @@ extension GooglePlacesAutocompleteContainer: UISearchBarDelegate {
                         self.places = predictions.map { (prediction: [String: AnyObject]) -> Place in
                             return Place(prediction: prediction, apiKey: self.apiKey, isAddressOnly: isAddressOnly)
                         }
+                        self.addContacts()
                         self.tableView.reloadData()
                         self.tableView.hidden = false
                         self.delegate?.placesFound?(self.places)

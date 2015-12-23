@@ -13,7 +13,7 @@ import SwiftAddressBook
 import AddressBook
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var contactAccess: Bool = false
