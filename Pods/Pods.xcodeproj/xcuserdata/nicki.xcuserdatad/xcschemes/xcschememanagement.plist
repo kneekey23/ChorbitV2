@@ -79,6 +79,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>KYCircularProgress.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-ChorbitV2.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -98,6 +103,11 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>0849E21B9B9ACDBAAC96A31A5953712F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>0A58A06E901FEDDCAA6B5AFD26C8C0B1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -137,7 +147,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>912846EC524ECAD88CBCCE6AC3FD647B</key>
+		<key>8918C98EDB1512F5409EEA1581A492E2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A29EA44BB590267804F38A666E6583D4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -148,6 +163,11 @@
 			<true/>
 		</dict>
 		<key>AC89BF0B23F90017D2FE812E7D8478EF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>AD3888FC246FB0D260022F04307263D0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -167,17 +187,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D14691BBA173B0EDE1A0CC2F75917423</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>D1B3D231EED9AD3B2A77C4CE93023F11</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>D298EC13A7B032434092E403B08A3C36</key>
 		<dict>
 			<key>primary</key>
 			<true/>

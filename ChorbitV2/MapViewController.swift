@@ -11,6 +11,7 @@ import UIKit
 import GoogleMaps
 import Alamofire
 import Polyline
+import KYCircularProgress
 
 class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
     
@@ -36,6 +37,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var routeDistance: Double = 0.0
     var durationSeconds: Int = 0
     var listGroupDict = [Int: [DirectionStep]]()
+    var halfCircularProgress: KYCircularProgress!
+    var progress: UInt8 = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,8 +48,23 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 
         mapView = GMSMapView.mapWithFrame(UIScreen.mainScreen().bounds, camera:camera)
         mapView!.delegate = self
-        GetLocationInformation()
+      
         self.view.addSubview(mapView!)
+        
+        let buttonRect: UIButton = UIButton(frame: CGRect(x: 0, y: self.view.frame.maxY - 100, width: self.view.frame.width, height: 55))
+        buttonRect.setTitle("DIRECTIONS", forState: UIControlState.Normal)
+        buttonRect.layer.borderWidth = 1
+        
+        //set font here
+        buttonRect.layer.borderColor = UIColor(hexString: "#64D8C4").CGColor
+        buttonRect.backgroundColor = UIColor(hexString: "#64D8C4")
+        buttonRect.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Highlighted)
+        //self.view.insertSubview(buttonRect, aboveSubview: mapView!)
+        self.view.addSubview(buttonRect)
+        //buttonRect.targetForAction(<#T##action: Selector##Selector#>, withSender: <#T##AnyObject?#>)
+        
+        configureHalfCircularProgress()
+        GetLocationInformation()
     }
     
     func GetLocationInformation() {
@@ -115,7 +133,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if i == totalNumberOfErrands - 1{
                     self.allPlaceRequestsSent = true
                 }
-                
+                updateProgress()
                 fetchPlacesNearCoordinate(location, name:errandString, count: i) { (data, error, count) -> Void in
                     do{
                         if(data != nil){
@@ -150,6 +168,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                     }
                                     
                                     if(self.allPlaceRequestsSent && self.placeResponsesAwaiting == 0){
+                                        self.updateProgress()
                                         self.CreateRoute()
                                     }
                                     
@@ -169,19 +188,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 
             }
          
-          
-            
-            let buttonRect: UIButton = UIButton(frame: CGRect(x: 0, y: self.view.frame.maxY - 55, width: self.view.frame.width, height: 55))
-            buttonRect.setTitle("DIRECTIONS", forState: UIControlState.Normal)
-            buttonRect.layer.borderWidth = 1
-            
-            //set font here
-            buttonRect.layer.borderColor = UIColor(hexString: "#64D8C4").CGColor
-            buttonRect.backgroundColor = UIColor(hexString: "#64D8C4")
-            buttonRect.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Highlighted)
-            self.view.insertSubview(buttonRect, aboveSubview: mapView!)
-            //self.view.addSubview(buttonRect)
-            //buttonRect.targetForAction(<#T##action: Selector##Selector#>, withSender: <#T##AnyObject?#>)
         }
         catch{
             print(error)
@@ -394,7 +400,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
         
             url = url.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+            updateProgress()
             do {
                 GetDirections(url);
             } catch {
@@ -481,7 +487,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         
                         // TODO: Add all steps to directions page
                         
-                        
+                        self.self.updateProgress()
                         
                         
                         // accomplishing 1 decimal place with * 10 / 10
@@ -544,6 +550,45 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         self.presentViewController(alertController, animated: true, completion: nil)
         
+    }
+    
+    func configureHalfCircularProgress() {
+        
+        let halfCircularProgressFrame = CGRectMake(0, 0, CGRectGetWidth(view.frame), CGRectGetHeight(view.frame))
+        
+        halfCircularProgress = KYCircularProgress(frame: halfCircularProgressFrame, showProgressGuide: true)
+        halfCircularProgress.backgroundColor = UIColor.grayColor()
+        let center = CGPoint(x: 180.0, y: 200.0)
+        halfCircularProgress.path = UIBezierPath(arcCenter: center, radius: CGFloat(CGRectGetWidth(halfCircularProgress.frame)/3), startAngle: CGFloat(M_PI), endAngle: CGFloat(0.0), clockwise: true)
+        halfCircularProgress.colors = [UIColor.purpleColor(), UIColor(rgba: 0xFFF77A55), UIColor(hexString: "#64D8C4")]
+        halfCircularProgress.lineWidth = 8.0
+        halfCircularProgress.progressGuideColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.5)
+        
+        let textLabel = UILabel(frame: CGRectMake(halfCircularProgress.frame.origin.x + 120.0, 170.0, 80.0, 32.0))
+        textLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 32)
+        textLabel.textAlignment = .Center
+        textLabel.textColor = UIColor.blackColor()
+        textLabel.alpha = 0.5
+        halfCircularProgress.addSubview(textLabel)
+        
+        halfCircularProgress.progressChangedClosure() {
+            (progress: Double, circularView: KYCircularProgress) in
+            print("progress: \(progress)")
+            textLabel.text = "\(Int(progress * 100.0))%"
+        }
+        
+        view.addSubview(halfCircularProgress)
+        view.bringSubviewToFront(halfCircularProgress)
+    }
+    
+    func updateProgress() {
+        progress = progress &+ 25
+        let normalizedProgress = Double(progress) / 100.0
+        
+        halfCircularProgress.progress = normalizedProgress
+        if normalizedProgress == 1 {
+            halfCircularProgress.hidden = true
+        }
     }
     
     func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
