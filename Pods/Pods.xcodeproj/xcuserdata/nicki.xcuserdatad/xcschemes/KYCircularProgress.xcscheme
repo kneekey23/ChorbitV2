@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '747EC8F50123E24D65268744'
-               BlueprintName = 'Pods-ChorbitV2'
+               BlueprintIdentifier = '1268CF1C205BD8EFA24C5DDA'
+               BlueprintName = 'KYCircularProgress'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'Pods_ChorbitV2.framework'>
+               BuildableName = 'KYCircularProgress.framework'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

@@ -67,6 +67,7 @@ PODS:
     - AWSCore (= 2.2.7)
   - GoogleMaps (1.10.5)
   - GooglePlacesAutocomplete (0.3.0)
+  - KYCircularProgress (0.5.1)
   - Polyline (3.0.0)
   - SwiftAddressBook (0.5.1)
 
@@ -76,6 +77,7 @@ DEPENDENCIES:
   - AWSiOSSDKv2
   - GoogleMaps
   - GooglePlacesAutocomplete
+  - KYCircularProgress
   - Polyline (~> 3.0)
   - SwiftAddressBook
 
@@ -97,6 +99,7 @@ SPEC CHECKSUMS:
   AWSSQS: 0def5dfc1385564d88ebf88a0bdf7227f5f855e1
   GoogleMaps: da51c62c338c2d9c47cdad470a0d1e0e4b8544e4
   GooglePlacesAutocomplete: 7694636fce561c9d8ac807b8e490d299a730a633
+  KYCircularProgress: 69a6d6852d96ca2be2830cc659b85aab3bb1cee6
   Polyline: 18026fd6675f754a15e70b4fd7ca01d0d156b6d7
   SwiftAddressBook: 539d33a5e36b2594d82ff5e0625becff18387930
 
