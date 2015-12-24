@@ -2911,6 +2911,20 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
+				TargetAttributes = {
+					242A6CBA14E43D8E8565F18ADC5B0BD9 = {
+						DevelopmentTeam = 9EVWV3K6BK;
+					};
+					432ECC54282C84882B482CCB4CF227FC = {
+						DevelopmentTeam = 9EVWV3K6BK;
+					};
+					BC279E1A4A79751E826180F63A851E07 = {
+						DevelopmentTeam = 9EVWV3K6BK;
+					};
+					D298EC13A7B032434092E403B08A3C36 = {
+						DevelopmentTeam = 9EVWV3K6BK;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -3564,6 +3578,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C099E2364A9C4C294FA664465DF8D53F /* Polyline.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3579,6 +3594,7 @@
 				MODULEMAP_FILE = "Target Support Files/Polyline/Polyline.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = Polyline;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3591,6 +3607,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 83135F50850C1FE5AE7162448F1A78CA /* AWSCore.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3606,6 +3623,7 @@
 				MODULEMAP_FILE = "Target Support Files/AWSCore/AWSCore.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = AWSCore;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3866,6 +3884,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75399DCD323356D2EB4ABECA9C026098 /* GooglePlacesAutocomplete.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -3881,6 +3900,7 @@
 				MODULEMAP_FILE = "Target Support Files/GooglePlacesAutocomplete/GooglePlacesAutocomplete.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = GooglePlacesAutocomplete;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4112,6 +4132,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E7B9EDFD75B78C4F523B8D75C85528D0 /* Alamofire.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -4127,6 +4148,7 @@
 				MODULEMAP_FILE = "Target Support Files/Alamofire/Alamofire.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = Alamofire;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4259,6 +4281,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E7B9EDFD75B78C4F523B8D75C85528D0 /* Alamofire.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -4274,6 +4297,7 @@
 				MODULEMAP_FILE = "Target Support Files/Alamofire/Alamofire.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = Alamofire;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -4341,6 +4365,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 83135F50850C1FE5AE7162448F1A78CA /* AWSCore.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -4356,6 +4381,7 @@
 				MODULEMAP_FILE = "Target Support Files/AWSCore/AWSCore.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = AWSCore;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4368,6 +4394,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C099E2364A9C4C294FA664465DF8D53F /* Polyline.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -4383,6 +4410,7 @@
 				MODULEMAP_FILE = "Target Support Files/Polyline/Polyline.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = Polyline;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -4457,6 +4485,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 75399DCD323356D2EB4ABECA9C026098 /* GooglePlacesAutocomplete.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -4472,6 +4501,7 @@
 				MODULEMAP_FILE = "Target Support Files/GooglePlacesAutocomplete/GooglePlacesAutocomplete.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = GooglePlacesAutocomplete;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

@@ -206,11 +206,13 @@ public class GooglePlacesAutocompleteContainer: UIViewController {
 
     let people : [SwiftAddressBookPerson]? = swiftAddressBook?.allPeople
 
-    func addContacts(){
+    func addContacts(searchText:String){
         
         if(appDelegate.contactAccess){
             //access variables on any entry of allPeople array just like always
             for person in people! {
+                if person.compositeName != nil{
+                if person.compositeName!.rangeOfString(searchText) != nil{
                 if(person.addresses?.count > 0){
                     for add in person.addresses!{
                         var contactAddress: String = ""
@@ -236,7 +238,9 @@ public class GooglePlacesAutocompleteContainer: UIViewController {
                     }
                   
                 }
-             
+            }
+                }
+            
             }
         }
 
@@ -375,7 +379,7 @@ extension GooglePlacesAutocompleteContainer: UISearchBarDelegate {
                         self.places = predictions.map { (prediction: [String: AnyObject]) -> Place in
                             return Place(prediction: prediction, apiKey: self.apiKey, isAddressOnly: isAddressOnly)
                         }
-                        self.addContacts()
+                        self.addContacts(searchString)
                         self.tableView.reloadData()
                         self.tableView.hidden = false
                         self.delegate?.placesFound?(self.places)
