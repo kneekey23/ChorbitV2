@@ -526,6 +526,120 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
     
+    func RejectLocation(placeId: String)
+    {
+        do {
+            //TODO: add loading overlay here
+            
+            
+            closestLocationsPerErrand.removeAll()
+            noResults.removeAll()
+            
+            //Identify rejected location within currentRouteLocations
+            //and remove it from currentRouteLocations
+            var rejected: Coordinates = Coordinates()
+            for var i = 0; i < currentRouteLocations.count; i++ {
+                if (currentRouteLocations[i]!.placeId == placeId) {
+                    rejected = currentRouteLocations[i]!
+                    currentRouteLocations.removeAtIndex(i)
+                    break
+                }
+            }
+            
+            var button: Int = 0
+            for var i = 0; i < locationResults.count; i++ {
+                if (locationResults[i].errandTermId == rejected.errandTermId) {
+                    //Add the next 3 locations for the rejected errand
+                    locationResults[i].usedPlaceIds.append(placeId)
+                    var excludedPlaceIds: [String] = locationResults[i].usedPlaceIds
+                    
+                    //Get next top locations for rejected errand
+                    var closestLocations: [Coordinates] = GetClosestLocationsForErrand(locationResults[i].locationSearchResults!, errandTermId: rejected.errandTermId, errandText: locationResults[i].errandText, excludedPlaceIds: excludedPlaceIds)
+                    if (closestLocations.count > 0) {
+                        closestLocationsPerErrand.append(closestLocations)
+                    } else {
+                        //No more results, so can't provide a new location
+                        
+                        
+                        var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+                      
+                        if (excludedPlaceIds.count > 0) {
+                            let title: String = "No more alternative locations"
+                            let msg: String = "Would you like to start over at the top of the list?"
+                            noresultsAlertController = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
+                            let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                                //If yes, clear out UsedPlaceIds for this errand and re-map:
+                                self.locationResults[i].usedPlaceIds.removeAll()
+                                self.noResults.removeAll()
+                               self.closestLocationsPerErrand.append(self.GetClosestLocationsForErrand(self.locationResults[i].locationSearchResults!,
+                                    errandTermId: self.locationResults[i].errandTermId, errandText: self.locationResults[i].errandText, excludedPlaceIds: nil))
+                            })
+                            let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                                //If no, exit method and do nothing:
+                                self.noResults.removeAll()
+                                
+                                for (index, value) in self.locationResults[i].usedPlaceIds.enumerate() {
+                                    if(value == placeId) {
+                                        self.locationResults[i].usedPlaceIds.removeAtIndex(index)
+                                    }
+                                }
+                                
+                                self.currentRouteLocations.append(rejected)
+                                // _loadPop.hide()
+                                return
+                            })
+                            
+                            noresultsAlertController.addAction(yesAction)
+                            noresultsAlertController.addAction(noAction)
+                        } else {
+                            //Inform user we have no alternative locations to provide
+                            let title2: String = "No more alternative locations"
+                            let msg2: String = "Unfortunately there are no more alternative locations to offer you for this errand."
+                            noresultsAlertController = UIAlertController(title: title2, message: msg2, preferredStyle: UIAlertControllerStyle.Alert)
+                            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                                self.noResults.removeAll()
+                                for (index, value) in self.locationResults[i].usedPlaceIds.enumerate() {
+                                    if(value == placeId) {
+                                        self.locationResults[i].usedPlaceIds.removeAtIndex(index)
+                                    }
+                                }
+                                self.currentRouteLocations.append(rejected)
+                                // _loadPop.hide()
+                                return
+                            })
+                            
+                            noresultsAlertController.addAction(okAction)
+                        }
+                    }
+                    
+                } else {
+                    //Get top locations for non-rejected 
+                    closestLocationsPerErrand.append(GetClosestLocationsForErrand(locationResults[i].locationSearchResults!,
+                        errandTermId: locationResults[i].errandTermId, errandText: locationResults[i].errandText, excludedPlaceIds: locationResults[i].usedPlaceIds))
+                }
+            }
+            
+            //Remove route info textview
+//            for sub in map.subviews) {
+//                if (sub.tag == 99) {
+//                    sub.removeFromSuperview()
+//                }
+//            }
+            
+            
+            // Clear all map markers and polylines
+            mapView?.clear()
+            
+            //TODO: Clear out third page directions
+            
+            CreateRoute()
+//            _myRoutes.removeAll()
+            
+        } catch {
+            DisplayErrorAlert("")
+        }
+    }
+    
     func DisplayErrorAlert(var errorMessage: String)
     {
         if(errorMessage.isEmpty){
