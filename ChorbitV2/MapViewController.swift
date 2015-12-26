@@ -633,6 +633,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             //TODO: Clear out third page directions
             
             CreateRoute()
+            
+            // Caching stuff:
 //            _myRoutes.removeAll()
             
         } catch {
