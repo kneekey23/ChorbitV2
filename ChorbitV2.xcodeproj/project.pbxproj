@@ -26,6 +26,7 @@
 		817139741C012C4700BA541F /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139731C012C4700BA541F /* SearchViewController.swift */; };
 		817139761C012CEE00BA541F /* FeaturedRouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139751C012CEE00BA541F /* FeaturedRouteController.swift */; };
 		817139781C012D1C00BA541F /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139771C012D1C00BA541F /* UserProfileViewController.swift */; };
+		817DD1321C3260BE0061AF7A /* DirectionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817DD1311C3260BD0061AF7A /* DirectionsController.swift */; };
 		81FD6AC21C1E2F15008A94DF /* NearbySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */; };
 		8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294201BEFFA3A0067059C /* RouteService.swift */; };
 		8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294241BF00D3A0067059C /* Coordinates.swift */; };
@@ -84,6 +85,7 @@
 		817139731C012C4700BA541F /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		817139751C012CEE00BA541F /* FeaturedRouteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturedRouteController.swift; sourceTree = "<group>"; };
 		817139771C012D1C00BA541F /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		817DD1311C3260BD0061AF7A /* DirectionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionsController.swift; sourceTree = "<group>"; };
 		81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbySearch.swift; sourceTree = "<group>"; };
 		87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChorbitV2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B2294201BEFFA3A0067059C /* RouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteService.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				81438E5C1C16989800551718 /* Constants.swift */,
 				81438E5E1C169DEF00551718 /* DynamoDbManager.swift */,
 				81438E601C16A1F400551718 /* ThemedRouteDetailViewController.swift */,
+				817DD1311C3260BD0061AF7A /* DirectionsController.swift */,
 			);
 			path = ChorbitV2;
 			sourceTree = "<group>";
@@ -448,6 +451,7 @@
 				8B85A26F1C2896E60090B4D3 /* GoogleDirectionsResponse.swift in Sources */,
 				8B22942D1BF01C1F0067059C /* ErrandResults.swift in Sources */,
 				8B85A26D1C2649290090B4D3 /* DirectionStep.swift in Sources */,
+				817DD1321C3260BE0061AF7A /* DirectionsController.swift in Sources */,
 				8B2294291BF017210067059C /* Copyright.swift in Sources */,
 				8B22942B1BF017AD0067059C /* ErrandDistance.swift in Sources */,
 				8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */,
