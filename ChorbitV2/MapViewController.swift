@@ -11,6 +11,7 @@ import UIKit
 import GoogleMaps
 import Alamofire
 import Polyline
+import KYCircularProgress
 
 class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
     
@@ -36,6 +37,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var routeDistance: Double = 0.0
     var durationSeconds: Int = 0
     var listGroupDict = [Int: [DirectionStep]]()
+    var halfCircularProgress: KYCircularProgress!
+    var progress: UInt8 = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,15 +48,23 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 
         mapView = GMSMapView.mapWithFrame(UIScreen.mainScreen().bounds, camera:camera)
         mapView!.delegate = self
-        
-        let marker = GMSMarker()
-        marker.position = camera.target
-        marker.snippet = "Hello World"
-        marker.appearAnimation = kGMSMarkerAnimationPop
-        marker.icon = UIImage(named: "Marker Filled-25")
-        marker.map = mapView
-        GetLocationInformation()
+      
         self.view.addSubview(mapView!)
+        
+        let buttonRect: UIButton = UIButton(frame: CGRect(x: 0, y: self.view.frame.maxY - 100, width: self.view.frame.width, height: 55))
+        buttonRect.setTitle("DIRECTIONS", forState: UIControlState.Normal)
+        buttonRect.layer.borderWidth = 1
+        
+        //set font here
+        buttonRect.layer.borderColor = UIColor(hexString: "#64D8C4").CGColor
+        buttonRect.backgroundColor = UIColor(hexString: "#64D8C4")
+        buttonRect.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Highlighted)
+        //self.view.insertSubview(buttonRect, aboveSubview: mapView!)
+        self.view.addSubview(buttonRect)
+        //buttonRect.targetForAction(<#T##action: Selector##Selector#>, withSender: <#T##AnyObject?#>)
+        
+        configureHalfCircularProgress()
+        GetLocationInformation()
     }
     
     func GetLocationInformation() {
@@ -93,6 +104,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 destination!.title = "My Final Destination"
           
         }
+        
         locationResults.removeAll()
         closestLocationsPerErrand.removeAll()
         noResults.removeAll()
@@ -121,7 +133,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if i == totalNumberOfErrands - 1{
                     self.allPlaceRequestsSent = true
                 }
-                
+                updateProgress()
                 fetchPlacesNearCoordinate(location, name:errandString, count: i) { (data, error, count) -> Void in
                     do{
                         if(data != nil){
@@ -156,6 +168,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                     }
                                     
                                     if(self.allPlaceRequestsSent && self.placeResponsesAwaiting == 0){
+                                        self.updateProgress()
                                         self.CreateRoute()
                                     }
                                     
@@ -175,17 +188,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 
             }
          
-          
-            
-            let buttonRect: UIButton = UIButton(frame: CGRect(x: 0, y: self.view.frame.maxY - 55, width: self.view.frame.width, height: 55))
-            buttonRect.setTitle("DIRECTIONS", forState: UIControlState.Normal)
-            buttonRect.layer.borderWidth = 1
-            //set font here
-            buttonRect.layer.borderColor = UIColor(hexString: "#64D8C4").CGColor
-            buttonRect.backgroundColor = UIColor(hexString: "#64D8C4")
-            buttonRect.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Highlighted)
-            self.view.addSubview(buttonRect)
-            //buttonRect.targetForAction(<#T##action: Selector##Selector#>, withSender: <#T##AnyObject?#>)
         }
         catch{
             print(error)
@@ -198,8 +200,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func GetClosestLocationsForErrand(search: NearbySearch, errandTermId: Int, errandText: String, excludedPlaceIds: [String]?) -> [Coordinates]{
       
         var closestLocations: [Coordinates] = []
-      
-  
  
             var maxResults: Int = 7
             if search.results.count > 0{
@@ -248,7 +248,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         urlString += "&name=\(name)"
 
         urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        print(urlString)
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 
@@ -286,12 +285,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             
         
         })
+        
         return coords
     }
     
     func CreateRoute()
     {
-        var locations: [Coordinates?] = [Coordinates()]
+        var locations: [Coordinates?] = []
         locations.append(origin)
         
         do {
@@ -304,7 +304,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 for locationList in closestLocationsPerErrand {
                     currentRouteLocations.append(locationList[0])
                 }
-                print(currentRouteLocations.count)
                 
                 if(currentRouteLocations.count < 1) {
                     let errandsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
@@ -386,22 +385,26 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //            var emptyDict = NSDictionary()
         
             if (_isRoundTrip && _errandLocations.count > 0) {
-                _errandLocations.append(_errandLocations[0]);
+                _errandLocations.append(_errandLocations[0])
             }
-            
-            let directionRequests: Int = _errandLocations.count - 1;
-            
-            for var i = 0; i < directionRequests; i++ {
-                var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(_errandLocations[i].position.latitude),\(_errandLocations[i].position.longitude)&destination=\(_errandLocations[i + 1].position.latitude),\(_errandLocations[i + 1].position.longitude)"
-                url = url.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-                print(url)
-                
-                do {
-                    GetDirections(url);
-                } catch {
-                    DisplayErrorAlert("");
+        
+//            let waypoints = _errandLocations[2..._errandLocations.count - 1]
+        
+            var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(_errandLocations[0].position.latitude),\(_errandLocations[0].position.longitude)&destination=\(_errandLocations[1].position.latitude),\(_errandLocations[1].position.longitude)&waypoints="
+        
+            for var i = 2; i < _errandLocations.count; i++ {
+                url += "\(_errandLocations[i].position.latitude),\(_errandLocations[i].position.longitude)"
+                if(i != _errandLocations.count - 1) {
+                    url += "|"
                 }
-                
+            }
+        
+            url = url.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+            updateProgress()
+            do {
+                GetDirections(url);
+            } catch {
+                DisplayErrorAlert("");
             }
             
             if (_errandLocations.count == 0) {
@@ -411,32 +414,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 return
             }
             
-            //TODO: move region code to a new method
-//            CLLocationCoordinate2D mapCenter = new CLLocationCoordinate2D (_errandLocations[1].Coordinate.Latitude, _errandLocations[1].Coordinate.Longitude);
-//            MKCoordinateRegion mapRegion = GetRegionForAnnotations (_errandLocations, mapCenter);
-//            map.CenterCoordinate = mapCenter;
-//            map.Region = mapRegion;
-            
             //Present Alert
             if (noResults.count > 0) {
                 self.presentViewController(noresultsAlertController, animated: true, completion: nil)
             }
-//        }
     }
     
     func GetDirections(url: String)
     {
         var temp: [DirectionStep] = []
-        
         Alamofire.request(.GET, url)
             .responseJSON { response in
-                print(response.request)  // original URL request
-                print(response.response) // URL response
-                print(response.data)     // server data
-                print(response.result)   // result of response serialization
                 
                 if let json = response.result.value {
-                    print("JSON: \(json)")
                     let directionsResponse: GoogleDirectionsResponse = GoogleDirectionsResponse(json as! [String : AnyObject])
                     
                     for route in directionsResponse.routes {
@@ -459,7 +449,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         }
                         
                         // Bounds contains the viewport bounding box of the overview_polyline
-                        let bounds = route.bounds
+                        let southwest = CLLocationCoordinate2DMake(route.bounds.southwest.lat, route.bounds.southwest.lng)
+                        let northeast = CLLocationCoordinate2DMake(route.bounds.northeast.lat, route.bounds.northeast.lng)
+                        let bounds = GMSCoordinateBounds(coordinate: southwest, coordinate: northeast)
+                        let padding = CGFloat(30)
+                        let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
+                        self.mapView!.animateWithCameraUpdate(fitBounds)
+                        
                         
                         for leg in route.legs {
 //                            if (leg.distance != nil) {
@@ -491,7 +487,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         
                         // TODO: Add all steps to directions page
                         
-                        
+                        self.self.updateProgress()
                         
                         
                         // accomplishing 1 decimal place with * 10 / 10
@@ -538,6 +534,122 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
     
+    func RejectLocation(placeId: String)
+    {
+        do {
+            //TODO: add loading overlay here
+            
+            
+            closestLocationsPerErrand.removeAll()
+            noResults.removeAll()
+            
+            //Identify rejected location within currentRouteLocations
+            //and remove it from currentRouteLocations
+            var rejected: Coordinates = Coordinates()
+            for var i = 0; i < currentRouteLocations.count; i++ {
+                if (currentRouteLocations[i]!.placeId == placeId) {
+                    rejected = currentRouteLocations[i]!
+                    currentRouteLocations.removeAtIndex(i)
+                    break
+                }
+            }
+            
+            var button: Int = 0
+            for var i = 0; i < locationResults.count; i++ {
+                if (locationResults[i].errandTermId == rejected.errandTermId) {
+                    //Add the next 3 locations for the rejected errand
+                    locationResults[i].usedPlaceIds.append(placeId)
+                    var excludedPlaceIds: [String] = locationResults[i].usedPlaceIds
+                    
+                    //Get next top locations for rejected errand
+                    var closestLocations: [Coordinates] = GetClosestLocationsForErrand(locationResults[i].locationSearchResults!, errandTermId: rejected.errandTermId, errandText: locationResults[i].errandText, excludedPlaceIds: excludedPlaceIds)
+                    if (closestLocations.count > 0) {
+                        closestLocationsPerErrand.append(closestLocations)
+                    } else {
+                        //No more results, so can't provide a new location
+                        
+                        
+                        var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+                      
+                        if (excludedPlaceIds.count > 0) {
+                            let title: String = "No more alternative locations"
+                            let msg: String = "Would you like to start over at the top of the list?"
+                            noresultsAlertController = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
+                            let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                                //If yes, clear out UsedPlaceIds for this errand and re-map:
+                                self.locationResults[i].usedPlaceIds.removeAll()
+                                self.noResults.removeAll()
+                               self.closestLocationsPerErrand.append(self.GetClosestLocationsForErrand(self.locationResults[i].locationSearchResults!,
+                                    errandTermId: self.locationResults[i].errandTermId, errandText: self.locationResults[i].errandText, excludedPlaceIds: nil))
+                            })
+                            let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                                //If no, exit method and do nothing:
+                                self.noResults.removeAll()
+                                
+                                for (index, value) in self.locationResults[i].usedPlaceIds.enumerate() {
+                                    if(value == placeId) {
+                                        self.locationResults[i].usedPlaceIds.removeAtIndex(index)
+                                    }
+                                }
+                                
+                                self.currentRouteLocations.append(rejected)
+                                // _loadPop.hide()
+                                return
+                            })
+                            
+                            noresultsAlertController.addAction(yesAction)
+                            noresultsAlertController.addAction(noAction)
+                        } else {
+                            //Inform user we have no alternative locations to provide
+                            let title2: String = "No more alternative locations"
+                            let msg2: String = "Unfortunately there are no more alternative locations to offer you for this errand."
+                            noresultsAlertController = UIAlertController(title: title2, message: msg2, preferredStyle: UIAlertControllerStyle.Alert)
+                            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                                self.noResults.removeAll()
+                                for (index, value) in self.locationResults[i].usedPlaceIds.enumerate() {
+                                    if(value == placeId) {
+                                        self.locationResults[i].usedPlaceIds.removeAtIndex(index)
+                                    }
+                                }
+                                self.currentRouteLocations.append(rejected)
+                                // _loadPop.hide()
+                                return
+                            })
+                            
+                            noresultsAlertController.addAction(okAction)
+                        }
+                    }
+                    
+                } else {
+                    //Get top locations for non-rejected 
+                    closestLocationsPerErrand.append(GetClosestLocationsForErrand(locationResults[i].locationSearchResults!,
+                        errandTermId: locationResults[i].errandTermId, errandText: locationResults[i].errandText, excludedPlaceIds: locationResults[i].usedPlaceIds))
+                }
+            }
+            
+            //Remove route info textview
+//            for sub in map.subviews) {
+//                if (sub.tag == 99) {
+//                    sub.removeFromSuperview()
+//                }
+//            }
+            
+            
+            // Clear all map markers and polylines
+            mapView?.clear()
+            
+            //TODO: Clear out third page directions
+            
+            CreateRoute()
+            
+            // Caching stuff:
+//            _myRoutes.removeAll()
+            
+        } catch {
+            DisplayErrorAlert("")
+        }
+    }
+    
     func DisplayErrorAlert(var errorMessage: String)
     {
         if(errorMessage.isEmpty){
@@ -554,6 +666,45 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         self.presentViewController(alertController, animated: true, completion: nil)
         
+    }
+    
+    func configureHalfCircularProgress() {
+        
+        let halfCircularProgressFrame = CGRectMake(0, 0, CGRectGetWidth(view.frame), CGRectGetHeight(view.frame))
+        
+        halfCircularProgress = KYCircularProgress(frame: halfCircularProgressFrame, showProgressGuide: true)
+        halfCircularProgress.backgroundColor = UIColor.grayColor()
+        let center = CGPoint(x: 180.0, y: 200.0)
+        halfCircularProgress.path = UIBezierPath(arcCenter: center, radius: CGFloat(CGRectGetWidth(halfCircularProgress.frame)/3), startAngle: CGFloat(M_PI), endAngle: CGFloat(0.0), clockwise: true)
+        halfCircularProgress.colors = [UIColor.purpleColor(), UIColor(rgba: 0xFFF77A55), UIColor(hexString: "#64D8C4")]
+        halfCircularProgress.lineWidth = 8.0
+        halfCircularProgress.progressGuideColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.5)
+        
+        let textLabel = UILabel(frame: CGRectMake(halfCircularProgress.frame.origin.x + 120.0, 170.0, 80.0, 32.0))
+        textLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 32)
+        textLabel.textAlignment = .Center
+        textLabel.textColor = UIColor.blackColor()
+        textLabel.alpha = 0.5
+        halfCircularProgress.addSubview(textLabel)
+        
+        halfCircularProgress.progressChangedClosure() {
+            (progress: Double, circularView: KYCircularProgress) in
+            print("progress: \(progress)")
+            textLabel.text = "\(Int(progress * 100.0))%"
+        }
+        
+        view.addSubview(halfCircularProgress)
+        view.bringSubviewToFront(halfCircularProgress)
+    }
+    
+    func updateProgress() {
+        progress = progress &+ 25
+        let normalizedProgress = Double(progress) / 100.0
+        
+        halfCircularProgress.progress = normalizedProgress
+        if normalizedProgress == 1 {
+            halfCircularProgress.hidden = true
+        }
     }
     
     func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
