@@ -30,7 +30,7 @@ class ThemedRouteDetailViewController: UIViewController {
                     let tableRow = task.result as! DDBTableRow
                     self.routeDescription.text = tableRow.routeDescription
                     //TODO: display images properly NJK
-                    //self.place1Image..imageFromUrl(tableRow.place1Image!)
+                    //self.place1Image.imageFromUrl(tableRow.place1Image!)
                     //self.place2Image.imageFromUrl(tableRow.place2Image!)
                     //self.place3Image.imageFromUrl(tableRow.place3Image!)
                     self.potentialRoute.append(tableRow.place1!)

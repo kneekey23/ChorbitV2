@@ -157,12 +157,27 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     //then you declare what you want to display in the cell NJK
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("errandCell", forIndexPath: indexPath)
-
+        
+        let errandLastItemIndex = (parentViewController?.parentViewController as! MainViewController).errandSelection.count - 1
         let errand = (parentViewController?.parentViewController as! MainViewController).errandSelection[indexPath.row]
-        
-        // Configure the cell
-        cell.textLabel!.text = errand
-        
+            // Configure the cell
+             var image : UIImage?
+        if(indexPath.row == 0){
+            cell.textLabel!.text = "Start: " + errand
+             image = UIImage(named: "Compass-32")!
+        }
+        else if(errandLastItemIndex == indexPath.row && !self.destinationToggle.on){
+            cell.textLabel!.text = "End: " + errand
+             image = UIImage(named: "Flag Filled -32")!
+        }
+        else{
+             cell.textLabel!.text = errand
+             image = UIImage(named: "Geo-fence Filled-25")!
+        }
+    
+        if image != nil{
+            cell.imageView!.image = image
+        }
         
         return cell
     }
@@ -248,7 +263,7 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
     //when you pick something on autocomplete this gets called. NJK
     func placeSelected(place: Place) {
   
-        if((parentViewController?.parentViewController as! MainViewController).errandSelection.count <= 10){
+        if((parentViewController?.parentViewController as! MainViewController).errandSelection.count <= 5){
             if(!place.isAddressOnly){
                 if(place.isContact){
                      (parentViewController?.parentViewController as! MainViewController).errandSelection.append(place.contactAddress!)
@@ -258,8 +273,8 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
                 }
             }
             else{
-                let lastIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count - 1
-                if(self.destinationToggle.on){
+                let lastIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count
+                if(!self.destinationToggle.on){
                     (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(place.description, atIndex: lastIndex)
                 }
                 else{
