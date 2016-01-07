@@ -110,9 +110,9 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         //reloads TableData when you return to page in case you updated from another page. NJK
-        if(self.errandTableView != nil){
-            self.errandTableView.reloadData()
-        }
+
+        self.errandTableView.reloadData()
+        
         
         locMan.startUpdatingLocation()
     }
@@ -126,9 +126,9 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         //this gets rid of ui issue where image blocks line from showing up completely NJK
         if(self.errandTableView != nil){
              self.errandTableView!.separatorInset = UIEdgeInsetsZero;
+               self.errandTableView.reloadData()
         }
        
-        
         // Do any additional setup after loading the view, typically from a nib.
     }
     

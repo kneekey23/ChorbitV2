@@ -30,9 +30,9 @@ class ThemedRouteDetailViewController: UIViewController {
                     let tableRow = task.result as! DDBTableRow
                     self.routeDescription.text = tableRow.routeDescription
                     //TODO: display images properly NJK
-                    //self.place1Image.imageFromUrl(tableRow.place1Image!)
-                    //self.place2Image.imageFromUrl(tableRow.place2Image!)
-                    //self.place3Image.imageFromUrl(tableRow.place3Image!)
+                    self.place1Image.downloadedFrom(link: tableRow.place1Image!, contentMode: UIViewContentMode.ScaleAspectFit)
+                    self.place2Image.downloadedFrom(link: tableRow.place2Image!, contentMode: UIViewContentMode.ScaleAspectFit)
+                    self.place3Image.downloadedFrom(link: tableRow.place3Image!, contentMode: UIViewContentMode.ScaleAspectFit)
                     self.potentialRoute.append(tableRow.place1!)
                     self.potentialRoute.append(tableRow.place2!)
                     self.potentialRoute.append(tableRow.place3!)
@@ -72,20 +72,18 @@ class ThemedRouteDetailViewController: UIViewController {
     }
     
     @IBAction func launchThemedRoute(sender: AnyObject) {
-        var errandArray = (parentViewController?.parentViewController as! MainViewController).errandSelection
-        if(errandArray.count > 0){
-            errandArray.removeAll()
+        let controller = tabBarController as! MainViewController
+       
+        if( controller.errandSelection.count > 1){
+            
+             controller.errandSelection.removeRange(1...4)
         }
         
         for errand in potentialRoute{
-            errandArray.append(errand)
+             controller.errandSelection.append(errand)
         }
-        //TODO: fix this function so that it doesn't break. NJK
-        for controller in self.navigationController!.viewControllers as Array {
-            if controller.isKindOfClass(SearchViewController) {
-                self.navigationController?.popToViewController(controller as UIViewController, animated: true)
-                break
-            }
-        }
+      
+        tabBarController?.selectedIndex = 0
+
     }
 }

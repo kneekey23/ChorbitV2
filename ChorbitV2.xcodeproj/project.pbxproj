@@ -17,7 +17,6 @@
 		814C98D41C0D6D5900F008C4 /* GooglePlacesAutocomplete.xib in Resources */ = {isa = PBXBuildFile; fileRef = 814C98D31C0D6D5900F008C4 /* GooglePlacesAutocomplete.xib */; };
 		814C98D61C0D77E600F008C4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814C98D51C0D77E600F008C4 /* Extensions.swift */; };
 		816609D91BE0B6BD008B797E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609D81BE0B6BD008B797E /* AppDelegate.swift */; };
-		816609E01BE0B6BD008B797E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 816609DE1BE0B6BD008B797E /* Main.storyboard */; };
 		816609E21BE0B6BD008B797E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 816609E11BE0B6BD008B797E /* Assets.xcassets */; };
 		816609E51BE0B6BD008B797E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 816609E31BE0B6BD008B797E /* LaunchScreen.storyboard */; };
 		816609F01BE0B6BD008B797E /* ChorbitV2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816609EF1BE0B6BD008B797E /* ChorbitV2Tests.swift */; };
@@ -27,6 +26,7 @@
 		817139761C012CEE00BA541F /* FeaturedRouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139751C012CEE00BA541F /* FeaturedRouteController.swift */; };
 		817139781C012D1C00BA541F /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139771C012D1C00BA541F /* UserProfileViewController.swift */; };
 		817DD1321C3260BE0061AF7A /* DirectionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817DD1311C3260BD0061AF7A /* DirectionsController.swift */; };
+		81AF490C1C3E317600309615 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AF490B1C3E317600309615 /* Main.storyboard */; };
 		81FD6AC21C1E2F15008A94DF /* NearbySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */; };
 		8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294201BEFFA3A0067059C /* RouteService.swift */; };
 		8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294241BF00D3A0067059C /* Coordinates.swift */; };
@@ -71,7 +71,6 @@
 		814C98D51C0D77E600F008C4 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		816609D51BE0B6BD008B797E /* ChorbitV2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChorbitV2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		816609D81BE0B6BD008B797E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		816609DF1BE0B6BD008B797E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		816609E11BE0B6BD008B797E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		816609E41BE0B6BD008B797E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		816609E61BE0B6BD008B797E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -86,6 +85,7 @@
 		817139751C012CEE00BA541F /* FeaturedRouteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturedRouteController.swift; sourceTree = "<group>"; };
 		817139771C012D1C00BA541F /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		817DD1311C3260BD0061AF7A /* DirectionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionsController.swift; sourceTree = "<group>"; };
+		81AF490B1C3E317600309615 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = ../../../../.Trash/Main.storyboard; sourceTree = "<group>"; };
 		81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbySearch.swift; sourceTree = "<group>"; };
 		87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChorbitV2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B2294201BEFFA3A0067059C /* RouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteService.swift; sourceTree = "<group>"; };
@@ -163,11 +163,11 @@
 		816609D71BE0B6BD008B797E /* ChorbitV2 */ = {
 			isa = PBXGroup;
 			children = (
+				81AF490B1C3E317600309615 /* Main.storyboard */,
 				816895981C2A547300CA5B87 /* AutoCompleteCell.xib */,
 				8B2294231BF00CB50067059C /* Models */,
 				8B2294221BEFFA470067059C /* Services */,
 				816609D81BE0B6BD008B797E /* AppDelegate.swift */,
-				816609DE1BE0B6BD008B797E /* Main.storyboard */,
 				814676921C0BA56000EA06F3 /* MapViewController.swift */,
 				816609E11BE0B6BD008B797E /* Assets.xcassets */,
 				816609E31BE0B6BD008B797E /* LaunchScreen.storyboard */,
@@ -355,9 +355,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				816609E51BE0B6BD008B797E /* LaunchScreen.storyboard in Resources */,
+				81AF490C1C3E317600309615 /* Main.storyboard in Resources */,
 				816609E21BE0B6BD008B797E /* Assets.xcassets in Resources */,
 				814C98D41C0D6D5900F008C4 /* GooglePlacesAutocomplete.xib in Resources */,
-				816609E01BE0B6BD008B797E /* Main.storyboard in Resources */,
 				816895991C2A547300CA5B87 /* AutoCompleteCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -491,14 +491,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		816609DE1BE0B6BD008B797E /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				816609DF1BE0B6BD008B797E /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		816609E31BE0B6BD008B797E /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
