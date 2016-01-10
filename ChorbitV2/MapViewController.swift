@@ -12,6 +12,8 @@ import GoogleMaps
 import Alamofire
 import Polyline
 import KYCircularProgress
+import SwiftyJSON
+import ObjectMapper
 
 class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
     
@@ -202,7 +204,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       
         var closestLocations: [Coordinates] = []
  
-            var maxResults: Int = 7
+            var maxResults: Int = 3
             if search.results.count > 0{
               
                 if(search.results.count < maxResults){
@@ -298,22 +300,129 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         do {
             //Only hit up mapquest api for optimized route if there are 2 or more errands
             if (closestLocationsPerErrand.count > 1) {
-//                HomegrownRouteService routeService = new HomegrownRouteService ();
-//                currentRouteLocations = routeService.GetOptimizedRoute (origin, closestLocationsPerErrand, destination);
+                let routeServiceUrl = "https://b97482pu3h.execute-api.us-west-2.amazonaws.com/test/ChorbitAlgorithm"
                 
-                // TODO: Remove this hardcoded crap thats only here instead of calling HomegrownRouteService:
-                for locationList in closestLocationsPerErrand {
-                    currentRouteLocations.append(locationList[0])
+                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: origin!, errands: closestLocationsPerErrand, destination: destination!)
+                
+                let requestObj: AnyObject = routeServiceRequest
+                let JSONString = Mapper().toJSONString(routeServiceRequest)
+                let params: [String: AnyObject] = ["request": JSONString!]
+                
+                Alamofire.request(.POST, routeServiceUrl, parameters: params, encoding: .JSON)
+                    .responseJSON { response in
+                        
+                        if let json = response.result.value {
+                            let routeServiceResponse: RouteServiceResponse = RouteServiceResponse(json as! [String : AnyObject])
+                            
+                            for r in routeServiceResponse.results {
+                                print(r)
+                                self.currentRouteLocations.append(Coordinates?(r))
+                            }
+                            
+                            if(self.currentRouteLocations.count < 1) {
+                                let errandsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
+                                self.DisplayErrorAlert(errandsNotFound)
+                                self.mapErroredOut = true;
+                                return;
+                            }
+                            
+                            locations += self.currentRouteLocations;
+                            
+                            if (!self._isRoundTrip) {
+                                locations.append(self.destination);
+                            }
+                            
+                            var errandCount: Int = (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
+                            
+                            for (index, value) in locations.enumerate() {
+                                let errandText: String = value!.errandText.uppercaseString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+                                var locationTitle: String = value!.title
+                                
+                                // Temporary fix: in future move to filter method and add filters for other known title issues
+                                if (errandText == "CVS" && locationTitle.characters.count > 3 && locationTitle.uppercaseString.containsString("CVS")) {
+                                    locationTitle = "CVS"
+                                }
+                                if (errandText == "CVS" && locationTitle.uppercaseString.containsString("ATM")) {
+                                    locationTitle = "CVS"
+                                }
+                                // End Temporary fix
+                                
+                                self._errandLocations.append(BasicMapAnnotation(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
+                            }
+                            
+                            var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+                            if (self.noResults.count > 0) {
+                                var noResultsMsg: String = ""
+                                for nr in self.noResults {
+                                    //Create Alert
+                                    if (!nr.isEmpty) {
+                                        noResultsMsg += nr + " did not return any results. "
+                                    }
+                                    
+                                }
+                                
+                                noresultsAlertController = UIAlertController(title: "No Results Found", message: noResultsMsg, preferredStyle: UIAlertControllerStyle.Alert)
+                                let tryAgainAction = UIAlertAction(title: "Go Back and Re-enter", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                                    self.navigationController?.popToRootViewControllerAnimated(true)
+                                })
+                                //Add Actions
+                                if (self.noResults.count != self.numErrands) {
+                                    let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                                        print("Okay was clicked")
+                                    })
+                                    
+                                    noresultsAlertController.addAction(okAction)
+                                    noresultsAlertController.addAction(tryAgainAction)
+                                    
+                                } else {
+                                    self.mapErroredOut = true;
+                                    noresultsAlertController.addAction(tryAgainAction)
+                                }
+                                
+                            }
+                            
+                            //Create Origin and Dest Place Marks and Map Items to use for directions
+                            //            var emptyDict = NSDictionary()
+                            
+                            if (self._isRoundTrip && self._errandLocations.count > 0) {
+                                self._errandLocations.append(self._errandLocations[0])
+                            }
+                            
+                            //            let waypoints = _errandLocations[2..._errandLocations.count - 1]
+                            
+                            var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(self._errandLocations[0].position.latitude),\(self._errandLocations[0].position.longitude)&destination=\(self._errandLocations[1].position.latitude),\(self._errandLocations[1].position.longitude)&waypoints="
+                            
+                            for var i = 2; i < self._errandLocations.count; i++ {
+                                url += "\(self._errandLocations[i].position.latitude),\(self._errandLocations[i].position.longitude)"
+                                if(i != self._errandLocations.count - 1) {
+                                    url += "|"
+                                }
+                            }
+                            
+                            url = url.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+                            self.updateProgress()
+                            do {
+                                self.GetDirections(url);
+                            } catch {
+                                self.DisplayErrorAlert("");
+                            }
+                            
+                            if (self._errandLocations.count == 0) {
+                                let locationsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
+                                self.DisplayErrorAlert(locationsNotFound)
+                                self.mapErroredOut = true
+                                return
+                            }
+                            
+                            //Present Alert
+                            if (self.noResults.count > 0) {
+                                self.presentViewController(noresultsAlertController, animated: true, completion: nil)
+                            }
+                        }
                 }
                 
-                if(currentRouteLocations.count < 1) {
-                    let errandsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
-                    DisplayErrorAlert(errandsNotFound)
-                    mapErroredOut = true;
-                    return;
-                }
                 
-                locations += currentRouteLocations;
+                
             } else {
                 //This just means that there's only one errand
                 for locationList in closestLocationsPerErrand {
@@ -329,96 +438,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             DisplayErrorAlert("");
         }
         
-        if (!_isRoundTrip) {
-            locations.append(destination);
-        }
         
-        var errandCount: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
-        
-        for (index, value) in locations.enumerate() {
-            let errandText: String = value!.errandText.uppercaseString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            var locationTitle: String = value!.title
-            
-            // Temporary fix: in future move to filter method and add filters for other known title issues
-            if (errandText == "CVS" && locationTitle.characters.count > 3 && locationTitle.uppercaseString.containsString("CVS")) {
-                locationTitle = "CVS"
-            }
-            if (errandText == "CVS" && locationTitle.uppercaseString.containsString("ATM")) {
-                locationTitle = "CVS"
-            }
-            // End Temporary fix
-            
-            _errandLocations.append(BasicMapAnnotation(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
-        }
-            
-            var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
-            if (noResults.count > 0) {
-                var noResultsMsg: String = ""
-                for nr in noResults {
-                    //Create Alert
-                    if (!nr.isEmpty) {
-                        noResultsMsg += nr + " did not return any results. "
-                    }
-                    
-                }
-                
-                noresultsAlertController = UIAlertController(title: "No Results Found", message: noResultsMsg, preferredStyle: UIAlertControllerStyle.Alert)
-                let tryAgainAction = UIAlertAction(title: "Go Back and Re-enter", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
-                    self.navigationController?.popToRootViewControllerAnimated(true)
-                })
-                //Add Actions
-                if (noResults.count != numErrands) {
-                    let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
-                        print("Okay was clicked")
-                    })
-                    
-                    noresultsAlertController.addAction(okAction)
-                    noresultsAlertController.addAction(tryAgainAction)
-                    
-                } else {
-                    mapErroredOut = true;
-                    noresultsAlertController.addAction(tryAgainAction)
-                }
-                
-            }
-            
-            //Create Origin and Dest Place Marks and Map Items to use for directions
-//            var emptyDict = NSDictionary()
-        
-            if (_isRoundTrip && _errandLocations.count > 0) {
-                _errandLocations.append(_errandLocations[0])
-            }
-        
-//            let waypoints = _errandLocations[2..._errandLocations.count - 1]
-        
-            var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(_errandLocations[0].position.latitude),\(_errandLocations[0].position.longitude)&destination=\(_errandLocations[1].position.latitude),\(_errandLocations[1].position.longitude)&waypoints="
-        
-            for var i = 2; i < _errandLocations.count; i++ {
-                url += "\(_errandLocations[i].position.latitude),\(_errandLocations[i].position.longitude)"
-                if(i != _errandLocations.count - 1) {
-                    url += "|"
-                }
-            }
-        
-            url = url.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-            updateProgress()
-            do {
-                GetDirections(url);
-            } catch {
-                DisplayErrorAlert("");
-            }
-            
-            if (_errandLocations.count == 0) {
-                let locationsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
-                DisplayErrorAlert(locationsNotFound)
-                mapErroredOut = true
-                return
-            }
-            
-            //Present Alert
-            if (noResults.count > 0) {
-                self.presentViewController(noresultsAlertController, animated: true, completion: nil)
-            }
     }
     
     func GetDirections(url: String)
