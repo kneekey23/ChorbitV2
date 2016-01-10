@@ -63,7 +63,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "239"
             endingLineNumber = "239"
-            landmarkName = "fetchPlacesNearCoordinate(_:name:count:completionHandler:)"
+            landmarkName = "GetClosestLocationsForErrand(_:errandTermId:errandText:excludedPlaceIds:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -207,7 +207,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "286"
             endingLineNumber = "286"
-            landmarkName = "CreateRoute()"
+            landmarkName = "GetLatLng(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
