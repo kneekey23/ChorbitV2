@@ -26,7 +26,7 @@
 		817139761C012CEE00BA541F /* FeaturedRouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139751C012CEE00BA541F /* FeaturedRouteController.swift */; };
 		817139781C012D1C00BA541F /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139771C012D1C00BA541F /* UserProfileViewController.swift */; };
 		817DD1321C3260BE0061AF7A /* DirectionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817DD1311C3260BD0061AF7A /* DirectionsController.swift */; };
-		81AF490C1C3E317600309615 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AF490B1C3E317600309615 /* Main.storyboard */; };
+		81AF49101C41EDC900309615 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AF490F1C41EDC900309615 /* Main.storyboard */; };
 		81FD6AC21C1E2F15008A94DF /* NearbySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */; };
 		8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294201BEFFA3A0067059C /* RouteService.swift */; };
 		8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294241BF00D3A0067059C /* Coordinates.swift */; };
@@ -85,7 +85,7 @@
 		817139751C012CEE00BA541F /* FeaturedRouteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturedRouteController.swift; sourceTree = "<group>"; };
 		817139771C012D1C00BA541F /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		817DD1311C3260BD0061AF7A /* DirectionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionsController.swift; sourceTree = "<group>"; };
-		81AF490B1C3E317600309615 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = ../../../../.Trash/Main.storyboard; sourceTree = "<group>"; };
+		81AF490F1C41EDC900309615 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbySearch.swift; sourceTree = "<group>"; };
 		87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChorbitV2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B2294201BEFFA3A0067059C /* RouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteService.swift; sourceTree = "<group>"; };
@@ -163,7 +163,7 @@
 		816609D71BE0B6BD008B797E /* ChorbitV2 */ = {
 			isa = PBXGroup;
 			children = (
-				81AF490B1C3E317600309615 /* Main.storyboard */,
+				81AF490F1C41EDC900309615 /* Main.storyboard */,
 				816895981C2A547300CA5B87 /* AutoCompleteCell.xib */,
 				8B2294231BF00CB50067059C /* Models */,
 				8B2294221BEFFA470067059C /* Services */,
@@ -355,8 +355,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				816609E51BE0B6BD008B797E /* LaunchScreen.storyboard in Resources */,
-				81AF490C1C3E317600309615 /* Main.storyboard in Resources */,
 				816609E21BE0B6BD008B797E /* Assets.xcassets in Resources */,
+				81AF49101C41EDC900309615 /* Main.storyboard in Resources */,
 				814C98D41C0D6D5900F008C4 /* GooglePlacesAutocomplete.xib in Resources */,
 				816895991C2A547300CA5B87 /* AutoCompleteCell.xib in Resources */,
 			);
