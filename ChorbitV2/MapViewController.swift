@@ -28,6 +28,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var currentRouteLocations: [Coordinates?] = []
     var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
+     var temp: [DirectionStep] = []
     
     var placeResponsesAwaiting: Int = 0;
     var allPlaceRequestsSent: Bool = false;
@@ -40,6 +41,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var halfCircularProgress: KYCircularProgress!
     var progress: UInt8 = 0
     
+    @IBOutlet weak var buttonRect: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,21 +52,20 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         mapView!.delegate = self
       
         self.view.addSubview(mapView!)
-        
-        let buttonRect: UIButton = UIButton(frame: CGRect(x: 0, y: self.view.frame.maxY - 100, width: self.view.frame.width, height: 55))
-        buttonRect.setTitle("DIRECTIONS", forState: UIControlState.Normal)
-        buttonRect.layer.borderWidth = 1
-        
-        //set font here
-        buttonRect.layer.borderColor = UIColor(hexString: "#64D8C4").CGColor
-        buttonRect.backgroundColor = UIColor(hexString: "#64D8C4")
-        buttonRect.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Highlighted)
-        //self.view.insertSubview(buttonRect, aboveSubview: mapView!)
         self.view.addSubview(buttonRect)
-        //buttonRect.targetForAction(<#T##action: Selector##Selector#>, withSender: <#T##AnyObject?#>)
+  
         
         configureHalfCircularProgress()
         GetLocationInformation()
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "mapToDirectionsSegue"{
+            let directionsViewController = segue.destinationViewController as! DirectionsController
+            directionsViewController.directions = temp
+            
+        }
+        
     }
     
     func GetLocationInformation() {
@@ -422,7 +423,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func GetDirections(url: String)
     {
-        var temp: [DirectionStep] = []
+       
         Alamofire.request(.GET, url)
             .responseJSON { response in
                 
@@ -455,9 +456,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         let padding = CGFloat(30)
                         let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
                         self.mapView!.animateWithCameraUpdate(fitBounds)
-                        
+
                         
                         for leg in route.legs {
+                            //directionStep.errandGroupNumber = String(format: "%02d %02d", "To", _errandLocations [i + 1].errandText)
 //                            if (leg.distance != nil) {
                                 self.totalDistanceMeters += leg.distance.value
 //                            }
@@ -471,23 +473,23 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             var instructionIndex: Int = 1;
                             for step in leg.steps {
                                 let directionStep: DirectionStep = DirectionStep()
-//                                directionStep.errandGroupNumber = string.Format ("{0} {1}", "To", _errandLocations [i + 1].Title);
-//                                directionStep.directionText = step.html_instructions;
+
+                                directionStep.directionText = step.html_instructions.stringByReplacingOccurrencesOfString("<[^>]+>", withString: "", options: .RegularExpressionSearch, range: nil);
                                 directionStep.stepIndex = instructionIndex;
                                 if(instructionIndex != 1)
                                 {
-                                    directionStep.distance = step.distance.value
-                                    directionStep.duration = step.duration.value
+                                    directionStep.distance = step.distance.text
+                                    directionStep.duration = step.duration.text
                                 }
                                 
-                                temp.append(directionStep);
+                                self.temp.append(directionStep);
                                 instructionIndex++;
                             }
                         }
                         
                         // TODO: Add all steps to directions page
                         
-                        self.self.updateProgress()
+                        self.updateProgress()
                         
                         
                         // accomplishing 1 decimal place with * 10 / 10

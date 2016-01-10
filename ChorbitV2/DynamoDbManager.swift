@@ -17,8 +17,11 @@ class DDBTableRow :AWSDynamoDBObjectModel ,AWSDynamoDBModeling  {
     var place2:String?
     var place3:String?
     var place1Image:String?
+    var place1Description: String?
     var place2Image: String?
+    var place2Description: String?
     var place3Image: String?
+    var place3Description: String?
     var routeDescription: String?
     
     
