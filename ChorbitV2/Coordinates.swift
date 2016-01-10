@@ -35,14 +35,14 @@ class Coordinates: Mappable {
         self.errandOrder = errandOrder
     }
     
-    init (_ json: [String: AnyObject]) {
-        
-        if let lat = json["lat"] as? Double { self.lat = lat }
-        else { self.lat = 0 }
-        
-        if let long = json["long"] as? Double { self.long = long }
-        else { self.long = 0 }
-    }
+//    init (_ json: [String: AnyObject]) {
+//        
+//        if let lat = json["lat"] as? Double { self.lat = lat }
+//        else { self.lat = 0 }
+//        
+//        if let long = json["long"] as? Double { self.long = long }
+//        else { self.long = 0 }
+//    }
     
     required init?(_ map: Map) {
         
@@ -58,5 +58,29 @@ class Coordinates: Mappable {
         placeId <- map["placeId"]
         errandText <- map["errandText"]
         errandOrder <- map["errandOrder"]
+    }
+    
+    init (_ json: [String: AnyObject]) {
+        
+        if let long = json["long"] as? Double { self.long = long }
+        else { self.long = 0 }
+        
+        if let title = json["title"] as? String { self.title = title }
+        else { self.title = "" }
+        
+        if let errandText = json["errandText"] as? String { self.errandText = errandText }
+        else { self.errandText = "" }
+        
+        if let errandTermId = json["errandTermId"] as? Int { self.errandTermId = errandTermId }
+        else { self.errandTermId = 0 }
+        
+        if let subtitle = json["subtitle"] as? String { self.subtitle = subtitle }
+        else { self.subtitle = "" }
+        
+        if let placeId = json["placeId"] as? String { self.placeId = placeId }
+        else { self.placeId = "" }
+        
+        if let lat = json["lat"] as? Double { self.lat = lat }
+        else { self.lat = 0 }
     }
 }
