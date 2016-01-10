@@ -13,6 +13,9 @@ import AWSDynamoDB
 
 class ThemedRouteDetailViewController: UIViewController {
     
+    @IBOutlet weak var place3Description: UITextView!
+    @IBOutlet weak var place2Description: UITextView!
+    @IBOutlet weak var place1Description: UITextView!
     @IBOutlet weak var place1Image: UIImageView!
     @IBOutlet weak var place2Image: UIImageView!
     @IBOutlet weak var place3Image: UIImageView!
@@ -20,6 +23,18 @@ class ThemedRouteDetailViewController: UIViewController {
     
     var tableRow:DDBTableRow?
     var potentialRoute: [String] = []
+    
+    func imageForImageURLString(imageURLString: String, completion: (image: UIImage?, success: Bool) -> Void) {
+        guard let url = NSURL(string: imageURLString),
+            let data = NSData(contentsOfURL: url),
+            let image = UIImage(data: data)
+            else {
+                completion(image: nil, success: false);
+                return
+        }
+        
+        completion(image: image, success: true)
+    }
     
     func getTableRow() {
         let dynamoDBObjectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
@@ -29,10 +44,16 @@ class ThemedRouteDetailViewController: UIViewController {
                 if (task.result != nil) {
                     let tableRow = task.result as! DDBTableRow
                     self.routeDescription.text = tableRow.routeDescription
-                    //TODO: display images properly NJK
-                    self.place1Image.downloadedFrom(link: tableRow.place1Image!, contentMode: UIViewContentMode.ScaleAspectFit)
-                    self.place2Image.downloadedFrom(link: tableRow.place2Image!, contentMode: UIViewContentMode.ScaleAspectFit)
-                    self.place3Image.downloadedFrom(link: tableRow.place3Image!, contentMode: UIViewContentMode.ScaleAspectFit)
+
+                    let url1 = NSURL(string: tableRow.place1Image!)
+                    let url2 = NSURL(string: tableRow.place2Image!)
+                    let url3 = NSURL(string: tableRow.place3Image!)
+                    self.downloadImage(url1!, imageView: self.place1Image)
+                    self.downloadImage(url2!, imageView: self.place2Image)
+                    self.downloadImage(url3!, imageView: self.place3Image)
+                    self.place1Description.text = tableRow.place1Description
+                    self.place2Description.text = tableRow.place2Description
+                    self.place3Description.text = tableRow.place3Description
                     self.potentialRoute.append(tableRow.place1!)
                     self.potentialRoute.append(tableRow.place2!)
                     self.potentialRoute.append(tableRow.place3!)
@@ -69,6 +90,25 @@ class ThemedRouteDetailViewController: UIViewController {
         super.viewWillDisappear(animated)
         
 
+    }
+    
+    func getDataFromUrl(url:NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) {
+        NSURLSession.sharedSession().dataTaskWithURL(url) { (data, response, error) in
+            completion(data: data, response: response, error: error)
+            }.resume()
+    }
+    
+    func downloadImage(url: NSURL, imageView: UIImageView){
+        print("Download Started")
+        print("lastPathComponent: " + (url.lastPathComponent ?? ""))
+        getDataFromUrl(url) { (data, response, error)  in
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                guard let data = data where error == nil else { return }
+                print(response?.suggestedFilename ?? "")
+                print("Download Finished")
+                imageView.image = UIImage(data: data)
+            }
+        }
     }
     
     @IBAction func launchThemedRoute(sender: AnyObject) {

@@ -205,7 +205,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
             geocoder.reverseGeocodeLocation(myGeoLocatedCoords,
                 completionHandler: { (array:[CLPlacemark]?, error:NSError?) -> Void in
               
-                    if(array!.count > 0){
+                    if(array != nil && array!.count > 0){
                         let myPlacemark: CLPlacemark = array![0]
                     
             
