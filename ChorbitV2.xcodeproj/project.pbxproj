@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4597898F88109FBC05793991 /* Pods_ChorbitV2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */; };
+		58B98972E0482C5BFA68014D /* Pods_ChorbitV2_ChorbitV2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 791947A464B959D9C296C351 /* Pods_ChorbitV2_ChorbitV2.framework */; };
 		81438E5D1C16989800551718 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81438E5C1C16989800551718 /* Constants.swift */; };
 		81438E5F1C169DEF00551718 /* DynamoDbManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81438E5E1C169DEF00551718 /* DynamoDbManager.swift */; };
 		81438E611C16A1F400551718 /* ThemedRouteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81438E601C16A1F400551718 /* ThemedRouteDetailViewController.swift */; };
@@ -26,7 +27,7 @@
 		817139761C012CEE00BA541F /* FeaturedRouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139751C012CEE00BA541F /* FeaturedRouteController.swift */; };
 		817139781C012D1C00BA541F /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139771C012D1C00BA541F /* UserProfileViewController.swift */; };
 		817DD1321C3260BE0061AF7A /* DirectionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817DD1311C3260BD0061AF7A /* DirectionsController.swift */; };
-		81AF490C1C3E317600309615 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AF490B1C3E317600309615 /* Main.storyboard */; };
+		81AF49101C41EDC900309615 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AF490F1C41EDC900309615 /* Main.storyboard */; };
 		81FD6AC21C1E2F15008A94DF /* NearbySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */; };
 		8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294201BEFFA3A0067059C /* RouteService.swift */; };
 		8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294241BF00D3A0067059C /* Coordinates.swift */; };
@@ -38,6 +39,8 @@
 		8B2294311BF01E570067059C /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294301BF01E570067059C /* Location.swift */; };
 		8B2294331BF01F820067059C /* GoogleMapsGeocoderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294321BF01F820067059C /* GoogleMapsGeocoderResult.swift */; };
 		8B2294371BF02A3C0067059C /* RouteTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294361BF02A3C0067059C /* RouteTest.swift */; };
+		8B2BEAD81C420E8F00DB9710 /* RouteServiceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2BEAD71C420E8F00DB9710 /* RouteServiceResponse.swift */; };
+		8B2BEADA1C42283300DB9710 /* RouteServiceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2BEAD91C42283300DB9710 /* RouteServiceRequest.swift */; };
 		8B85A26D1C2649290090B4D3 /* DirectionStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B85A26C1C2649290090B4D3 /* DirectionStep.swift */; };
 		8B85A26F1C2896E60090B4D3 /* GoogleDirectionsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B85A26E1C2896E60090B4D3 /* GoogleDirectionsResponse.swift */; };
 /* End PBXBuildFile section */
@@ -61,6 +64,7 @@
 
 /* Begin PBXFileReference section */
 		050E9BC6060A6D7D80C26E0B /* Pods-ChorbitV2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChorbitV2.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2.debug.xcconfig"; sourceTree = "<group>"; };
+		791947A464B959D9C296C351 /* Pods_ChorbitV2_ChorbitV2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChorbitV2_ChorbitV2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81438E5C1C16989800551718 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		81438E5E1C169DEF00551718 /* DynamoDbManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamoDbManager.swift; sourceTree = "<group>"; };
 		81438E601C16A1F400551718 /* ThemedRouteDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemedRouteDetailViewController.swift; sourceTree = "<group>"; };
@@ -85,7 +89,7 @@
 		817139751C012CEE00BA541F /* FeaturedRouteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturedRouteController.swift; sourceTree = "<group>"; };
 		817139771C012D1C00BA541F /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		817DD1311C3260BD0061AF7A /* DirectionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionsController.swift; sourceTree = "<group>"; };
-		81AF490B1C3E317600309615 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = ../../../../.Trash/Main.storyboard; sourceTree = "<group>"; };
+		81AF490F1C41EDC900309615 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbySearch.swift; sourceTree = "<group>"; };
 		87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChorbitV2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B2294201BEFFA3A0067059C /* RouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteService.swift; sourceTree = "<group>"; };
@@ -98,6 +102,8 @@
 		8B2294301BF01E570067059C /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		8B2294321BF01F820067059C /* GoogleMapsGeocoderResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapsGeocoderResult.swift; sourceTree = "<group>"; };
 		8B2294361BF02A3C0067059C /* RouteTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteTest.swift; sourceTree = "<group>"; };
+		8B2BEAD71C420E8F00DB9710 /* RouteServiceResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteServiceResponse.swift; sourceTree = "<group>"; };
+		8B2BEAD91C42283300DB9710 /* RouteServiceRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteServiceRequest.swift; sourceTree = "<group>"; };
 		8B85A26C1C2649290090B4D3 /* DirectionStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionStep.swift; sourceTree = "<group>"; };
 		8B85A26E1C2896E60090B4D3 /* GoogleDirectionsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleDirectionsResponse.swift; sourceTree = "<group>"; };
 		9E6F9E8513D70B29EF3C0119 /* Pods-ChorbitV2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChorbitV2.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2.release.xcconfig"; sourceTree = "<group>"; };
@@ -109,6 +115,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4597898F88109FBC05793991 /* Pods_ChorbitV2.framework in Frameworks */,
+				58B98972E0482C5BFA68014D /* Pods_ChorbitV2_ChorbitV2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */,
+				791947A464B959D9C296C351 /* Pods_ChorbitV2_ChorbitV2.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -163,7 +171,7 @@
 		816609D71BE0B6BD008B797E /* ChorbitV2 */ = {
 			isa = PBXGroup;
 			children = (
-				81AF490B1C3E317600309615 /* Main.storyboard */,
+				81AF490F1C41EDC900309615 /* Main.storyboard */,
 				816895981C2A547300CA5B87 /* AutoCompleteCell.xib */,
 				8B2294231BF00CB50067059C /* Models */,
 				8B2294221BEFFA470067059C /* Services */,
@@ -228,6 +236,8 @@
 				81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */,
 				8B85A26C1C2649290090B4D3 /* DirectionStep.swift */,
 				8B85A26E1C2896E60090B4D3 /* GoogleDirectionsResponse.swift */,
+				8B2BEAD71C420E8F00DB9710 /* RouteServiceResponse.swift */,
+				8B2BEAD91C42283300DB9710 /* RouteServiceRequest.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -355,8 +365,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				816609E51BE0B6BD008B797E /* LaunchScreen.storyboard in Resources */,
-				81AF490C1C3E317600309615 /* Main.storyboard in Resources */,
 				816609E21BE0B6BD008B797E /* Assets.xcassets in Resources */,
+				81AF49101C41EDC900309615 /* Main.storyboard in Resources */,
 				814C98D41C0D6D5900F008C4 /* GooglePlacesAutocomplete.xib in Resources */,
 				816895991C2A547300CA5B87 /* AutoCompleteCell.xib in Resources */,
 			);
@@ -391,7 +401,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChorbitV2-ChorbitV2/Pods-ChorbitV2-ChorbitV2-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		64CC488D098D0074C4755EC8 /* Embed Pods Frameworks */ = {
@@ -406,7 +416,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChorbitV2-ChorbitV2/Pods-ChorbitV2-ChorbitV2-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C72059F25D6222D3143F7C25 /* Check Pods Manifest.lock */ = {
@@ -446,7 +456,9 @@
 				8B2294371BF02A3C0067059C /* RouteTest.swift in Sources */,
 				8B2294311BF01E570067059C /* Location.swift in Sources */,
 				8B2294331BF01F820067059C /* GoogleMapsGeocoderResult.swift in Sources */,
+				8B2BEADA1C42283300DB9710 /* RouteServiceRequest.swift in Sources */,
 				8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */,
+				8B2BEAD81C420E8F00DB9710 /* RouteServiceResponse.swift in Sources */,
 				8B2294271BF011DE0067059C /* BasicMapAnnotation.swift in Sources */,
 				8B85A26F1C2896E60090B4D3 /* GoogleDirectionsResponse.swift in Sources */,
 				8B22942D1BF01C1F0067059C /* ErrandResults.swift in Sources */,

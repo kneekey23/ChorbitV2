@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'C629AEB00D1E948A6045699B'
-               BlueprintName = 'AWSDynamoDB'
+               BlueprintIdentifier = 'C98E8411C2EE71989CFBED12'
+               BlueprintName = 'Pods-ChorbitV2-ChorbitV2'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'AWSDynamoDB.framework'>
+               BuildableName = 'Pods_ChorbitV2_ChorbitV2.framework'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

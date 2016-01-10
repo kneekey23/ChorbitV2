@@ -34,4 +34,12 @@ class Coordinates {
         self.errandOrder = errandOrder
     }
     
+    init (_ json: [String: AnyObject]) {
+        
+        if let lat = json["lat"] as? Double { self.lat = lat }
+        else { self.lat = 0 }
+        
+        if let long = json["long"] as? Double { self.long = long }
+        else { self.long = 0 }
+    }
 }

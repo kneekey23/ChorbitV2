@@ -70,6 +70,7 @@ PODS:
   - KYCircularProgress (0.5.1)
   - Polyline (3.0.0)
   - SwiftAddressBook (0.5.1)
+  - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
   - Alamofire (~> 3.0)
@@ -80,6 +81,16 @@ DEPENDENCIES:
   - KYCircularProgress
   - Polyline (~> 3.0)
   - SwiftAddressBook
+  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
+
+EXTERNAL SOURCES:
+  SwiftyJSON:
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+
+CHECKOUT OPTIONS:
+  SwiftyJSON:
+    :commit: 5f59648a6e9356b26c5cb698ab924fa7d750b6c9
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
 
 SPEC CHECKSUMS:
   Alamofire: 9f93b56389e48def9220dd57d1f44b1927229a5a
@@ -102,5 +113,6 @@ SPEC CHECKSUMS:
   KYCircularProgress: 69a6d6852d96ca2be2830cc659b85aab3bb1cee6
   Polyline: 18026fd6675f754a15e70b4fd7ca01d0d156b6d7
   SwiftAddressBook: 539d33a5e36b2594d82ff5e0625becff18387930
+  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
 COCOAPODS: 0.39.0

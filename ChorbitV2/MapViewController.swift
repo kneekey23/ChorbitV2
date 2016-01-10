@@ -12,6 +12,7 @@ import GoogleMaps
 import Alamofire
 import Polyline
 import KYCircularProgress
+import SwiftyJSON
 
 class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
     
@@ -298,13 +299,37 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         do {
             //Only hit up mapquest api for optimized route if there are 2 or more errands
             if (closestLocationsPerErrand.count > 1) {
-//                HomegrownRouteService routeService = new HomegrownRouteService ();
+                let routeServiceUrl = "https://b97482pu3h.execute-api.us-west-2.amazonaws.com/test/ChorbitAlgorithm"
+                
+                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: origin!, errands: closestLocationsPerErrand, destination: destination!)
+                
+//                let params = ["request": JSON(routeServiceRequest)]
+                
+//                let requestObj = JSON(routeServiceRequest)
+//                let requestString = requestObj.rawString()
+                
+                let requestObj: [AnyObject] = [routeServiceRequest]
+                let params = ["request": requestObj]
+                
+                
+                Alamofire.request(.POST, routeServiceUrl, parameters: params)
+                    .responseJSON { response in
+                        
+                        if let json = response.result.value {
+                            let routeServiceResponse: RouteServiceResponse = RouteServiceResponse(json as! [String : AnyObject])
+                            
+                            for r in routeServiceResponse.results {
+                                print(r)
+//                                currentRouteLocations.append(Coordinates?(r.lat, r.long))
+                            }
+                        }
+                }
 //                currentRouteLocations = routeService.GetOptimizedRoute (origin, closestLocationsPerErrand, destination);
                 
                 // TODO: Remove this hardcoded crap thats only here instead of calling HomegrownRouteService:
-                for locationList in closestLocationsPerErrand {
-                    currentRouteLocations.append(locationList[0])
-                }
+//                for locationList in self.closestLocationsPerErrand {
+//                    currentRouteLocations.append(locationList[0])
+//                }
                 
                 if(currentRouteLocations.count < 1) {
                     let errandsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
