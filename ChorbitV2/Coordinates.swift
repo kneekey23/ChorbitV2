@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import ObjectMapper
 
-class Coordinates {
+class Coordinates: Mappable {
     
     var lat: Double = 0.0
     var long: Double = 0.0
@@ -41,5 +42,21 @@ class Coordinates {
         
         if let long = json["long"] as? Double { self.long = long }
         else { self.long = 0 }
+    }
+    
+    required init?(_ map: Map) {
+        
+    }
+    
+    // Mappable
+    func mapping(map: Map) {
+        lat      <- map["lat"]
+        long     <- map["long"]
+        title <- map["title"]
+        subtitle <- map["subtitle"]
+        errandTermId <- map["errandTermId"]
+        placeId <- map["placeId"]
+        errandText <- map["errandText"]
+        errandOrder <- map["errandOrder"]
     }
 }

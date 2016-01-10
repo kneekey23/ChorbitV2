@@ -13,6 +13,7 @@ import Alamofire
 import Polyline
 import KYCircularProgress
 import SwiftyJSON
+import ObjectMapper
 
 class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
     
@@ -203,7 +204,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       
         var closestLocations: [Coordinates] = []
  
-            var maxResults: Int = 7
+            var maxResults: Int = 3
             if search.results.count > 0{
               
                 if(search.results.count < maxResults){
@@ -303,16 +304,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 
                 let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: origin!, errands: closestLocationsPerErrand, destination: destination!)
                 
-//                let params = ["request": JSON(routeServiceRequest)]
+                let requestObj: AnyObject = routeServiceRequest
+                let JSONString = Mapper().toJSONString(routeServiceRequest)
+                print(JSONString)
+                let params: [String: AnyObject] = ["request": JSONString!]
                 
-//                let requestObj = JSON(routeServiceRequest)
-//                let requestString = requestObj.rawString()
-                
-                let requestObj: [AnyObject] = [routeServiceRequest]
-                let params = ["request": requestObj]
-                
-                
-                Alamofire.request(.POST, routeServiceUrl, parameters: params)
+                Alamofire.request(.POST, routeServiceUrl, parameters: params, encoding: .JSON)
                     .responseJSON { response in
                         
                         if let json = response.result.value {
@@ -324,6 +321,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             }
                         }
                 }
+                
+                
+                
 //                currentRouteLocations = routeService.GetOptimizedRoute (origin, closestLocationsPerErrand, destination);
                 
                 // TODO: Remove this hardcoded crap thats only here instead of calling HomegrownRouteService:

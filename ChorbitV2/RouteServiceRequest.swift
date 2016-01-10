@@ -7,17 +7,30 @@
 //
 
 import Foundation
+import ObjectMapper
 
-class RouteServiceRequest {
+class RouteServiceRequest: Mappable {
     
-    var origin: Coordinates
-    var errands: [[Coordinates]]
-    var destination: Coordinates
+    var origin: Coordinates = Coordinates()
+    var errands: [[Coordinates]] = [[Coordinates()]]
+    var destination: Coordinates = Coordinates()
+    
     
     init (origin: Coordinates, errands: [[Coordinates]], destination: Coordinates)
     {
         self.origin = origin
         self.errands = errands
         self.destination = destination
+    }
+    
+    required init?(_ map: Map) {
+        
+    }
+    
+    // Mappable
+    func mapping(map: Map) {
+        origin      <- map["origin"]
+        errands     <- map["errands"]
+        destination <- map["destination"]
     }
 }

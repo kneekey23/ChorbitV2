@@ -30,6 +30,8 @@ target 'ChorbitV2' do
     pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
 end
 
+pod 'ObjectMapper', '~> 1.1'
+
 pod 'Polyline', '~> 3.0'
 
 pod "SwiftAddressBook"
