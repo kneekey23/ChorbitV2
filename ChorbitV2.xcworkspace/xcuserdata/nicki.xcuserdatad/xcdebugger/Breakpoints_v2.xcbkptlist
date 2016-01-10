@@ -9,12 +9,28 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ChorbitV2/ThemedRouteDetailViewController.swift"
-            timestampString = "473839496.814654"
+            filePath = "UIImageView.swift"
+            timestampString = "474076309.575529"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
+            startingLineNumber = "15"
+            endingLineNumber = "15"
+            landmarkName = "init()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChorbitV2/ThemedRouteDetailViewController.swift"
+            timestampString = "474080366.787035"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "getTableRow()"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,12 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChorbitV2/ThemedRouteDetailViewController.swift"
-            timestampString = "473839501.210342"
+            timestampString = "474080366.787035"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "getTableRow()"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
+            landmarkName = "downloadImage(_:imageView:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,12 +58,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChorbitV2/ThemedRouteDetailViewController.swift"
-            timestampString = "473839556.983788"
+            timestampString = "474080366.787035"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
-            landmarkName = "getTableRow()"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
+            landmarkName = "downloadImage(_:imageView:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
