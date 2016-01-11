@@ -55,7 +55,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       
         self.view.addSubview(mapView!)
         self.view.addSubview(buttonRect)
-  
         
         configureHalfCircularProgress()
         GetLocationInformation()
@@ -729,8 +728,39 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
     
-    func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
-        print("You tapped at \(coordinate.latitude), \(coordinate.longitude)")
+//    func mapView(mapView: GMSMapView!, markerInfoWindow marker: GMSMarker!) -> UIView! {
+//        var infoWindow = NSBundle.mainBundle().loadNibNamed("CustomInfoWindow", owner: self, options: nil).first! as CustomInfoWindow
+//        infoWindow.label.text = "\(marker.position.latitude) \(marker.position.longitude)"
+//        return infoWindow
+//    }
+    
+    func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool {
+        let rejectBtn = UIButton()
+        rejectBtn.setTitle("Reject this location", forState: .Normal)
+        rejectBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        rejectBtn.backgroundColor = UIColor(hexString: "#CC1100")
+        rejectBtn.layer.cornerRadius = 5
+        rejectBtn.layer.borderWidth = 1
+        rejectBtn.layer.borderColor = UIColor(hexString: "#660000").CGColor
+        rejectBtn.frame = CGRectMake(16, mapView!.bounds.minY + 120, 200, 40)
+        rejectBtn.tag = 23
+        rejectBtn.addTarget(self, action: "pressed:", forControlEvents: .TouchUpInside)
+        
+        self.view.addSubview(rejectBtn)
+        return false
     }
+    
+    func mapView(mapView: GMSMapView!, didCloseInfoWindowOfMarker marker: GMSMarker!) -> Bool {
+        print("didCloseInfoWindowOfMarker")
+        if let viewWithTag = self.view.viewWithTag(23) {
+            print("found view with tag 23")
+            viewWithTag.removeFromSuperview()
+        }
+        return false
+    }
+    
+//    func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
+//        print("You tapped at \(coordinate.latitude), \(coordinate.longitude)")
+//    }
 
 }
