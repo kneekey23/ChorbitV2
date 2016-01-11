@@ -1,0 +1,6 @@
+framework module Pods_ChorbitV2_ChorbitV2 {
+  umbrella header "Pods-ChorbitV2-ChorbitV2-umbrella.h"
+
+  export *
+  module * { export * }
+}

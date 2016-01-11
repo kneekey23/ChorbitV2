@@ -23,6 +23,15 @@ pod 'AWSDynamoDB', '~> 2.2.0'
 
 pod 'AWSiOSSDKv2'
 
+platform :ios, '8.0'
+use_frameworks!
+
+target 'ChorbitV2' do
+    pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
+end
+
+pod 'ObjectMapper', '~> 1.1'
+
 pod 'Polyline', '~> 3.0'
 
 pod "SwiftAddressBook"
@@ -38,4 +47,6 @@ end
 target 'ChorbitV2UITests' do
 
 end
+
+
 
