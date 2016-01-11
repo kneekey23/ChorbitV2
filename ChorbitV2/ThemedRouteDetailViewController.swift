@@ -115,8 +115,21 @@ class ThemedRouteDetailViewController: UIViewController {
         let controller = tabBarController as! MainViewController
        
         if( controller.errandSelection.count > 1){
-            
-             controller.errandSelection.removeRange(1...4)
+            switch(controller.errandSelection.count){
+            case 2: controller.errandSelection.removeLast()
+                break
+            case 3: controller.errandSelection.removeRange(1...2)
+                break
+            case 4: controller.errandSelection.removeRange(1...3)
+                break
+            case 5: controller.errandSelection.removeRange(1...4)
+                break
+            case 6: controller.errandSelection.removeRange(1...5)
+                break
+            default: controller.errandSelection.removeLast()
+                break
+            }
+           
         }
         
         for errand in potentialRoute{
