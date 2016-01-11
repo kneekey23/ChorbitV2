@@ -442,6 +442,14 @@
                                     <segue destination="Hdw-6G-Q59" kind="show" identifier="mapToDirectionsSegue" id="W0l-ey-p50"/>
                                 </connections>
                             </button>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="BnJ-7E-njw">
+                                <rect key="frame" x="108" y="81" width="159" height="29"/>
+                                <segments>
+                                    <segment title="" image="Walking-20"/>
+                                    <segment title="Driving"/>
+                                    <segment title="Transit"/>
+                                </segments>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -624,6 +632,7 @@
         <image name="Plus Math-32" width="32" height="32"/>
         <image name="Route Sign Filled-32" width="32" height="32"/>
         <image name="Street View Filled-32" width="32" height="32"/>
+        <image name="Walking-20" width="20" height="20"/>
         <image name="Waypoint Map Filled-32" width="32" height="32"/>
     </resources>
     <color key="tintColor" red="0.2196078431372549" green="0.83529411764705885" blue="0.75294117647058822" alpha="1" colorSpace="calibratedRGB"/>
