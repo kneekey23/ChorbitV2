@@ -43,7 +43,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var halfCircularProgress: KYCircularProgress!
     var progress: UInt8 = 0
     
+    @IBOutlet weak var transportationTyoe: UISegmentedControl!
     @IBOutlet weak var buttonRect: UIButton!
+    @IBAction func refreshTrafficConditions(sender: AnyObject) {
+        //refresh route goes here NJK
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -55,11 +59,27 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       
         self.view.addSubview(mapView!)
         self.view.addSubview(buttonRect)
+        self.view.addSubview(transportationTyoe)
         
         configureHalfCircularProgress()
         GetLocationInformation()
     }
     
+    @IBAction func changeTransportationType(sender: AnyObject) {
+        //code to change from driving to walking to transit goes here.NJK
+        let segmentedControl: UISegmentedControl = sender as! UISegmentedControl
+        
+        if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Drive"{
+            //default is here. possibly do nothing? NJK
+        }
+        else if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Walk"{
+            //code for walking goes here. NJK
+        }
+        else{
+            //transit goes here NJK
+        }
+        
+    }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "mapToDirectionsSegue"{
             let directionsViewController = segue.destinationViewController as! DirectionsController

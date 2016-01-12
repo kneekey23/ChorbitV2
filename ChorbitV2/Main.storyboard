@@ -449,12 +449,17 @@
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="BnJ-7E-njw">
-                                <rect key="frame" x="108" y="81" width="159" height="29"/>
+                                <rect key="frame" x="72" y="72" width="230" height="29"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <segments>
-                                    <segment title="" image="Walking-20"/>
-                                    <segment title="Driving"/>
+                                    <segment title="Drive"/>
+                                    <segment title="Walk"/>
                                     <segment title="Transit"/>
                                 </segments>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="changeTransportationType:" destination="1vX-gY-hQA" eventType="valueChanged" id="PJm-xg-f2T"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -469,10 +474,17 @@
                         <barButtonItem key="backBarButtonItem" title="Back" id="zAr-hO-cw4">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="TMW-Mc-F1V">
+                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="refreshTrafficConditions:" destination="1vX-gY-hQA" id="2sy-Be-cCC"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="buttonRect" destination="JZt-Do-ToM" id="6SZ-9D-NbP"/>
+                        <outlet property="transportationTyoe" destination="BnJ-7E-njw" id="bxL-xj-4qE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ugk-hI-tRw" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -650,7 +662,6 @@
         <image name="Plus Math-32" width="32" height="32"/>
         <image name="Route Sign Filled-32" width="32" height="32"/>
         <image name="Street View Filled-32" width="32" height="32"/>
-        <image name="Walking-20" width="20" height="20"/>
         <image name="Waypoint Map Filled-32" width="32" height="32"/>
     </resources>
     <color key="tintColor" red="0.2196078431372549" green="0.83529411764705885" blue="0.75294117647058822" alpha="1" colorSpace="calibratedRGB"/>
