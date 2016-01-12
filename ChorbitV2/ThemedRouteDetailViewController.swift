@@ -25,6 +25,7 @@ class ThemedRouteDetailViewController: UIViewController {
     var potentialRoute: [String] = []
     
     func imageForImageURLString(imageURLString: String, completion: (image: UIImage?, success: Bool) -> Void) {
+        
         guard let url = NSURL(string: imageURLString),
             let data = NSData(contentsOfURL: url),
             let image = UIImage(data: data)
@@ -93,12 +94,14 @@ class ThemedRouteDetailViewController: UIViewController {
     }
     
     func getDataFromUrl(url:NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) {
+        
         NSURLSession.sharedSession().dataTaskWithURL(url) { (data, response, error) in
             completion(data: data, response: response, error: error)
             }.resume()
     }
     
     func downloadImage(url: NSURL, imageView: UIImageView){
+        
         print("Download Started")
         print("lastPathComponent: " + (url.lastPathComponent ?? ""))
         getDataFromUrl(url) { (data, response, error)  in
@@ -112,10 +115,13 @@ class ThemedRouteDetailViewController: UIViewController {
     }
     
     @IBAction func launchThemedRoute(sender: AnyObject) {
+        
         let controller = tabBarController as! MainViewController
        
         if( controller.errandSelection.count > 1){
+            
             switch(controller.errandSelection.count){
+                
             case 2: controller.errandSelection.removeLast()
                 break
             case 3: controller.errandSelection.removeRange(1...2)
