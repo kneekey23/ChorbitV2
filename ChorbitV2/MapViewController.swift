@@ -97,8 +97,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
          if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Use New Location"{
             
-            let addressString: String = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[0]
-            let result: Coordinates = GetLatLng(addressString)
+            let startingLocation: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[0]
+            let result: Coordinates = GetLatLng(startingLocation.errandString)
             
             if(result.lat > 0){
                 lat = result.lat
@@ -121,8 +121,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         else{
               //geocode last item in errand selection array to find the coordinates NJK
             let index: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
-            let destinationString = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[index - 1]
-                destination = GetLatLng(destinationString)
+            let destinationLocation: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[index - 1]
+                destination = GetLatLng(destinationLocation.errandString)
                 destination!.title = "My Final Destination"
           
         }
@@ -146,7 +146,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 }
                 
                 numErrands++
-                let errandString: String = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[i]
+                let errand: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[i]
                 let location = CLLocationCoordinate2D(latitude: lat, longitude:lng)
                 var l: NearbySearch?
                 
@@ -156,7 +156,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     self.allPlaceRequestsSent = true
                 }
                 updateProgress()
-                fetchPlacesNearCoordinate(location, name:errandString, count: i) { (data, error, count) -> Void in
+                //if the errand is not an address and something like Target, fetch closest locations using Google Places API NJK
+                if(!errand.isAddress){
+                fetchPlacesNearCoordinate(location, name:errand.errandString, count: i) { (data, error, count) -> Void in
                     do{
                         if(data != nil){
                             self.placeResponsesAwaiting--
@@ -171,13 +173,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                     
                                     let errandTermId: Int = count
                                     
-                                    if !errandString.isEmpty{
-                                        let closestLocations: [Coordinates] = self.GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errandString, excludedPlaceIds: nil )
+                                    if !errand.errandString.isEmpty{
+                                        let closestLocations: [Coordinates] = self.GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errand.errandString, excludedPlaceIds: nil )
                                         
                                         if closestLocations.count > 0{
                                             self.closestLocationsPerErrand.append(closestLocations)
                                             let usedPlaceIds: [String] = []
-                                            self.locationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errandString))
+                                            self.locationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errand.errandString))
                                             haveFoundLocations = true
                                         }
                                     }
@@ -207,7 +209,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                 }
                 
-
+                }
+                else{ //else find the coords, add it to an array of coords and add it to the array that goes to the algorithm, closestLocationsPerErrand
+                    
+                    var addressArray: [Coordinates] = []
+                     let errandAddress: Coordinates = GetLatLng(errand.errandString)
+                    addressArray.append(errandAddress)
+                    closestLocationsPerErrand.append(addressArray)
+                    
+                }
             }
          
         }

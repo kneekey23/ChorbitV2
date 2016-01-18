@@ -12,7 +12,7 @@ import UIKit
 //any shared variables between the three scenes(user profile, featured routes, and the search) go in this controller NJK
 class MainViewController: UITabBarController{
     //if this variable is here we can control it from any screen. thinking of featured routes, you click on one we populate this variable and pass it on through NJK
-   internal var errandSelection: Array<String> = []
+   internal var errandSelection: Array<Errand> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()

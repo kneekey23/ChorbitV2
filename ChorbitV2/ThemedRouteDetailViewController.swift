@@ -139,7 +139,8 @@ class ThemedRouteDetailViewController: UIViewController {
         }
         
         for errand in potentialRoute{
-             controller.errandSelection.append(errand)
+            let newErrand: Errand = Errand(errandString: errand, isAddress: false, isStartingLocation: false, isEndingLocation: false)
+             controller.errandSelection.append(newErrand)
         }
       
         tabBarController?.selectedIndex = 0

@@ -159,19 +159,19 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         let cell = tableView.dequeueReusableCellWithIdentifier("errandCell", forIndexPath: indexPath)
         
         let errandLastItemIndex = (parentViewController?.parentViewController as! MainViewController).errandSelection.count - 1
-        let errand = (parentViewController?.parentViewController as! MainViewController).errandSelection[indexPath.row]
+        let errand: Errand = (parentViewController?.parentViewController as! MainViewController).errandSelection[indexPath.row]
             // Configure the cell
              var image : UIImage?
-        if(indexPath.row == 0){
-            cell.textLabel!.text = "Start: " + errand
+        if(indexPath.row == 0 && errand.isStartingLocation){
+            cell.textLabel!.text = "Start: " + errand.errandString
              image = UIImage(named: "Compass-32")!
         }
-        else if(errandLastItemIndex == indexPath.row && !self.destinationToggle.on){
-            cell.textLabel!.text = "End: " + errand
+        else if(errandLastItemIndex == indexPath.row && !self.destinationToggle.on && errand.isEndingLocation){
+            cell.textLabel!.text = "End: " + errand.errandString
              image = UIImage(named: "Flag Filled -32")!
         }
-        else{
-             cell.textLabel!.text = errand
+        else if(!errand.isStartingLocation && !errand.isEndingLocation){
+             cell.textLabel!.text = errand.errandString
              image = UIImage(named: "Geo-fence Filled-25")!
         }
     
@@ -224,7 +224,9 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
                     }
 
                     if((self.parentViewController?.parentViewController as! MainViewController).errandSelection.count == 0){
-                    (self.parentViewController?.parentViewController as! MainViewController).errandSelection.insert(self.addressString, atIndex: 0)
+                        let newStartingLocation: Errand = Errand(errandString: self.addressString, isAddress: true, isStartingLocation: true, isEndingLocation: false)
+                       
+                    (self.parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newStartingLocation, atIndex: 0)
                         self.errandTableView.reloadData()
                     }
                   
@@ -266,19 +268,27 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
         if((parentViewController?.parentViewController as! MainViewController).errandSelection.count <= 5){
             if(!place.isAddressOnly){
                 if(place.isContact){
-                     (parentViewController?.parentViewController as! MainViewController).errandSelection.append(place.contactAddress!)
+                    let newAddress = Errand(errandString: place.contactAddress!, isAddress: true, isStartingLocation: false, isEndingLocation: false)
+                     (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newAddress)
+                }
+                else if(place.isErrandAddress){
+                    let newErrandAddress = Errand(errandString: place.description, isAddress: true, isStartingLocation: false, isEndingLocation: false)
+                    (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newErrandAddress)
                 }
                 else{
-                     (parentViewController?.parentViewController as! MainViewController).errandSelection.append(place.description)
+                    let newErrand = Errand(errandString: place.description, isAddress: false, isStartingLocation: false, isEndingLocation: false)
+                     (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newErrand)
                 }
             }
             else{
                 let lastIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count
                 if(!self.destinationToggle.on){
-                    (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(place.description, atIndex: lastIndex)
+                    let newEndingLocation: Errand = Errand(errandString: place.description, isAddress: true, isStartingLocation: false, isEndingLocation: true)
+                    (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newEndingLocation, atIndex: lastIndex)
                 }
                 else{
-                     (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(place.description, atIndex: 0)
+                    let newStartingLocation: Errand = Errand(errandString: place.description, isAddress: true, isStartingLocation: true, isEndingLocation: false)
+                     (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newStartingLocation, atIndex: 0)
                 }
                
             }
