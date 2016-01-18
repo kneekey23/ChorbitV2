@@ -32,6 +32,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var mapErroredOut: Bool = false
     var temp: [DirectionStep] = []
     var selectedMarker: GoogleMapMarker = GoogleMapMarker()
+    var errandAddress: Coordinates?
     
     var placeResponsesAwaiting: Int = 0;
     var allPlaceRequestsSent: Bool = false;
@@ -157,24 +158,26 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     self.allPlaceRequestsSent = true
                 }
                 updateProgress()
+                
                 //if the errand is not an address and something like Target, fetch closest locations using Google Places API NJK
-                if(!errand.isAddress){
-                fetchPlacesNearCoordinate(location, name:errand.errandString, count: i) { (data, error, count) -> Void in
+      
+                fetchPlacesNearCoordinate(location, errand:errand, count: i) { (data, error, count) -> Void in
                     do{
-                        if(data != nil){
-                            self.placeResponsesAwaiting--
+                        if(data != nil || errand.isAddress){
+                              self.placeResponsesAwaiting--
+                            if(data != nil){
+                              
+                            let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+                                    l =  NearbySearch(json as! [String : AnyObject])
+                            }
                             
-                            if let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary {
-                                
-                                l =  NearbySearch(json as! [String : AnyObject])
-                                
-                                if(l != nil || l!.results.count != 0){
-                                    
+                           
+                                if((l != nil && l!.results.count != 0) || errand.isAddress){
                                     
                                     
                                     let errandTermId: Int = count
                                     
-                                    if !errand.errandString.isEmpty{
+                                    if !errand.errandString.isEmpty && !errand.isAddress{
                                         let closestLocations: [Coordinates] = self.GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errand.errandString, excludedPlaceIds: nil )
                                         
                                         if closestLocations.count > 0{
@@ -183,6 +186,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                             self.locationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errand.errandString))
                                             haveFoundLocations = true
                                         }
+                                    }
+                                    else{
+                                        //else find the coords, add it to an array of coords and add it to the array that goes to the algorithm, closestLocationsPerErrand
+                                        
+                                        var addressArray: [Coordinates] = []
+                                      
+                                        addressArray.append(self.errandAddress!)
+                                        self.closestLocationsPerErrand.append(addressArray)
+                                        haveFoundLocations = true
                                     }
                                     
                                     if !haveFoundLocations {
@@ -198,10 +210,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                     }
                                     
                                 }
-                            }
+                            
                         }
                         else{
                             print(error)
+                            
+              
                         }
                     
                     } catch let error as NSError {
@@ -210,15 +224,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                 }
                 
-                }
-                else{ //else find the coords, add it to an array of coords and add it to the array that goes to the algorithm, closestLocationsPerErrand
+
                     
-                    var addressArray: [Coordinates] = []
-                     let errandAddress: Coordinates = GetLatLng(errand.errandString)
-                    addressArray.append(errandAddress)
-                    closestLocationsPerErrand.append(addressArray)
-                    
-                }
+                
             }
          
         }
@@ -275,10 +283,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
        
    }
     
-    func fetchPlacesNearCoordinate(coordinate: CLLocationCoordinate2D, name: String, count: Int, completionHandler: ((NSData!, NSError!, count: Int) -> Void)){
+    func fetchPlacesNearCoordinate(coordinate: CLLocationCoordinate2D, errand: Errand, count: Int, completionHandler: ((NSData!, NSError!, count: Int) -> Void)){
+        
+        if !errand.isAddress{
         
         var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&location=\(coordinate.latitude),\(coordinate.longitude)&rankby=distance&sensor=true"
-        urlString += "&name=\(name)"
+        urlString += "&name=\(errand.errandString)"
 
         urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -300,6 +310,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
     
         sessionTask.resume()
+        }
+        else{
+            errandAddress = self.GetLatLng(errand.errandString)
+            //do nothing becayse it's an address that has been entered as an errand NJK
+            dispatch_async(dispatch_get_main_queue()) {
+                    completionHandler(nil, nil, count: count)
+                
+                
+            }
+        }
     }
     
     func GetLatLng(address:String) -> Coordinates{
@@ -315,7 +335,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 coords.long = placemark.location!.coordinate.longitude
                 coords.subtitle = placemark.name!
             }
-            
+         
         
         })
         
