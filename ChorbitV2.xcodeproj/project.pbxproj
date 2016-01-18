@@ -31,7 +31,7 @@
 		81FD6AC21C1E2F15008A94DF /* NearbySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */; };
 		8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294201BEFFA3A0067059C /* RouteService.swift */; };
 		8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294241BF00D3A0067059C /* Coordinates.swift */; };
-		8B2294271BF011DE0067059C /* BasicMapAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294261BF011DE0067059C /* BasicMapAnnotation.swift */; };
+		8B2294271BF011DE0067059C /* GoogleMapMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294261BF011DE0067059C /* GoogleMapMarker.swift */; };
 		8B2294291BF017210067059C /* Copyright.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294281BF017210067059C /* Copyright.swift */; };
 		8B22942B1BF017AD0067059C /* ErrandDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22942A1BF017AD0067059C /* ErrandDistance.swift */; };
 		8B22942D1BF01C1F0067059C /* ErrandResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B22942C1BF01C1F0067059C /* ErrandResults.swift */; };
@@ -94,7 +94,7 @@
 		87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChorbitV2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B2294201BEFFA3A0067059C /* RouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteService.swift; sourceTree = "<group>"; };
 		8B2294241BF00D3A0067059C /* Coordinates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinates.swift; sourceTree = "<group>"; };
-		8B2294261BF011DE0067059C /* BasicMapAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicMapAnnotation.swift; sourceTree = "<group>"; };
+		8B2294261BF011DE0067059C /* GoogleMapMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleMapMarker.swift; sourceTree = "<group>"; };
 		8B2294281BF017210067059C /* Copyright.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Copyright.swift; sourceTree = "<group>"; };
 		8B22942A1BF017AD0067059C /* ErrandDistance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrandDistance.swift; sourceTree = "<group>"; };
 		8B22942C1BF01C1F0067059C /* ErrandResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrandResults.swift; sourceTree = "<group>"; };
@@ -225,7 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				8B2294241BF00D3A0067059C /* Coordinates.swift */,
-				8B2294261BF011DE0067059C /* BasicMapAnnotation.swift */,
+				8B2294261BF011DE0067059C /* GoogleMapMarker.swift */,
 				8B2294281BF017210067059C /* Copyright.swift */,
 				8B22942A1BF017AD0067059C /* ErrandDistance.swift */,
 				8B22942C1BF01C1F0067059C /* ErrandResults.swift */,
@@ -459,7 +459,7 @@
 				8B2BEADA1C42283300DB9710 /* RouteServiceRequest.swift in Sources */,
 				8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */,
 				8B2BEAD81C420E8F00DB9710 /* RouteServiceResponse.swift in Sources */,
-				8B2294271BF011DE0067059C /* BasicMapAnnotation.swift in Sources */,
+				8B2294271BF011DE0067059C /* GoogleMapMarker.swift in Sources */,
 				8B85A26F1C2896E60090B4D3 /* GoogleDirectionsResponse.swift in Sources */,
 				8B22942D1BF01C1F0067059C /* ErrandResults.swift in Sources */,
 				8B85A26D1C2649290090B4D3 /* DirectionStep.swift in Sources */,

@@ -26,11 +26,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var locationResults: [ErrandResults] = []
     var numErrands: Int = 0
     var closestLocationsPerErrand:[[Coordinates]] = [[]]
-    var _errandLocations: [BasicMapAnnotation] = []
+    var _errandLocations: [GoogleMapMarker] = []
     var currentRouteLocations: [Coordinates?] = []
     var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
-     var temp: [DirectionStep] = []
+    var temp: [DirectionStep] = []
+    var selectedMarker: GoogleMapMarker = GoogleMapMarker()
     
     var placeResponsesAwaiting: Int = 0;
     var allPlaceRequestsSent: Bool = false;
@@ -321,7 +322,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             if (closestLocationsPerErrand.count > 1) {
                 let routeServiceUrl = "https://b97482pu3h.execute-api.us-west-2.amazonaws.com/test/ChorbitAlgorithm"
                 
-                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: origin!, errands: closestLocationsPerErrand, destination: destination!)
+                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: origin!, errands: closestLocationsPerErrand, destination: destination!, mode: "driving")
                 
                 let requestObj: AnyObject = routeServiceRequest
                 let JSONString = Mapper().toJSONString(routeServiceRequest)
@@ -366,7 +367,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 }
                                 // End Temporary fix
                                 
-                                self._errandLocations.append(BasicMapAnnotation(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
+                                self._errandLocations.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
                             }
                             
                             var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
@@ -556,10 +557,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         
                         for routeLocation in self._errandLocations {
                             // Add markers to map:
-                            let marker = GMSMarker()
+                            let marker = GoogleMapMarker()  //GMSMarker()
                             marker.position = routeLocation.position
+                            marker.placeId = routeLocation.placeId
                             marker.title = routeLocation.title
                             marker.snippet = routeLocation.snippet
+                            marker.errandOrder = routeLocation.errandOrder
+                            marker.errandText = routeLocation.errandText
                             marker.appearAnimation = kGMSMarkerAnimationPop
                             marker.icon = UIImage(named: "Marker Filled-25")
                             // TODO: figure out how to initialize mapView as global class variable:
@@ -755,6 +759,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //    }
     
     func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool {
+        if let viewWithTag = self.view.viewWithTag(23) {
+            print("found view with tag 23")
+            viewWithTag.removeFromSuperview()
+        }
+        
+        selectedMarker = marker as! GoogleMapMarker
+        
         let rejectBtn = UIButton()
         rejectBtn.setTitle("Reject this location", forState: .Normal)
         rejectBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -762,12 +773,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         rejectBtn.layer.cornerRadius = 5
         rejectBtn.layer.borderWidth = 1
         rejectBtn.layer.borderColor = UIColor(hexString: "#660000").CGColor
-        rejectBtn.frame = CGRectMake(16, mapView!.bounds.minY + 120, 200, 40)
+        rejectBtn.frame = CGRectMake(12, mapView!.bounds.minY + 120, 200, 40)
         rejectBtn.tag = 23
-        rejectBtn.addTarget(self, action: "pressed:", forControlEvents: .TouchUpInside)
+        rejectBtn.addTarget(self, action: "rejectLocation:", forControlEvents: .TouchUpInside)
         
         self.view.addSubview(rejectBtn)
         return false
+    }
+    
+    func onRejectLocation(sender: UIButton!) {
+        RejectLocation(selectedMarker.placeId)
     }
     
     func mapView(mapView: GMSMapView!, didCloseInfoWindowOfMarker marker: GMSMarker!) -> Bool {
@@ -779,8 +794,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         return false
     }
     
-//    func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
-//        print("You tapped at \(coordinate.latitude), \(coordinate.longitude)")
-//    }
+    func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
+        if let viewWithTag = self.view.viewWithTag(23) {
+            print("found view with tag 23")
+            viewWithTag.removeFromSuperview()
+        }
+        print("You tapped at \(coordinate.latitude), \(coordinate.longitude)")
+    }
 
 }

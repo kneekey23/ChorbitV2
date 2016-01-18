@@ -1,10 +1,11 @@
 //
-//  BasicMapAnnotation.swift
+//  GoogleMapMarker.swift
 //  ChorbitV2
 //
-//  Created by Melissa Hargis on 11/8/15.
-//  Copyright © 2015 shortkey. All rights reserved.
+//  Created by Melissa Hargis on 1/10/16.
+//  Copyright © 2016 shortkey. All rights reserved.
 //
+
 
 import Foundation
 import GoogleMaps
@@ -30,3 +31,4 @@ class GoogleMapMarker : GMSMarker {
     }
     
 }
+

@@ -14,13 +14,15 @@ class RouteServiceRequest: Mappable {
     var origin: Coordinates = Coordinates()
     var errands: [[Coordinates]] = [[Coordinates()]]
     var destination: Coordinates = Coordinates()
+    var mode: String = ""
     
     
-    init (origin: Coordinates, errands: [[Coordinates]], destination: Coordinates)
+    init (origin: Coordinates, errands: [[Coordinates]], destination: Coordinates, mode: String)
     {
         self.origin = origin
         self.errands = errands
         self.destination = destination
+        self.mode = mode
     }
     
     required init?(_ map: Map) {
@@ -32,5 +34,6 @@ class RouteServiceRequest: Mappable {
         origin      <- map["origin"]
         errands     <- map["errands"]
         destination <- map["destination"]
+        mode        <- map["mode"]
     }
 }
