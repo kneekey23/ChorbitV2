@@ -267,6 +267,23 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
   
         if((parentViewController?.parentViewController as! MainViewController).errandSelection.count <= 5){
             if(!place.isAddressOnly){
+                if(!self.destinationToggle.on){
+                    let lastErrandIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count - 2
+                    if(place.isContact){
+                        let newAddress = Errand(errandString: place.contactAddress!, isAddress: true, isStartingLocation: false, isEndingLocation: false)
+                        (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newAddress, atIndex: lastErrandIndex)
+                    }
+                    else if(place.isErrandAddress){
+                        let newErrandAddress = Errand(errandString: place.description, isAddress: true, isStartingLocation: false, isEndingLocation: false)
+                        (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newErrandAddress, atIndex: lastErrandIndex)
+                    }
+                    else{
+                        let newErrand = Errand(errandString: place.description, isAddress: false, isStartingLocation: false, isEndingLocation: false)
+                        (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newErrand, atIndex: lastErrandIndex)
+                    }
+                    
+                    
+                }else{
                 if(place.isContact){
                     let newAddress = Errand(errandString: place.contactAddress!, isAddress: true, isStartingLocation: false, isEndingLocation: false)
                      (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newAddress)
@@ -278,6 +295,7 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
                 else{
                     let newErrand = Errand(errandString: place.description, isAddress: false, isStartingLocation: false, isEndingLocation: false)
                      (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newErrand)
+                }
                 }
             }
             else{
