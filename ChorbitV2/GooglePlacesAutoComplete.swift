@@ -56,27 +56,36 @@ public class Place: NSObject {
     public let contactAddress: String?
     public let isContact: Bool
     public let isAddressOnly: Bool
+    public let isErrandAddress: Bool
     
     override public var description: String {
         get { return desc }
     }
     
-    public init(description: String, contactAddress: String, isContact: Bool, isAddressOnly: Bool = false) {
+    public init(description: String, contactAddress: String, isContact: Bool, isAddressOnly: Bool = false, isErrandAddress: Bool = false) {
         //self.id = id
         self.desc = description
         self.contactAddress = contactAddress
         self.isContact = isContact
         self.isAddressOnly = isAddressOnly
+        self.isErrandAddress = isErrandAddress
     }
     
     public convenience init(prediction: [String: AnyObject], apiKey: String?, isAddressOnly: Bool = false) {
-        if(isAddressOnly){
+        var isTypeAddress: Bool = false
+        if(prediction["types"] != nil){
+            print(prediction["types"]!)
+          
+         isTypeAddress = (prediction["types"]! as! Array).contains("street_address")
+        }
+        if(isAddressOnly || isTypeAddress){
             self.init(
                 //id: prediction["place_id"] as! String,
                 description: prediction["description"] as! String,
                 contactAddress: "",
                 isContact: false,
-                isAddressOnly: isAddressOnly
+                isAddressOnly: isAddressOnly,
+                isErrandAddress: isTypeAddress
             )
         }else{
             self.init(
