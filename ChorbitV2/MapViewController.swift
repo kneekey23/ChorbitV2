@@ -8,30 +8,32 @@
 
 import Foundation
 import UIKit
-import GoogleMaps
+//import GoogleMaps
 import Alamofire
 import Polyline
 import KYCircularProgress
 import SwiftyJSON
 import ObjectMapper
+import Mapbox
 
-class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, MGLMapViewDelegate {
     
     var firstViewController : SearchViewController? = nil
     
-    var mapView: GMSMapView?
+    //    var mapView: GMSMapView?
+    var mapView: MGLMapView!
     var origin: Coordinates?
     var destination: Coordinates?
     var noResults: [String] = []
     var locationResults: [ErrandResults] = []
     var numErrands: Int = 0
     var closestLocationsPerErrand:[[Coordinates]] = [[]]
-    var _errandLocations: [GoogleMapMarker] = []
+    var _errandLocations: [MapboxMapMarker] = []
     var currentRouteLocations: [Coordinates?] = []
     var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
     var temp: [DirectionStep] = []
-    var selectedMarker: GoogleMapMarker = GoogleMapMarker()
+    var selectedMarker: MapboxMapMarker = MapboxMapMarker()
     var errandAddress: Coordinates?
     
     var placeResponsesAwaiting: Int = 0;
@@ -54,11 +56,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         super.viewDidLoad()
         
         let myLocation: CLLocation = (firstViewController!.myGeoLocatedCoords) as CLLocation!
-        let camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom:6)
-
-        mapView = GMSMapView.mapWithFrame(UIScreen.mainScreen().bounds, camera:camera)
+        //        let camera = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom:6)
+        
+        //        mapView = GMSMapView.mapWithFrame(UIScreen.mainScreen().bounds, camera:camera)
+        
+        mapView = MGLMapView(frame: view.bounds)
+        mapView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        
+        mapView.setCenterCoordinate(myLocation.coordinate,
+            zoomLevel: 15, animated: false)
         mapView!.delegate = self
-      
+        
         self.view.addSubview(mapView!)
         self.view.addSubview(buttonRect)
         self.view.addSubview(transportationTyoe)
@@ -97,7 +105,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         var subtitle:String? = ""
         let segmentedControl = (firstViewController!.startingLocationControl)! as UISegmentedControl
         
-         if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Use New Location"{
+        if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Use New Location"{
             
             let startingLocation: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[0]
             let result: Coordinates = GetLatLng(startingLocation.errandString)
@@ -108,7 +116,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 subtitle = result.subtitle
             }
         }
-         else{
+        else{
             lat = firstViewController!.myGeoLocatedCoords.coordinate.latitude
             lng = firstViewController!.myGeoLocatedCoords.coordinate.longitude
             subtitle = (firstViewController!.addressString)
@@ -121,12 +129,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             destination = origin
         }
         else{
-              //geocode last item in errand selection array to find the coordinates NJK
+            //geocode last item in errand selection array to find the coordinates NJK
             let index: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
             let destinationLocation: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[index - 1]
-                destination = GetLatLng(destinationLocation.errandString)
-                destination!.title = "My Final Destination"
-          
+            destination = GetLatLng(destinationLocation.errandString)
+            destination!.title = "My Final Destination"
+            
         }
         
         locationResults.removeAll()
@@ -160,75 +168,75 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 updateProgress()
                 
                 //if the errand is not an address and something like Target, fetch closest locations using Google Places API NJK
-      
+                
                 fetchPlacesNearCoordinate(location, errand:errand, count: i) { (data, error, count) -> Void in
                     do{
                         if(data != nil || errand.isAddress){
-                              self.placeResponsesAwaiting--
+                            self.placeResponsesAwaiting--
                             if(data != nil){
-                              
-                            let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
-                                    l =  NearbySearch(json as! [String : AnyObject])
+                                
+                                let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSDictionary
+                                l =  NearbySearch(json as! [String : AnyObject])
                             }
                             
-                           
-                                if((l != nil && l!.results.count != 0) || errand.isAddress){
+                            
+                            if((l != nil && l!.results.count != 0) || errand.isAddress){
+                                
+                                
+                                let errandTermId: Int = count
+                                
+                                if !errand.errandString.isEmpty && !errand.isAddress{
+                                    let closestLocations: [Coordinates] = self.GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errand.errandString, excludedPlaceIds: nil )
                                     
-                                    
-                                    let errandTermId: Int = count
-                                    
-                                    if !errand.errandString.isEmpty && !errand.isAddress{
-                                        let closestLocations: [Coordinates] = self.GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errand.errandString, excludedPlaceIds: nil )
-                                        
-                                        if closestLocations.count > 0{
-                                            self.closestLocationsPerErrand.append(closestLocations)
-                                            let usedPlaceIds: [String] = []
-                                            self.locationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errand.errandString))
-                                            haveFoundLocations = true
-                                        }
-                                    }
-                                    else{
-                                        //else find the coords, add it to an array of coords and add it to the array that goes to the algorithm, closestLocationsPerErrand
-                                        
-                                        var addressArray: [Coordinates] = []
-                                      
-                                        addressArray.append(self.errandAddress!)
-                                        self.closestLocationsPerErrand.append(addressArray)
+                                    if closestLocations.count > 0{
+                                        self.closestLocationsPerErrand.append(closestLocations)
+                                        let usedPlaceIds: [String] = []
+                                        self.locationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errand.errandString))
                                         haveFoundLocations = true
                                     }
-                                    
-                                    if !haveFoundLocations {
-                                        let locationsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
-                                        self.mapErroredOut = true
-                                        self.DisplayErrorAlert(locationsNotFound)
-                                        return
-                                    }
-                                    
-                                    if(self.allPlaceRequestsSent && self.placeResponsesAwaiting == 0){
-                                        self.updateProgress()
-                                        self.CreateRoute()
-                                    }
-                                    
                                 }
+                                else{
+                                    //else find the coords, add it to an array of coords and add it to the array that goes to the algorithm, closestLocationsPerErrand
+                                    
+                                    var addressArray: [Coordinates] = []
+                                    
+                                    addressArray.append(self.errandAddress!)
+                                    self.closestLocationsPerErrand.append(addressArray)
+                                    haveFoundLocations = true
+                                }
+                                
+                                if !haveFoundLocations {
+                                    let locationsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
+                                    self.mapErroredOut = true
+                                    self.DisplayErrorAlert(locationsNotFound)
+                                    return
+                                }
+                                
+                                if(self.allPlaceRequestsSent && self.placeResponsesAwaiting == 0){
+                                    self.updateProgress()
+                                    self.CreateRoute()
+                                }
+                                
+                            }
                             
                         }
                         else{
                             print(error)
                             
-              
+                            
                         }
-                    
+                        
                     } catch let error as NSError {
                         print(error.localizedDescription)
                     }
                     
                 }
                 
-
-                    
+                
+                
                 
             }
-         
+            
         }
         catch{
             print(error)
@@ -239,65 +247,65 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func GetClosestLocationsForErrand(search: NearbySearch, errandTermId: Int, errandText: String, excludedPlaceIds: [String]?) -> [Coordinates]{
-      
+        
         var closestLocations: [Coordinates] = []
- 
-            var maxResults: Int = 3
-            if search.results.count > 0{
-              
-                if(search.results.count < maxResults){
-                    maxResults = search.results.count
-                }
-            }
-            //TODO: work on filtering with swift. NJK
-            let filteredResults: [Results] = search.results
+        
+        var maxResults: Int = 3
+        if search.results.count > 0{
             
-            for result in filteredResults {
-                if maxResults < 1 {
-                    break
-                }
-                if excludedPlaceIds != nil && excludedPlaceIds!.count > 0 {
-                    var isExcluded: Bool = false
-                    for id in excludedPlaceIds!{
-                        if id == result.place_id{
-                            isExcluded = true
-                            continue
-                        }
-                    }
-                    if(isExcluded){
+            if(search.results.count < maxResults){
+                maxResults = search.results.count
+            }
+        }
+        //TODO: work on filtering with swift. NJK
+        let filteredResults: [Results] = search.results
+        
+        for result in filteredResults {
+            if maxResults < 1 {
+                break
+            }
+            if excludedPlaceIds != nil && excludedPlaceIds!.count > 0 {
+                var isExcluded: Bool = false
+                for id in excludedPlaceIds!{
+                    if id == result.place_id{
+                        isExcluded = true
                         continue
                     }
                 }
-                
-                closestLocations.append(Coordinates(lat: result.geometry.location.lat, long: result.geometry.location.lng, title: result.name, subtitle: result.vicinity, errandTermId: errandTermId, placeId: result.place_id, errandText: errandText, errandOrder: nil))
-                
-                maxResults--
-                
+                if(isExcluded){
+                    continue
+                }
+            }
+            
+            closestLocations.append(Coordinates(lat: result.geometry.location.lat, long: result.geometry.location.lng, title: result.name, subtitle: result.vicinity, errandTermId: errandTermId, placeId: result.place_id, errandText: errandText, errandOrder: nil))
+            
+            maxResults--
+            
             
         }
         if closestLocations.count < 1{
             noResults.append(errandText)
         }
-
+        
         return closestLocations
-       
-   }
+        
+    }
     
     func fetchPlacesNearCoordinate(coordinate: CLLocationCoordinate2D, errand: Errand, count: Int, completionHandler: ((NSData!, NSError!, count: Int) -> Void)){
         
         if !errand.isAddress{
-        
-        var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&location=\(coordinate.latitude),\(coordinate.longitude)&rankby=distance&sensor=true"
-        urlString += "&name=\(errand.errandString)"
-
-        urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-
-        let session = NSURLSession.sharedSession()
-    
-        let sessionTask = session.dataTaskWithURL(NSURL(string: urlString)!) { data, response, error in
-              
+            
+            var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&location=\(coordinate.latitude),\(coordinate.longitude)&rankby=distance&sensor=true"
+            urlString += "&name=\(errand.errandString)"
+            
+            urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+            
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            
+            let session = NSURLSession.sharedSession()
+            
+            let sessionTask = session.dataTaskWithURL(NSURL(string: urlString)!) { data, response, error in
+                
                 dispatch_async(dispatch_get_main_queue()) {
                     if(data != nil){
                         completionHandler(data, error, count: count)
@@ -308,14 +316,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                 }
             }
-    
-        sessionTask.resume()
+            
+            sessionTask.resume()
         }
         else{
             errandAddress = self.GetLatLng(errand.errandString)
             //do nothing becayse it's an address that has been entered as an errand NJK
             dispatch_async(dispatch_get_main_queue()) {
-                    completionHandler(nil, nil, count: count)
+                completionHandler(nil, nil, count: count)
                 
                 
             }
@@ -323,20 +331,20 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func GetLatLng(address:String) -> Coordinates{
-         let geocoder: CLGeocoder = CLGeocoder()
+        let geocoder: CLGeocoder = CLGeocoder()
         let coords: Coordinates = Coordinates()
         geocoder.geocodeAddressString(address, completionHandler: {(placemarks:[CLPlacemark]?, error:NSError?) -> Void in
             
             if(placemarks!.count > 0){
-            let placemark: CLPlacemark = placemarks![0]
-            
+                let placemark: CLPlacemark = placemarks![0]
+                
                 
                 coords.lat = placemark.location!.coordinate.latitude
                 coords.long = placemark.location!.coordinate.longitude
                 coords.subtitle = placemark.name!
             }
-         
-        
+            
+            
         })
         
         return coords
@@ -397,7 +405,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 }
                                 // End Temporary fix
                                 
-                                self._errandLocations.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
+                                self._errandLocations.append(MapboxMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, subtitle: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
                             }
                             
                             var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
@@ -440,10 +448,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             
                             //            let waypoints = _errandLocations[2..._errandLocations.count - 1]
                             
-                            var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(self._errandLocations[0].position.latitude),\(self._errandLocations[0].position.longitude)&destination=\(self._errandLocations[1].position.latitude),\(self._errandLocations[1].position.longitude)&waypoints="
+                            var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(self._errandLocations[0].coordinate.latitude),\(self._errandLocations[0].coordinate.longitude)&destination=\(self._errandLocations[1].coordinate.latitude),\(self._errandLocations[1].coordinate.longitude)&waypoints="
                             
                             for var i = 2; i < self._errandLocations.count; i++ {
-                                url += "\(self._errandLocations[i].position.latitude),\(self._errandLocations[i].position.longitude)"
+                                url += "\(self._errandLocations[i].coordinate.latitude),\(self._errandLocations[i].coordinate.longitude)"
                                 if(i != self._errandLocations.count - 1) {
                                     url += "|"
                                 }
@@ -493,7 +501,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func GetDirections(url: String)
     {
-       
+        
         Alamofire.request(.GET, url)
             .responseJSON { response in
                 
@@ -502,48 +510,47 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                     for route in directionsResponse.routes {
                         var polylinePts: String = ""
-//                        if (route.overview_polyline != nil) {
-                            polylinePts = route.overview_polyline.points
-//                        }
+                        //                        if (route.overview_polyline != nil) {
+                        polylinePts = route.overview_polyline.points
+                        //                        }
                         
                         if (!polylinePts.isEmpty) {
                             let polylineCoords: [CLLocationCoordinate2D]? = decodePolyline(polylinePts)
                             
-                            let path = GMSMutablePath()
-                            for polylineCoord in polylineCoords! {
-                                path.addCoordinate(polylineCoord)
-                            }
-                                
-                            let polyline = GMSPolyline(path: path)
-                            // TODO: figure out how to initialize mapView as global class variable:
-                            polyline.map = self.mapView
+                            //                            let path = GMSMutablePath()
+                            //                            for polylineCoord in polylineCoords! {
+                            //                                path.addCoordinate(polylineCoord)
+                            //                            }
+                            
+                            //                            let polyline = GMSPolyline(path: path)
+                            //                            polyline.map = self.mapView
                         }
                         
                         // Bounds contains the viewport bounding box of the overview_polyline
                         let southwest = CLLocationCoordinate2DMake(route.bounds.southwest.lat, route.bounds.southwest.lng)
                         let northeast = CLLocationCoordinate2DMake(route.bounds.northeast.lat, route.bounds.northeast.lng)
-                        let bounds = GMSCoordinateBounds(coordinate: southwest, coordinate: northeast)
+                        //                        let bounds = GMSCoordinateBounds(coordinate: southwest, coordinate: northeast)
                         let padding = CGFloat(30)
-                        let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
-                        self.mapView!.animateWithCameraUpdate(fitBounds)
-
+                        //                        let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
+                        //                        self.mapView!.animateWithCameraUpdate(fitBounds)
+                        
                         
                         for leg in route.legs {
                             //directionStep.errandGroupNumber = String(format: "%02d %02d", "To", _errandLocations [i + 1].errandText)
-//                            if (leg.distance != nil) {
-                                self.totalDistanceMeters += leg.distance.value
-//                            }
+                            //                            if (leg.distance != nil) {
+                            self.totalDistanceMeters += leg.distance.value
+                            //                            }
                             
-//                            if(leg.duration_in_traffic && leg.duration_in_traffic.value) {
-//                                durationSeconds += leg.duration_in_traffic.value
-//                            } else if(leg.duration && leg.duration.value) {
-                                self.durationSeconds += leg.duration.value
-//                            }
+                            //                            if(leg.duration_in_traffic && leg.duration_in_traffic.value) {
+                            //                                durationSeconds += leg.duration_in_traffic.value
+                            //                            } else if(leg.duration && leg.duration.value) {
+                            self.durationSeconds += leg.duration.value
+                            //                            }
                             
                             var instructionIndex: Int = 1;
                             for step in leg.steps {
                                 let directionStep: DirectionStep = DirectionStep()
-
+                                
                                 directionStep.directionText = step.html_instructions.stringByReplacingOccurrencesOfString("<[^>]+>", withString: "", options: .RegularExpressionSearch, range: nil);
                                 directionStep.stepIndex = instructionIndex;
                                 if(instructionIndex != 1)
@@ -564,7 +571,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         
                         // accomplishing 1 decimal place with * 10 / 10
                         self.totalDistanceMiles = Double(round(Double(self.totalDistanceMeters) * 0.000621371 * 10)/10)
-//                        let timeInt: Int = round(self.durationSeconds / 60)
+                        //                        let timeInt: Int = round(self.durationSeconds / 60)
                         let timeInt: Int = self.durationSeconds / 60
                         var timeText: String = ""
                         var hrs: Int = 0
@@ -583,21 +590,36 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         
                         // TODO: Add infoOverlay with distance and duration here
                         
-            
+                        
+                        
+                        
+                        //                        for routeLocation in self._errandLocations {
+                        //                            // Add markers to map:
+                        //                            let marker = GoogleMapMarker()  //GMSMarker()
+                        //                            marker.position = routeLocation.position
+                        //                            marker.placeId = routeLocation.placeId
+                        //                            marker.title = routeLocation.title
+                        //                            marker.snippet = routeLocation.snippet
+                        //                            marker.errandOrder = routeLocation.errandOrder
+                        //                            marker.errandText = routeLocation.errandText
+                        //                            marker.appearAnimation = kGMSMarkerAnimationPop
+                        //                            marker.icon = UIImage(named: "Marker Filled-25")
+                        //                            // TODO: figure out how to initialize mapView as global class variable:
+                        //                            marker.map = self.mapView
+                        //                        }
                         
                         for routeLocation in self._errandLocations {
                             // Add markers to map:
-                            let marker = GoogleMapMarker()  //GMSMarker()
-                            marker.position = routeLocation.position
+                            let marker = MapboxMapMarker()  //MGLPointAnnotation()
+                            marker.coordinate = routeLocation.coordinate
                             marker.placeId = routeLocation.placeId
                             marker.title = routeLocation.title
-                            marker.snippet = routeLocation.snippet
+                            marker.subtitle = routeLocation.subtitle
                             marker.errandOrder = routeLocation.errandOrder
                             marker.errandText = routeLocation.errandText
-                            marker.appearAnimation = kGMSMarkerAnimationPop
-                            marker.icon = UIImage(named: "Marker Filled-25")
-                            // TODO: figure out how to initialize mapView as global class variable:
-                            marker.map = self.mapView
+                            //                            marker.appearAnimation = kGMSMarkerAnimationPop
+                            //                            marker.icon = UIImage(named: "Marker Filled-25")
+                            self.mapView.addAnnotation(marker)
                         }
                         
                         // Only interested in routes[0] right now
@@ -645,7 +667,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         
                         
                         var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
-                      
+                        
                         if (excludedPlaceIds.count > 0) {
                             let title: String = "No more alternative locations"
                             let msg: String = "Would you like to start over at the top of the list?"
@@ -654,7 +676,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 //If yes, clear out UsedPlaceIds for this errand and re-map:
                                 self.locationResults[i].usedPlaceIds.removeAll()
                                 self.noResults.removeAll()
-                               self.closestLocationsPerErrand.append(self.GetClosestLocationsForErrand(self.locationResults[i].locationSearchResults!,
+                                self.closestLocationsPerErrand.append(self.GetClosestLocationsForErrand(self.locationResults[i].locationSearchResults!,
                                     errandTermId: self.locationResults[i].errandTermId, errandText: self.locationResults[i].errandText, excludedPlaceIds: nil))
                             })
                             let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
@@ -696,29 +718,29 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     }
                     
                 } else {
-                    //Get top locations for non-rejected 
+                    //Get top locations for non-rejected
                     closestLocationsPerErrand.append(GetClosestLocationsForErrand(locationResults[i].locationSearchResults!,
                         errandTermId: locationResults[i].errandTermId, errandText: locationResults[i].errandText, excludedPlaceIds: locationResults[i].usedPlaceIds))
                 }
             }
             
             //Remove route info textview
-//            for sub in map.subviews) {
-//                if (sub.tag == 99) {
-//                    sub.removeFromSuperview()
-//                }
-//            }
+            //            for sub in map.subviews) {
+            //                if (sub.tag == 99) {
+            //                    sub.removeFromSuperview()
+            //                }
+            //            }
             
             
             // Clear all map markers and polylines
-            mapView?.clear()
+            //            mapView?.clear()
             
             //TODO: Clear out third page directions
             
             CreateRoute()
             
             // Caching stuff:
-//            _myRoutes.removeAll()
+            //            _myRoutes.removeAll()
             
         } catch {
             DisplayErrorAlert("")
@@ -782,54 +804,58 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
     
-//    func mapView(mapView: GMSMapView!, markerInfoWindow marker: GMSMarker!) -> UIView! {
-//        var infoWindow = NSBundle.mainBundle().loadNibNamed("CustomInfoWindow", owner: self, options: nil).first! as CustomInfoWindow
-//        infoWindow.label.text = "\(marker.position.latitude) \(marker.position.longitude)"
-//        return infoWindow
-//    }
+    //    func mapView(mapView: GMSMapView!, markerInfoWindow marker: GMSMarker!) -> UIView! {
+    //        var infoWindow = NSBundle.mainBundle().loadNibNamed("CustomInfoWindow", owner: self, options: nil).first! as CustomInfoWindow
+    //        infoWindow.label.text = "\(marker.position.latitude) \(marker.position.longitude)"
+    //        return infoWindow
+    //    }
     
-    func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool {
-        if let viewWithTag = self.view.viewWithTag(23) {
-            print("found view with tag 23")
-            viewWithTag.removeFromSuperview()
-        }
-        
-        selectedMarker = marker as! GoogleMapMarker
-        
-        let rejectBtn = UIButton()
-        rejectBtn.setTitle("Reject this location", forState: .Normal)
-        rejectBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        rejectBtn.backgroundColor = UIColor(hexString: "#CC1100")
-        rejectBtn.layer.cornerRadius = 5
-        rejectBtn.layer.borderWidth = 1
-        rejectBtn.layer.borderColor = UIColor(hexString: "#660000").CGColor
-        rejectBtn.frame = CGRectMake(12, mapView!.bounds.minY + 120, 200, 40)
-        rejectBtn.tag = 23
-        rejectBtn.addTarget(self, action: "rejectLocation:", forControlEvents: .TouchUpInside)
-        
-        self.view.addSubview(rejectBtn)
-        return false
-    }
+    //    func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool {
+    //        if let viewWithTag = self.view.viewWithTag(23) {
+    //            print("found view with tag 23")
+    //            viewWithTag.removeFromSuperview()
+    //        }
+    //
+    //        selectedMarker = marker as! MapboxMapMarker
+    //
+    //        let rejectBtn = UIButton()
+    //        rejectBtn.setTitle("Reject this location", forState: .Normal)
+    //        rejectBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+    //        rejectBtn.backgroundColor = UIColor(hexString: "#CC1100")
+    //        rejectBtn.layer.cornerRadius = 5
+    //        rejectBtn.layer.borderWidth = 1
+    //        rejectBtn.layer.borderColor = UIColor(hexString: "#660000").CGColor
+    //        rejectBtn.frame = CGRectMake(12, mapView!.bounds.minY + 120, 200, 40)
+    //        rejectBtn.tag = 23
+    //        rejectBtn.addTarget(self, action: "rejectLocation:", forControlEvents: .TouchUpInside)
+    //        
+    //        self.view.addSubview(rejectBtn)
+    //        return false
+    //    }
     
     func onRejectLocation(sender: UIButton!) {
         RejectLocation(selectedMarker.placeId)
     }
     
-    func mapView(mapView: GMSMapView!, didCloseInfoWindowOfMarker marker: GMSMarker!) -> Bool {
-        print("didCloseInfoWindowOfMarker")
-        if let viewWithTag = self.view.viewWithTag(23) {
-            print("found view with tag 23")
-            viewWithTag.removeFromSuperview()
-        }
-        return false
+    func mapView(mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
+        return true
     }
     
-    func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
-        if let viewWithTag = self.view.viewWithTag(23) {
-            print("found view with tag 23")
-            viewWithTag.removeFromSuperview()
-        }
-        print("You tapped at \(coordinate.latitude), \(coordinate.longitude)")
-    }
-
+    //    func mapView(mapView: GMSMapView!, didCloseInfoWindowOfMarker marker: GMSMarker!) -> Bool {
+    //        print("didCloseInfoWindowOfMarker")
+    //        if let viewWithTag = self.view.viewWithTag(23) {
+    //            print("found view with tag 23")
+    //            viewWithTag.removeFromSuperview()
+    //        }
+    //        return false
+    //    }
+    
+    //    func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
+    //        if let viewWithTag = self.view.viewWithTag(23) {
+    //            print("found view with tag 23")
+    //            viewWithTag.removeFromSuperview()
+    //        }
+    //        print("You tapped at \(coordinate.latitude), \(coordinate.longitude)")
+    //    }
+    
 }

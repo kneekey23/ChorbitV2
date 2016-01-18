@@ -7,28 +7,28 @@
 //
 
 
-import Foundation
-import GoogleMaps
-
-class GoogleMapMarker : GMSMarker {
-    
-    var placeId: String = ""
-    var errandText: String = ""
-    var errandOrder: Int? = 0
-    
-    override init () {
-        
-    }
-    
-    init (coordinate: CLLocationCoordinate2D, title: String, snippet: String, placeId: String, errandText: String, errandOrder: Int?) {
-        super.init()
-        self.position = coordinate
-        self.title = title
-        self.snippet = snippet
-        self.placeId = placeId
-        self.errandText = errandText
-        self.errandOrder = errandOrder
-    }
-    
-}
+//import Foundation
+//import GoogleMaps
+//
+//class GoogleMapMarker : GMSMarker {
+//    
+//    var placeId: String = ""
+//    var errandText: String = ""
+//    var errandOrder: Int? = 0
+//    
+//    override init () {
+//        
+//    }
+//    
+//    init (coordinate: CLLocationCoordinate2D, title: String, snippet: String, placeId: String, errandText: String, errandOrder: Int?) {
+//        super.init()
+//        self.position = coordinate
+//        self.title = title
+//        self.snippet = snippet
+//        self.placeId = placeId
+//        self.errandText = errandText
+//        self.errandOrder = errandOrder
+//    }
+//    
+//}
 

@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '2581B97B6D9AF745ACE69440'
+               BlueprintIdentifier = '822B7DC82B7358F6372000FC'
                BlueprintName = 'Pods-ChorbitV2'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'Pods_ChorbitV2.framework'>

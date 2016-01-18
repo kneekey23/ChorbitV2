@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import GoogleMaps
+//import GoogleMaps
 import AWSCore
 import SwiftAddressBook
 import AddressBook
@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
-        GMSServices.provideAPIKey("AIzaSyA-qG_Wky75SL9NQ7sRalZxWF9sLGuY2ZY")
+//        GMSServices.provideAPIKey("AIzaSyA-qG_Wky75SL9NQ7sRalZxWF9sLGuY2ZY")
         // Override point for customization after application launch.
         let credentialProvider = AWSCognitoCredentialsProvider(regionType: CognitoRegionType, identityPoolId: CognitoIdentityPoolId)
         

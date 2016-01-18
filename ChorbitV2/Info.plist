@@ -68,9 +68,13 @@
 			<false/>
 		</dict>
 	</dict>
+	<key>MGLMapboxAccessToken</key>
+	<string>pk.eyJ1Ijoic2hvcnRrZXlkZXYiLCJhIjoiY2lqZW1jdnZjMDAwN3V1a2tudzludHpnOSJ9.HUTctendGb9peZTEBNOsHw</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>MGLMapboxMetricsEnabledSettingShownInApp</key>
+	<string>YES</string>
 </dict>
 </plist>

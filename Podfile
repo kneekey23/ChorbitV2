@@ -4,9 +4,10 @@
 use_frameworks!
 
 target 'ChorbitV2' do
-source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.4'
-pod 'GoogleMaps'
+
+platform :ios, '8.0'
+pod 'Mapbox-iOS-SDK'
+use_frameworks!
 
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
@@ -26,9 +27,7 @@ pod 'AWSiOSSDKv2'
 platform :ios, '8.0'
 use_frameworks!
 
-target 'ChorbitV2' do
-    pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
-end
+pod 'SwiftyJSON'
 
 pod 'ObjectMapper', '~> 1.1'
 

@@ -44,6 +44,7 @@
 		8B2BEADA1C42283300DB9710 /* RouteServiceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2BEAD91C42283300DB9710 /* RouteServiceRequest.swift */; };
 		8B85A26D1C2649290090B4D3 /* DirectionStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B85A26C1C2649290090B4D3 /* DirectionStep.swift */; };
 		8B85A26F1C2896E60090B4D3 /* GoogleDirectionsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B85A26E1C2896E60090B4D3 /* GoogleDirectionsResponse.swift */; };
+		8BCCA7DB1C4CAD8E00A39A55 /* MapboxMapMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCCA7DA1C4CAD8E00A39A55 /* MapboxMapMarker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +109,7 @@
 		8B2BEAD91C42283300DB9710 /* RouteServiceRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteServiceRequest.swift; sourceTree = "<group>"; };
 		8B85A26C1C2649290090B4D3 /* DirectionStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionStep.swift; sourceTree = "<group>"; };
 		8B85A26E1C2896E60090B4D3 /* GoogleDirectionsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleDirectionsResponse.swift; sourceTree = "<group>"; };
+		8BCCA7DA1C4CAD8E00A39A55 /* MapboxMapMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapboxMapMarker.swift; sourceTree = "<group>"; };
 		9E6F9E8513D70B29EF3C0119 /* Pods-ChorbitV2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChorbitV2.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChorbitV2/Pods-ChorbitV2.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -241,6 +243,7 @@
 				8B2BEAD71C420E8F00DB9710 /* RouteServiceResponse.swift */,
 				8B2BEAD91C42283300DB9710 /* RouteServiceRequest.swift */,
 				81AF49111C4C28BA00309615 /* Errand.swift */,
+				8BCCA7DA1C4CAD8E00A39A55 /* MapboxMapMarker.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -471,6 +474,7 @@
 				8B2294291BF017210067059C /* Copyright.swift in Sources */,
 				8B22942B1BF017AD0067059C /* ErrandDistance.swift in Sources */,
 				8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */,
+				8BCCA7DB1C4CAD8E00A39A55 /* MapboxMapMarker.swift in Sources */,
 				8B22942F1BF01DC80067059C /* Geometry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

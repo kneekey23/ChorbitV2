@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import GoogleMaps
+//import GoogleMaps
 import CoreLocation
 
 class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
