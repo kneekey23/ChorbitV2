@@ -31,7 +31,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
     var temp: [DirectionStep] = []
-    var selectedMarker: GMSMarker = GMSMarker()
+    var selectedMarker: GoogleMapMarker = GoogleMapMarker()
     
     var placeResponsesAwaiting: Int = 0;
     var allPlaceRequestsSent: Bool = false;
@@ -302,7 +302,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             if (closestLocationsPerErrand.count > 1) {
                 let routeServiceUrl = "https://b97482pu3h.execute-api.us-west-2.amazonaws.com/test/ChorbitAlgorithm"
                 
-                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: origin!, errands: closestLocationsPerErrand, destination: destination!)
+                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: origin!, errands: closestLocationsPerErrand, destination: destination!, mode: "driving")
                 
                 let requestObj: AnyObject = routeServiceRequest
                 let JSONString = Mapper().toJSONString(routeServiceRequest)
@@ -539,8 +539,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             // Add markers to map:
                             let marker = GoogleMapMarker()  //GMSMarker()
                             marker.position = routeLocation.position
+                            marker.placeId = routeLocation.placeId
                             marker.title = routeLocation.title
                             marker.snippet = routeLocation.snippet
+                            marker.errandOrder = routeLocation.errandOrder
+                            marker.errandText = routeLocation.errandText
                             marker.appearAnimation = kGMSMarkerAnimationPop
                             marker.icon = UIImage(named: "Marker Filled-25")
                             // TODO: figure out how to initialize mapView as global class variable:
@@ -741,7 +744,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             viewWithTag.removeFromSuperview()
         }
         
-//        selectedMarker = marker
+        selectedMarker = marker as! GoogleMapMarker
         
         let rejectBtn = UIButton()
         rejectBtn.setTitle("Reject this location", forState: .Normal)
@@ -758,8 +761,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         return false
     }
     
-    func rejectLocation(sender: UIButton!) {
-        print("location rejected")
+    func onRejectLocation(sender: UIButton!) {
+        RejectLocation(selectedMarker.placeId)
     }
     
     func mapView(mapView: GMSMapView!, didCloseInfoWindowOfMarker marker: GMSMarker!) -> Bool {
