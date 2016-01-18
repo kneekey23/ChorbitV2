@@ -284,8 +284,15 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
         })
         
         alertController.addAction(okAction)
+        
+        let totalNumberOfErrands: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count - 1
+        
+        if(!self.destinationToggle.on){
+            totalNumberOfErrands - 1
+        }
+        
   
-        if((parentViewController?.parentViewController as! MainViewController).errandSelection.count <= 5){
+        if( totalNumberOfErrands <= 5){
             if(!place.isAddressOnly){
                 if(!self.destinationToggle.on){
                     let lastErrandIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count - 1
