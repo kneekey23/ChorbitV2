@@ -17,6 +17,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     var myGeoLocatedCoords: CLLocation = CLLocation()
     var isAddressOnly: Bool = false;
     var addressString : String = ""
+    var clickedChangeStartingLocation: Bool = false
 
     @IBOutlet weak var destinationToggle: UISwitch!
     @IBOutlet weak var startingLocationControl: UISegmentedControl!
@@ -47,6 +48,8 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     }
     
     @IBAction func chooseStartingPoint(sender: AnyObject) {
+        clickedChangeStartingLocation = true
+        
         let segmentedControl: UISegmentedControl = sender as! UISegmentedControl
         if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Use New Location"{
             if((parentViewController?.parentViewController as! MainViewController).errandSelection.count > 0){
@@ -250,6 +253,15 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         }
     }
     
+    func DisplayErrorAlert(var errorMessage: String)
+    {
+        
+        
+        
+   
+        
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "searchToMapIndentifier"{
             let mapViewController = segue.destinationViewController as! MapViewController
@@ -264,11 +276,19 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
 extension SearchViewController: GooglePlacesAutocompleteDelegate {
     //when you pick something on autocomplete this gets called. NJK
     func placeSelected(place: Place) {
+        var error: Bool = false
+       let alertController = UIAlertController(title: "Error", message: "No more than 5 locations can be routed at this time. Coming soon!", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+            print("Okay was clicked")
+        })
+        
+        alertController.addAction(okAction)
   
         if((parentViewController?.parentViewController as! MainViewController).errandSelection.count <= 5){
             if(!place.isAddressOnly){
                 if(!self.destinationToggle.on){
-                    let lastErrandIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count - 2
+                    let lastErrandIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count - 1
                     if(place.isContact){
                         let newAddress = Errand(errandString: place.contactAddress!, isAddress: true, isStartingLocation: false, isEndingLocation: false)
                         (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newAddress, atIndex: lastErrandIndex)
@@ -300,7 +320,7 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
             }
             else{
                 let lastIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count
-                if(!self.destinationToggle.on){
+                if(!self.destinationToggle.on && !clickedChangeStartingLocation){
                     let newEndingLocation: Errand = Errand(errandString: place.description, isAddress: true, isStartingLocation: false, isEndingLocation: true)
                     (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newEndingLocation, atIndex: lastIndex)
                 }
@@ -311,7 +331,11 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
                
             }
         }
-        dismissViewControllerAnimated(true, completion: nil)
+        else{
+           
+           error = true
+        }
+        dismissViewControllerAnimated(true, completion: { if error {self.presentViewController(alertController, animated: true, completion: nil)}})
 
         
     }
