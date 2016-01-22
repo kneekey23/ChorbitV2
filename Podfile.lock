@@ -65,6 +65,9 @@ PODS:
     - AWSCore (= 2.2.7)
   - AWSSQS (2.2.7):
     - AWSCore (= 2.2.7)
+  - Crashlytics (3.6.0):
+    - Fabric (~> 1.6.3)
+  - Fabric (1.6.4)
   - GoogleMaps (1.10.5)
   - GooglePlacesAutocomplete (0.3.0)
   - KYCircularProgress (0.5.1)
@@ -77,6 +80,8 @@ DEPENDENCIES:
   - Alamofire (~> 3.0)
   - AWSDynamoDB (~> 2.2.0)
   - AWSiOSSDKv2
+  - Crashlytics
+  - Fabric
   - GoogleMaps
   - GooglePlacesAutocomplete
   - KYCircularProgress
@@ -110,6 +115,8 @@ SPEC CHECKSUMS:
   AWSSimpleDB: 3e699c4437f17f70fce66558731232431e1b1090
   AWSSNS: 6f526c50d4013eacd4c35af4b9b35eb415d202ec
   AWSSQS: 0def5dfc1385564d88ebf88a0bdf7227f5f855e1
+  Crashlytics: e4e8d02914f2608fbc7bf42b1a7af838b0db67a2
+  Fabric: ed41fd62173c6bdea24ab02c9d7707161eabb750
   GoogleMaps: da51c62c338c2d9c47cdad470a0d1e0e4b8544e4
   GooglePlacesAutocomplete: 7694636fce561c9d8ac807b8e490d299a730a633
   KYCircularProgress: 69a6d6852d96ca2be2830cc659b85aab3bb1cee6

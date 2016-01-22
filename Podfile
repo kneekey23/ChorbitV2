@@ -38,6 +38,9 @@ pod "SwiftAddressBook"
 
 pod 'KYCircularProgress'
 
+pod 'Fabric'
+pod 'Crashlytics'
+
 end
 
 target 'ChorbitV2Tests' do

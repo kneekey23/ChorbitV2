@@ -33,6 +33,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var temp: [DirectionStep] = []
     var selectedMarker: GoogleMapMarker = GoogleMapMarker()
     var errandAddress: Coordinates?
+    var modeOfTransportation: String = "driving"
     
     var placeResponsesAwaiting: Int = 0;
     var allPlaceRequestsSent: Bool = false;
@@ -49,6 +50,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     @IBOutlet weak var buttonRect: UIButton!
     @IBAction func refreshTrafficConditions(sender: AnyObject) {
         //refresh route goes here NJK
+        mapView?.clear()
+        self._errandLocations.removeAll()
+        self.currentRouteLocations.removeAll()
+        self.CreateRoute()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,14 +78,22 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Drive"{
             //default is here. possibly do nothing? NJK
+            modeOfTransportation = "driving"
+        
         }
         else if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Walk"{
             //code for walking goes here. NJK
+            modeOfTransportation = "walking"
+           
         }
         else{
             //transit goes here NJK
+            modeOfTransportation = "cycling"
         }
-        
+            mapView?.clear()
+            self._errandLocations.removeAll()
+            self.currentRouteLocations.removeAll()
+            self.CreateRoute()
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "mapToDirectionsSegue"{
@@ -352,7 +365,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             if (closestLocationsPerErrand.count > 1) {
                 let routeServiceUrl = "https://b97482pu3h.execute-api.us-west-2.amazonaws.com/test/ChorbitAlgorithm"
                 
-                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: origin!, errands: closestLocationsPerErrand, destination: destination!, mode: "driving")
+                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: origin!, errands: closestLocationsPerErrand, destination: destination!, mode: modeOfTransportation)
                 
                 let requestObj: AnyObject = routeServiceRequest
                 let JSONString = Mapper().toJSONString(routeServiceRequest)
@@ -440,7 +453,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             
                             //            let waypoints = _errandLocations[2..._errandLocations.count - 1]
                             
-                            var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(self._errandLocations[0].position.latitude),\(self._errandLocations[0].position.longitude)&destination=\(self._errandLocations[1].position.latitude),\(self._errandLocations[1].position.longitude)&waypoints="
+                            if(self.modeOfTransportation == "cycling"){
+                                self.modeOfTransportation = "bicycling"
+                            }
+                            
+                            var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(self._errandLocations[0].position.latitude),\(self._errandLocations[0].position.longitude)&destination=\(self._errandLocations[1].position.latitude),\(self._errandLocations[1].position.longitude)&mode=\(self.modeOfTransportation)&waypoints="
                             
                             for var i = 2; i < self._errandLocations.count; i++ {
                                 url += "\(self._errandLocations[i].position.latitude),\(self._errandLocations[i].position.longitude)"
@@ -557,8 +574,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             }
                         }
                         
-                        // TODO: Add all steps to directions page
-                        
                         self.updateProgress()
                         
                         
@@ -579,11 +594,42 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         } else {
                             timeText = String(mins) + " min";
                         }
+
+                        let infoOverlay: UITextView = UITextView()
+                        infoOverlay.frame = CGRect(x: CGFloat(9), y: (self.buttonRect.frame.minY) - 60, width: CGFloat(boxWidth), height: CGFloat(50))
+                        infoOverlay.tag = 99
+                        infoOverlay.editable = false
+                        infoOverlay.backgroundColor = UIColor.blackColor()
+                        infoOverlay.alpha = 0.7
+                        infoOverlay.layer.cornerRadius = 5
+                         let font: UIFont = UIFont(name: "AvenirNext-DemiBold", size: 13)!
+                        let fontAttr = [NSFontAttributeName:font]
+                    
+                        let styledString = NSMutableAttributedString()
+                        let distTitle: NSMutableAttributedString = NSMutableAttributedString(string:"Total Distance: ", attributes: fontAttr)
+                        distTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor(hexString: "#40e0d0"), range: NSRange(location:0, length: distTitle.length))
+                        let timeTitle: NSMutableAttributedString = NSMutableAttributedString(string:"Total Travel Time: ", attributes: fontAttr)
+                        timeTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor(hexString: "#40e0d0"), range: NSRange(location:0, length: timeTitle.length))
+                        let totalDistTxt: NSMutableAttributedString = NSMutableAttributedString(string: String(self.totalDistanceMiles) + "miles", attributes: fontAttr)
+                        totalDistTxt.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSRange(location: 0, length: totalDistTxt.length))
+                        let timeTextMutable: NSMutableAttributedString = NSMutableAttributedString(string: timeText)
+                        timeTextMutable.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSRange(location: 0, length:timeTextMutable.length))
+                        styledString.appendAttributedString(distTitle)
+                        styledString.appendAttributedString(totalDistTxt)
+                        //line break
+                        styledString.appendAttributedString(NSAttributedString(string:"\n"))
+                        styledString.appendAttributedString(timeTitle)
+                        styledString.appendAttributedString(timeTextMutable)
                         
+                        let paraStyle = NSMutableParagraphStyle()
+                        paraStyle.lineSpacing = 1.0
                         
-                        // TODO: Add infoOverlay with distance and duration here
+                        // Apply paragraph styles to paragraph
+                        styledString.addAttribute(NSParagraphStyleAttributeName, value: paraStyle, range: NSRange(location: 0,length: styledString.length))
                         
-            
+                        infoOverlay.attributedText = styledString
+                        self.view.addSubview(infoOverlay)
+                        
                         
                         for routeLocation in self._errandLocations {
                             // Add markers to map:

@@ -18,6 +18,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     var isAddressOnly: Bool = false;
     var addressString : String = ""
     var clickedChangeStartingLocation: Bool = false
+  
 
     @IBOutlet weak var destinationToggle: UISwitch!
     @IBOutlet weak var startingLocationControl: UISegmentedControl!
@@ -122,6 +123,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let logo = UIImage(named: "LogoTitleBar.png")
+        let imageView = UIImageView(image:logo)
+        self.navigationItem.titleView = imageView
         locMan.delegate = self
         locMan.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locMan.requestWhenInUseAuthorization()

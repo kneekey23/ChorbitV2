@@ -450,13 +450,13 @@
                                     <segue destination="Hdw-6G-Q59" kind="show" identifier="mapToDirectionsSegue" id="W0l-ey-p50"/>
                                 </connections>
                             </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="BnJ-7E-njw">
-                                <rect key="frame" x="72" y="72" width="230" height="29"/>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="BnJ-7E-njw">
+                                <rect key="frame" x="7" y="72" width="362" height="29"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <segments>
                                     <segment title="Drive"/>
                                     <segment title="Walk"/>
-                                    <segment title="Transit"/>
+                                    <segment title="Cycle"/>
                                 </segments>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -466,10 +466,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="BnJ-7E-njw" firstAttribute="leading" secondItem="AU2-AG-oJz" secondAttribute="leadingMargin" constant="-9" id="1h2-W8-W5U"/>
                             <constraint firstItem="JZt-Do-ToM" firstAttribute="top" secondItem="a3w-on-0JT" secondAttribute="bottom" constant="506" id="ANx-BX-CDx"/>
                             <constraint firstItem="JZt-Do-ToM" firstAttribute="leading" secondItem="AU2-AG-oJz" secondAttribute="leading" id="HeL-rB-4gX"/>
                             <constraint firstAttribute="trailing" secondItem="JZt-Do-ToM" secondAttribute="trailing" id="VCE-W0-ioz"/>
+                            <constraint firstItem="BnJ-7E-njw" firstAttribute="top" secondItem="a3w-on-0JT" secondAttribute="bottom" constant="8" symbolic="YES" id="Ycr-ea-U7P"/>
                             <constraint firstAttribute="bottomMargin" secondItem="JZt-Do-ToM" secondAttribute="bottom" constant="42" id="u9u-fI-8MQ"/>
+                            <constraint firstItem="BnJ-7E-njw" firstAttribute="centerX" secondItem="JZt-Do-ToM" secondAttribute="centerX" id="uLd-v6-ntr"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Route" id="af6-K9-jiO">
@@ -595,7 +598,7 @@
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.21960784310000001" green="0.83529411760000005" blue="0.75294117650000003" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="22"/>
+                            <fontDescription key="fontDescription" name="AvenirNextCondensed-DemiBold" family="Avenir Next Condensed" pointSize="30"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
                     </navigationBar>
