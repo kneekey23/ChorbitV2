@@ -11,6 +11,9 @@ import GoogleMaps
 import AWSCore
 import SwiftAddressBook
 import AddressBook
+import Fabric
+import Crashlytics
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -41,6 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.contactAccess = false
             }
         })
+        Fabric.with([Crashlytics.self])
+
         return true
     }
 

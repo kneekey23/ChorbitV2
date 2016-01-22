@@ -29,6 +29,7 @@
 		817DD1321C3260BE0061AF7A /* DirectionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817DD1311C3260BD0061AF7A /* DirectionsController.swift */; };
 		81AF49101C41EDC900309615 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AF490F1C41EDC900309615 /* Main.storyboard */; };
 		81AF49121C4C28BA00309615 /* Errand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AF49111C4C28BA00309615 /* Errand.swift */; };
+		81AF49141C4C9EFD00309615 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AF49131C4C9EFD00309615 /* MapKit.framework */; };
 		81FD6AC21C1E2F15008A94DF /* NearbySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */; };
 		8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294201BEFFA3A0067059C /* RouteService.swift */; };
 		8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294241BF00D3A0067059C /* Coordinates.swift */; };
@@ -92,6 +93,7 @@
 		817DD1311C3260BD0061AF7A /* DirectionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionsController.swift; sourceTree = "<group>"; };
 		81AF490F1C41EDC900309615 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		81AF49111C4C28BA00309615 /* Errand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errand.swift; sourceTree = "<group>"; };
+		81AF49131C4C9EFD00309615 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbySearch.swift; sourceTree = "<group>"; };
 		87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChorbitV2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B2294201BEFFA3A0067059C /* RouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteService.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4597898F88109FBC05793991 /* Pods_ChorbitV2.framework in Frameworks */,
+				81AF49141C4C9EFD00309615 /* MapKit.framework in Frameworks */,
 				58B98972E0482C5BFA68014D /* Pods_ChorbitV2_ChorbitV2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -141,6 +144,7 @@
 		273B16F5D2D3B890C788982D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				81AF49131C4C9EFD00309615 /* MapKit.framework */,
 				87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */,
 				791947A464B959D9C296C351 /* Pods_ChorbitV2_ChorbitV2.framework */,
 			);
@@ -267,6 +271,7 @@
 				816609D31BE0B6BD008B797E /* Resources */,
 				64CC488D098D0074C4755EC8 /* Embed Pods Frameworks */,
 				4A43AB32A4494E4EEE454FD3 /* Copy Pods Resources */,
+				81AF49151C52E7EC00309615 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -421,6 +426,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChorbitV2-ChorbitV2/Pods-ChorbitV2-ChorbitV2-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		81AF49151C52E7EC00309615 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 8322cb7cd552c0c6456cf8f013b10ad393791c3e fe84e1c9d7991e2947cb1059c84dd9aa00bee444eef0ca8854886da1d2dda431";
 		};
 		C72059F25D6222D3143F7C25 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
