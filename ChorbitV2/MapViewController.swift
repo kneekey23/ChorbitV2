@@ -11,7 +11,6 @@ import UIKit
 import GoogleMaps
 import Alamofire
 import Polyline
-import KYCircularProgress
 import SwiftyJSON
 import ObjectMapper
 
@@ -43,7 +42,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var routeDistance: Double = 0.0
     var durationSeconds: Int = 0
     var listGroupDict = [Int: [DirectionStep]]()
-    var halfCircularProgress: KYCircularProgress!
+    var progressBackground: UIImageView?
     var progress: UInt8 = 0
     
     @IBOutlet weak var transportationTyoe: UISegmentedControl!
@@ -68,7 +67,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.view.addSubview(buttonRect)
         self.view.addSubview(transportationTyoe)
         
-        configureHalfCircularProgress()
+        configureLoadingMessage()
         GetLocationInformation()
     }
     
@@ -170,7 +169,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if i == totalNumberOfErrands - 1{
                     self.allPlaceRequestsSent = true
                 }
-                updateProgress()
+          
                 
                 //if the errand is not an address and something like Target, fetch closest locations using Google Places API NJK
       
@@ -218,7 +217,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                     }
                                     
                                     if(self.allPlaceRequestsSent && self.placeResponsesAwaiting == 0){
-                                        self.updateProgress()
+                                 
                                         self.CreateRoute()
                                     }
                                     
@@ -467,7 +466,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             }
                             
                             url = url.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-                            self.updateProgress()
+                           
                             do {
                                 self.GetDirections(url);
                             } catch {
@@ -495,7 +494,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 for locationList in closestLocationsPerErrand {
                     if(locationList.count > 0) {
                         locations.append(locationList[0]);
-                        currentRouteLocations = locationList;
+                        currentRouteLocations = locations;
                         break;
                     }
                 }
@@ -544,6 +543,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
                         self.mapView!.animateWithCameraUpdate(fitBounds)
 
+                        self.dismissViewControllerAnimated(false, completion: nil)
                         
                         for leg in route.legs {
                             //directionStep.errandGroupNumber = String(format: "%02d %02d", "To", _errandLocations [i + 1].errandText)
@@ -573,8 +573,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 instructionIndex++;
                             }
                         }
-                        
-                        self.updateProgress()
                         
                         
                         // accomplishing 1 decimal place with * 10 / 10
@@ -789,44 +787,45 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
     }
     
-    func configureHalfCircularProgress() {
+    
+    func configureLoadingMessage() {
+        var iterations: String = "7"
+        var numberOfErrands: Int = 1
         
-        let halfCircularProgressFrame = CGRectMake(0, 0, CGRectGetWidth(view.frame), CGRectGetHeight(view.frame))
-        
-        halfCircularProgress = KYCircularProgress(frame: halfCircularProgressFrame, showProgressGuide: true)
-        halfCircularProgress.backgroundColor = UIColor.grayColor()
-        let center = CGPoint(x: 180.0, y: 200.0)
-        halfCircularProgress.path = UIBezierPath(arcCenter: center, radius: CGFloat(CGRectGetWidth(halfCircularProgress.frame)/3), startAngle: CGFloat(M_PI), endAngle: CGFloat(0.0), clockwise: true)
-        halfCircularProgress.colors = [UIColor.purpleColor(), UIColor(rgba: 0xFFF77A55), UIColor(hexString: "#64D8C4")]
-        halfCircularProgress.lineWidth = 8.0
-        halfCircularProgress.progressGuideColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.5)
-        
-        let textLabel = UILabel(frame: CGRectMake(halfCircularProgress.frame.origin.x + 120.0, 170.0, 80.0, 32.0))
-        textLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 32)
-        textLabel.textAlignment = .Center
-        textLabel.textColor = UIColor.blackColor()
-        textLabel.alpha = 0.5
-        halfCircularProgress.addSubview(textLabel)
-        
-        halfCircularProgress.progressChangedClosure() {
-            (progress: Double, circularView: KYCircularProgress) in
-            print("progress: \(progress)")
-            textLabel.text = "\(Int(progress * 100.0))%"
+        if (firstViewController!.destinationToggle as UISwitch).on{
+        numberOfErrands = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count - 1
+        }
+        else{
+            numberOfErrands = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count - 2
         }
         
-        view.addSubview(halfCircularProgress)
-        view.bringSubviewToFront(halfCircularProgress)
+        if numberOfErrands == 2{
+            iterations = "256"
+        }
+        else if numberOfErrands == 3{
+            iterations = "13,122"
+        }
+        else if numberOfErrands == 4{
+            iterations = "393,216"
+        }
+        else if numberOfErrands == 5{
+            iterations = "9,375,000"
+        }
+        
+        let message = "Testing " + iterations + " combinations to calculate your route..."
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .Alert)
+        
+        alert.view.tintColor = UIColor.blackColor()
+        let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(10, 5, 50, 50)) as UIActivityIndicatorView
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        loadingIndicator.startAnimating();
+        
+        alert.view.addSubview(loadingIndicator)
+        presentViewController(alert, animated: true, completion: nil)
+        
     }
     
-    func updateProgress() {
-        progress = progress &+ 25
-        let normalizedProgress = Double(progress) / 100.0
-        
-        halfCircularProgress.progress = normalizedProgress
-        if normalizedProgress == 1 {
-            halfCircularProgress.hidden = true
-        }
-    }
     
 //    func mapView(mapView: GMSMapView!, markerInfoWindow marker: GMSMarker!) -> UIView! {
 //        var infoWindow = NSBundle.mainBundle().loadNibNamed("CustomInfoWindow", owner: self, options: nil).first! as CustomInfoWindow
