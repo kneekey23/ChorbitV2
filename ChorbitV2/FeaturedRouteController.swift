@@ -26,6 +26,7 @@ class FeaturedRouteViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureLoadingMessage()
         featuredRouteTable.separatorInset = UIEdgeInsetsZero
         featuredRouteList = []
         lock = NSLock()
@@ -46,6 +47,21 @@ class FeaturedRouteViewController: UIViewController, UITableViewDelegate, UITabl
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func configureLoadingMessage() {
+        
+        let alert = UIAlertController(title: nil, message: "Loading themed routes...", preferredStyle: .Alert)
+        
+        alert.view.tintColor = UIColor.blackColor()
+        let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(10, 5, 50, 50)) as UIActivityIndicatorView
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        loadingIndicator.startAnimating();
+        
+        alert.view.addSubview(loadingIndicator)
+        presentViewController(alert, animated: true, completion: nil)
+        
     }
     
     func refreshList(startFromBeginning: Bool)  {
@@ -82,6 +98,7 @@ class FeaturedRouteViewController: UIViewController, UITableViewDelegate, UITabl
                 
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 self.featuredRouteTable.reloadData()
+                self.dismissViewControllerAnimated(false, completion: nil)
                 
                 if ((task.error) != nil) {
                     print("Error: \(task.error)")

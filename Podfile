@@ -36,7 +36,8 @@ pod 'Polyline', '~> 3.0'
 
 pod "SwiftAddressBook"
 
-pod 'KYCircularProgress'
+pod 'Fabric'
+pod 'Crashlytics'
 
 end
 

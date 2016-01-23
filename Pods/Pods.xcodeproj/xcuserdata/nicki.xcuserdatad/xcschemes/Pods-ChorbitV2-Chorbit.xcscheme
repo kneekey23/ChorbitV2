@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "23C1A73054B449A7DCCF1A4021D6D629"
-               BuildableName = "Pods_ChorbitV2_Chorbit.framework"
-               BlueprintName = "Pods-ChorbitV2-Chorbit"
+               BuildableName = "Pods_ChorbitV2_ChorbitV2.framework"
+               BlueprintName = "Pods-ChorbitV2-ChorbitV2"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,8 +46,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "23C1A73054B449A7DCCF1A4021D6D629"
-            BuildableName = "Pods_ChorbitV2_Chorbit.framework"
-            BlueprintName = "Pods-ChorbitV2-Chorbit"
+            BuildableName = "Pods_ChorbitV2_ChorbitV2.framework"
+            BlueprintName = "Pods-ChorbitV2-ChorbitV2"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -64,8 +64,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "23C1A73054B449A7DCCF1A4021D6D629"
-            BuildableName = "Pods_ChorbitV2_Chorbit.framework"
-            BlueprintName = "Pods-ChorbitV2-Chorbit"
+            BuildableName = "Pods_ChorbitV2_ChorbitV2.framework"
+            BlueprintName = "Pods-ChorbitV2-ChorbitV2"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

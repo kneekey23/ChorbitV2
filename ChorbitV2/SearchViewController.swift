@@ -17,17 +17,9 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     var myGeoLocatedCoords: CLLocation = CLLocation()
     var isAddressOnly: Bool = false;
     var addressString : String = ""
-
-    @IBOutlet weak var destinationToggle: UISwitch!
-    @IBOutlet weak var startingLocationControl: UISegmentedControl!
-    @IBOutlet weak var errandTableView: UITableView!
-    let locMan: CLLocationManager = CLLocationManager()
-
-    @IBAction func launchButton(sender: AnyObject) {
-    }
-    
+    var clickedChangeStartingLocation: Bool = false
+  
     @IBAction func addErrand(sender: AnyObject) {
-        
         let gpaViewController = GooglePlacesAutocomplete(
             apiKey: "AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY",
             placeType: .All,
@@ -35,7 +27,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         )
         
         gpaViewController.placeDelegate = self
-       
+        
         gpaViewController.locationBias = LocationBias(latitude: myGeoLocatedCoords.coordinate.latitude, longitude: myGeoLocatedCoords.coordinate.longitude, radius: 20)
         gpaViewController.navigationBar.barStyle = UIBarStyle.Default
         gpaViewController.navigationBar.translucent = false
@@ -45,8 +37,22 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         presentViewController(gpaViewController, animated: true, completion: nil)
     }
+
+    @IBOutlet weak var destinationToggle: UISwitch!
+    @IBOutlet weak var startingLocationControl: UISegmentedControl!
+    @IBOutlet weak var errandTableView: UITableView!
+    let locMan: CLLocationManager = CLLocationManager()
+
+    @IBAction func launchButton(sender: AnyObject) {
+    }
+    
+    @IBAction func refreshLocation(sender: AnyObject) {
+        locMan.startUpdatingLocation()
+    }
     
     @IBAction func chooseStartingPoint(sender: AnyObject) {
+        clickedChangeStartingLocation = true
+        
         let segmentedControl: UISegmentedControl = sender as! UISegmentedControl
         if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Use New Location"{
             if((parentViewController?.parentViewController as! MainViewController).errandSelection.count > 0){
@@ -119,13 +125,18 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.errandTableView.tableFooterView = UIView()
+        
+        let logo = UIImage(named: "LogoTitleBar.png")
+        let imageView = UIImageView(image:logo)
+        self.navigationItem.titleView = imageView
         locMan.delegate = self
         locMan.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locMan.requestWhenInUseAuthorization()
         locMan.startUpdatingLocation()
         //this gets rid of ui issue where image blocks line from showing up completely NJK
         if(self.errandTableView != nil){
-             self.errandTableView!.separatorInset = UIEdgeInsetsZero;
+            // self.errandTableView!.separatorInset = UIEdgeInsetsZero;
                self.errandTableView.reloadData()
         }
        
@@ -250,7 +261,32 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         }
     }
     
+    func DisplayErrorAlert(errorMessage: String)
+    {
+        
+        let alertController = UIAlertController(title: "Error", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+        
+        let okAction = UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+            print("Okay was clicked")
+        })
+        alertController.addAction(okAction)
+        
+        self.presentViewController(alertController, animated: true, completion: nil)
+        
+    }
+    
+    override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
+        if(parentViewController?.parentViewController as! MainViewController).errandSelection.count < 2 || (parentViewController?.parentViewController as! MainViewController).errandSelection.count < 3 && !self.destinationToggle.on
+            {
+            DisplayErrorAlert("Please enter at least one errand to launch your route.")
+            return false
+            
+        }
+        return true
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+
         if segue.identifier == "searchToMapIndentifier"{
             let mapViewController = segue.destinationViewController as! MapViewController
             mapViewController.firstViewController = self
@@ -264,9 +300,41 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
 extension SearchViewController: GooglePlacesAutocompleteDelegate {
     //when you pick something on autocomplete this gets called. NJK
     func placeSelected(place: Place) {
+        var error: Bool = false
+       let alertController = UIAlertController(title: "Error", message: "No more than 5 locations can be routed at this time. Coming soon!", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+            print("Okay was clicked")
+        })
+        
+        alertController.addAction(okAction)
+        
+        let totalNumberOfErrands: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count - 1
+        
+        if(!self.destinationToggle.on){
+            totalNumberOfErrands - 1
+        }
+        
   
-        if((parentViewController?.parentViewController as! MainViewController).errandSelection.count <= 5){
+        if( totalNumberOfErrands <= 5){
             if(!place.isAddressOnly){
+                if(!self.destinationToggle.on){
+                    let lastErrandIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count - 1
+                    if(place.isContact){
+                        let newAddress = Errand(errandString: place.contactAddress!, isAddress: true, isStartingLocation: false, isEndingLocation: false)
+                        (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newAddress, atIndex: lastErrandIndex)
+                    }
+                    else if(place.isErrandAddress){
+                        let newErrandAddress = Errand(errandString: place.description, isAddress: true, isStartingLocation: false, isEndingLocation: false)
+                        (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newErrandAddress, atIndex: lastErrandIndex)
+                    }
+                    else{
+                        let newErrand = Errand(errandString: place.description, isAddress: false, isStartingLocation: false, isEndingLocation: false)
+                        (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newErrand, atIndex: lastErrandIndex)
+                    }
+                    
+                    
+                }else{
                 if(place.isContact){
                     let newAddress = Errand(errandString: place.contactAddress!, isAddress: true, isStartingLocation: false, isEndingLocation: false)
                      (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newAddress)
@@ -279,10 +347,11 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
                     let newErrand = Errand(errandString: place.description, isAddress: false, isStartingLocation: false, isEndingLocation: false)
                      (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newErrand)
                 }
+                }
             }
             else{
                 let lastIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count
-                if(!self.destinationToggle.on){
+                if(!self.destinationToggle.on && !clickedChangeStartingLocation){
                     let newEndingLocation: Errand = Errand(errandString: place.description, isAddress: true, isStartingLocation: false, isEndingLocation: true)
                     (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newEndingLocation, atIndex: lastIndex)
                 }
@@ -293,7 +362,11 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
                
             }
         }
-        dismissViewControllerAnimated(true, completion: nil)
+        else{
+           
+           error = true
+        }
+        dismissViewControllerAnimated(true, completion: { if error {self.presentViewController(alertController, animated: true, completion: nil)}})
 
         
     }
