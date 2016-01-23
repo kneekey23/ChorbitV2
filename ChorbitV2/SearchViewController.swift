@@ -19,6 +19,24 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     var addressString : String = ""
     var clickedChangeStartingLocation: Bool = false
   
+    @IBAction func addErrand(sender: AnyObject) {
+        let gpaViewController = GooglePlacesAutocomplete(
+            apiKey: "AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY",
+            placeType: .All,
+            isAddressOnly: false
+        )
+        
+        gpaViewController.placeDelegate = self
+        
+        gpaViewController.locationBias = LocationBias(latitude: myGeoLocatedCoords.coordinate.latitude, longitude: myGeoLocatedCoords.coordinate.longitude, radius: 20)
+        gpaViewController.navigationBar.barStyle = UIBarStyle.Default
+        gpaViewController.navigationBar.translucent = false
+        gpaViewController.navigationBar.barTintColor = UIColor(hexString: "#64D8C4")
+        gpaViewController.navigationBar.tintColor = UIColor.whiteColor()
+        gpaViewController.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 16.0)!]
+        
+        presentViewController(gpaViewController, animated: true, completion: nil)
+    }
 
     @IBOutlet weak var destinationToggle: UISwitch!
     @IBOutlet weak var startingLocationControl: UISegmentedControl!
@@ -30,25 +48,6 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     @IBAction func refreshLocation(sender: AnyObject) {
         locMan.startUpdatingLocation()
-    }
-    @IBAction func addErrand(sender: AnyObject) {
-        
-        let gpaViewController = GooglePlacesAutocomplete(
-            apiKey: "AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY",
-            placeType: .All,
-            isAddressOnly: false
-        )
-        
-        gpaViewController.placeDelegate = self
-       
-        gpaViewController.locationBias = LocationBias(latitude: myGeoLocatedCoords.coordinate.latitude, longitude: myGeoLocatedCoords.coordinate.longitude, radius: 20)
-        gpaViewController.navigationBar.barStyle = UIBarStyle.Default
-        gpaViewController.navigationBar.translucent = false
-        gpaViewController.navigationBar.barTintColor = UIColor(hexString: "#64D8C4")
-        gpaViewController.navigationBar.tintColor = UIColor.whiteColor()
-        gpaViewController.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 16.0)!]
-        
-        presentViewController(gpaViewController, animated: true, completion: nil)
     }
     
     @IBAction func chooseStartingPoint(sender: AnyObject) {
@@ -126,6 +125,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.errandTableView.tableFooterView = UIView()
         
         let logo = UIImage(named: "LogoTitleBar.png")
         let imageView = UIImageView(image:logo)
@@ -136,7 +136,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         locMan.startUpdatingLocation()
         //this gets rid of ui issue where image blocks line from showing up completely NJK
         if(self.errandTableView != nil){
-             self.errandTableView!.separatorInset = UIEdgeInsetsZero;
+            // self.errandTableView!.separatorInset = UIEdgeInsetsZero;
                self.errandTableView.reloadData()
         }
        

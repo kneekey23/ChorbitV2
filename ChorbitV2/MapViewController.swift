@@ -542,7 +542,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         let padding = CGFloat(30)
                         let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
                         self.mapView!.animateWithCameraUpdate(fitBounds)
-
+                        //removes loading view from screen NJK
                         self.dismissViewControllerAnimated(false, completion: nil)
                         
                         for leg in route.legs {
