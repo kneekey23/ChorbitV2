@@ -558,10 +558,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //                            }
                             
                             var instructionIndex: Int = 1;
+                          
+
                             for step in leg.steps {
                                 let directionStep: DirectionStep = DirectionStep()
+                                
+                                
+                                 directionStep.directionText = step.html_instructions.stringByReplacingOccurrencesOfString("<[^>]+>", withString: " ", options: .RegularExpressionSearch, range: nil);
 
-                                directionStep.directionText = step.html_instructions.stringByReplacingOccurrencesOfString("<[^>]+>", withString: "", options: .RegularExpressionSearch, range: nil);
+                            
                                 directionStep.stepIndex = instructionIndex;
                                 if(instructionIndex != 1)
                                 {
