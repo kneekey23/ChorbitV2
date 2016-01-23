@@ -812,7 +812,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             iterations = "9,375,000"
         }
         
-        let message = "Testing " + iterations + " combinations..."
+        let message = "Testing " + iterations + " route combinations..."
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .Alert)
         
         alert.view.tintColor = UIColor.blackColor()
