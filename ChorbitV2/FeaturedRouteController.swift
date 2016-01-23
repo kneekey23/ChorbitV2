@@ -20,15 +20,17 @@ class FeaturedRouteViewController: UIViewController, UITableViewDelegate, UITabl
     var lock:NSLock?
     var lastEvaluatedKey:[NSObject : AnyObject]!
     var  doneLoading = false
+    var cityId: NSNumber?
     
     var needsToRefresh = true
     //var featuredRouteList: [String] = ["Tourist Route", "Lazy Sunday Route"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureLoadingMessage()
+        //configureLoadingMessage()
         featuredRouteTable.separatorInset = UIEdgeInsetsZero
         featuredRouteList = []
+        featuredRouteTable.tableFooterView = UIView()
         lock = NSLock()
 
         
@@ -75,10 +77,15 @@ class FeaturedRouteViewController: UIViewController, UITableViewDelegate, UITabl
             UIApplication.sharedApplication().networkActivityIndicatorVisible = true
             
             let dynamoDBObjectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
-            let queryExpression = AWSDynamoDBScanExpression()
+         
+        
+            let queryExpression = AWSDynamoDBQueryExpression()
+            queryExpression.hashKeyValues = self.cityId;
             queryExpression.exclusiveStartKey = self.lastEvaluatedKey
             queryExpression.limit = 20;
-            dynamoDBObjectMapper.scan(DDBTableRow.self, expression: queryExpression).continueWithExecutor(AWSExecutor.mainThreadExecutor(), withBlock: { (task:AWSTask!) -> AnyObject! in
+           queryExpression.hashKeyAttribute = "cityId";
+       
+            dynamoDBObjectMapper.query(DDBTableRow.self, expression: queryExpression).continueWithExecutor(AWSExecutor.mainThreadExecutor(), withBlock: { (task:AWSTask!) -> AnyObject! in
                 
                 if self.lastEvaluatedKey == nil {
                     self.featuredRouteList?.removeAll(keepCapacity: true)
@@ -97,8 +104,9 @@ class FeaturedRouteViewController: UIViewController, UITableViewDelegate, UITabl
                 }
                 
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+               // self.dismissViewControllerAnimated(false, completion: nil)
                 self.featuredRouteTable.reloadData()
-                self.dismissViewControllerAnimated(false, completion: nil)
+            
                 
                 if ((task.error) != nil) {
                     print("Error: \(task.error)")

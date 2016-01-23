@@ -15,3 +15,4 @@ let CognitoRegionType = AWSRegionType.USEast1
 let DefaultServiceRegionType = AWSRegionType.USWest1
 let CognitoIdentityPoolId = "us-east-1:c771f327-3de4-4670-860a-fc9195c04cdc"
 let ThemedRoutesTable = "ThemedRoutes"
+let CityListTable = "CityList"

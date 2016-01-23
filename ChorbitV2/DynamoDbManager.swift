@@ -13,6 +13,7 @@ import AWSDynamoDB
 class DDBTableRow :AWSDynamoDBObjectModel ,AWSDynamoDBModeling  {
     
     var routeName:String?
+    var cityId: NSNumber?
     var place1:String?
     var place2:String?
     var place3:String?
@@ -30,6 +31,9 @@ class DDBTableRow :AWSDynamoDBObjectModel ,AWSDynamoDBModeling  {
     }
     
     class func hashKeyAttribute() -> String! {
+        return "cityId"
+    }
+    class func rangeKeyAttribute() -> String! {
         return "routeName"
     }
     
@@ -42,4 +46,26 @@ class DDBTableRow :AWSDynamoDBObjectModel ,AWSDynamoDBModeling  {
     override func `self`() -> Self {
         return self
     }
+}
+
+class CityTableRow: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
+    var cityName: String?
+    var cityId: NSNumber? = 0
+    
+    class func dynamoDBTableName() -> String! {
+        return CityListTable
+    }
+    
+    class func hashKeyAttribute() -> String! {
+        return "cityId"
+    }
+    
+    override func isEqual(object: AnyObject!) -> Bool {
+        return super.isEqual(object)
+    }
+    
+    override func `self`() -> Self{
+        return self
+    }
+    
 }

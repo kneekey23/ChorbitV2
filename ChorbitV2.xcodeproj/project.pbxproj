@@ -30,6 +30,7 @@
 		81AF49101C41EDC900309615 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AF490F1C41EDC900309615 /* Main.storyboard */; };
 		81AF49121C4C28BA00309615 /* Errand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AF49111C4C28BA00309615 /* Errand.swift */; };
 		81AF49141C4C9EFD00309615 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AF49131C4C9EFD00309615 /* MapKit.framework */; };
+		81AF49171C540BE000309615 /* CityListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AF49161C540BE000309615 /* CityListViewController.swift */; };
 		81FD6AC21C1E2F15008A94DF /* NearbySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */; };
 		8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294201BEFFA3A0067059C /* RouteService.swift */; };
 		8B2294251BF00D3A0067059C /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2294241BF00D3A0067059C /* Coordinates.swift */; };
@@ -94,6 +95,7 @@
 		81AF490F1C41EDC900309615 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		81AF49111C4C28BA00309615 /* Errand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errand.swift; sourceTree = "<group>"; };
 		81AF49131C4C9EFD00309615 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		81AF49161C540BE000309615 /* CityListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CityListViewController.swift; sourceTree = "<group>"; };
 		81FD6AC11C1E2F15008A94DF /* NearbySearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NearbySearch.swift; sourceTree = "<group>"; };
 		87AD2CAA34C0F924E906B469 /* Pods_ChorbitV2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChorbitV2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B2294201BEFFA3A0067059C /* RouteService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteService.swift; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				81438E5E1C169DEF00551718 /* DynamoDbManager.swift */,
 				81438E601C16A1F400551718 /* ThemedRouteDetailViewController.swift */,
 				817DD1311C3260BD0061AF7A /* DirectionsController.swift */,
+				81AF49161C540BE000309615 /* CityListViewController.swift */,
 			);
 			path = ChorbitV2;
 			sourceTree = "<group>";
@@ -471,6 +474,7 @@
 				817139741C012C4700BA541F /* SearchViewController.swift in Sources */,
 				81438E5F1C169DEF00551718 /* DynamoDbManager.swift in Sources */,
 				816609D91BE0B6BD008B797E /* AppDelegate.swift in Sources */,
+				81AF49171C540BE000309615 /* CityListViewController.swift in Sources */,
 				8146768F1C0B9C0500EA06F3 /* MainViewController.swift in Sources */,
 				81FD6AC21C1E2F15008A94DF /* NearbySearch.swift in Sources */,
 				814676931C0BA56000EA06F3 /* MapViewController.swift in Sources */,
@@ -622,12 +626,13 @@
 			baseConfigurationReference = 050E9BC6060A6D7D80C26E0B /* Pods-ChorbitV2.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Nicki Klein (T88D9Y26L8)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = ChorbitV2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[arch=*]" = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortkey.ChorbitV2;
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -637,11 +642,12 @@
 			baseConfigurationReference = 9E6F9E8513D70B29EF3C0119 /* Pods-ChorbitV2.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Nicki Klein (T88D9Y26L8)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = ChorbitV2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.shortkey.ChorbitV2;
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

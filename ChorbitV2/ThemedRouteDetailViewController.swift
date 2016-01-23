@@ -40,7 +40,7 @@ class ThemedRouteDetailViewController: UIViewController {
     func getTableRow() {
         let dynamoDBObjectMapper = AWSDynamoDBObjectMapper.defaultDynamoDBObjectMapper()
         
-        dynamoDBObjectMapper.load(DDBTableRow.self, hashKey: tableRow?.routeName, rangeKey: nil) .continueWithExecutor(AWSExecutor.mainThreadExecutor(), withBlock: { (task:AWSTask!) -> AnyObject! in
+        dynamoDBObjectMapper.load(DDBTableRow.self, hashKey: tableRow?.cityId, rangeKey: tableRow?.routeName) .continueWithExecutor(AWSExecutor.mainThreadExecutor(), withBlock: { (task:AWSTask!) -> AnyObject! in
             if (task.error == nil) {
                 if (task.result != nil) {
                     let tableRow = task.result as! DDBTableRow
@@ -75,7 +75,7 @@ class ThemedRouteDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+  
         // Do any additional setup after loading the view.
 
         self.getTableRow()

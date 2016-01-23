@@ -84,15 +84,25 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-ChorbitV2-ChorbitV2.xcscheme</key>
+		<key>Pods-Chorbit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-ChorbitV2.xcscheme</key>
+		<key>Pods-ChorbitV2-Chorbit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+		</dict>
+		<key>Pods-ChorbitV2-ChorbitV2.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<true/>
+		</dict>
+		<key>Pods-ChorbitV2.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<true/>
 		</dict>
 		<key>Polyline.xcscheme</key>
 		<dict>
