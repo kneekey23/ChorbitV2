@@ -258,16 +258,32 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         }
     }
     
-    func DisplayErrorAlert(var errorMessage: String)
+    func DisplayErrorAlert(errorMessage: String)
     {
         
+        let alertController = UIAlertController(title: "Error", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
         
+        let okAction = UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+            print("Okay was clicked")
+        })
+        alertController.addAction(okAction)
         
-   
+        self.presentViewController(alertController, animated: true, completion: nil)
         
     }
     
+    override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
+        if(parentViewController?.parentViewController as! MainViewController).errandSelection.count < 2 || (parentViewController?.parentViewController as! MainViewController).errandSelection.count < 3 && !self.destinationToggle.on
+            {
+            DisplayErrorAlert("Please enter at least one errand to launch your route.")
+            return false
+            
+        }
+        return true
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+
         if segue.identifier == "searchToMapIndentifier"{
             let mapViewController = segue.destinationViewController as! MapViewController
             mapViewController.firstViewController = self
