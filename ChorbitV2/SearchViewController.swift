@@ -28,6 +28,9 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     @IBAction func launchButton(sender: AnyObject) {
     }
     
+    @IBAction func refreshLocation(sender: AnyObject) {
+        locMan.startUpdatingLocation()
+    }
     @IBAction func addErrand(sender: AnyObject) {
         
         let gpaViewController = GooglePlacesAutocomplete(

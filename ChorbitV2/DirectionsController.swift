@@ -45,6 +45,9 @@ class DirectionsController: UIViewController, UITableViewDelegate, UITableViewDa
            image = UIImage(named: "Up Right-32")!
            
         }
+        else if item.directionText.lowercaseString.rangeOfString("continue") != nil{
+            image = UIImage(named: "Up-32")
+        }
         else if item.directionText.lowercaseString.rangeOfString("turn left") != nil{
             image = UIImage(named: "Up Left-32")
             

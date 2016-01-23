@@ -170,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChorbitV2/SearchViewController.swift"
-            timestampString = "475199543.085213"
+            timestampString = "475207780.757543"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "350"
-            endingLineNumber = "350"
+            startingLineNumber = "353"
+            endingLineNumber = "353"
             landmarkName = "placeSelected(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -298,11 +298,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ChorbitV2/MapViewController.swift"
-            timestampString = "475205693.010413"
+            timestampString = "475209068.166741"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "597"
-            endingLineNumber = "597"
+            startingLineNumber = "619"
+            endingLineNumber = "619"
             landmarkName = "GetDirections(_:)"
             landmarkType = "5">
          </BreakpointContent>
