@@ -267,7 +267,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       
         var closestLocations: [Coordinates] = []
  
-            var maxResults: Int = 3
+            var maxResults: Int = 7
             if search.results.count > 0{
               
                 if(search.results.count < maxResults){
@@ -406,6 +406,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             if (!self._isRoundTrip) {
                                 locations.append(self.destination);
                             }
+                            // TODO: wait wait, don't we need to appedn the origin here is it's roundtrip in an else block
+                            
                             
                             var errandCount: Int = (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
                             
@@ -676,7 +678,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         do {
             //TODO: add loading overlay here
             
-            
+            _errandLocations.removeAll()
             closestLocationsPerErrand.removeAll()
             noResults.removeAll()
             
