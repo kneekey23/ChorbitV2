@@ -49,19 +49,21 @@ class DirectionsController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.textLabel?.text = item.directionText
          var image : UIImage?
         
-        if item.directionText.lowercaseString.rangeOfString("turn right") != nil {
+        if item.directionText.rangeOfString("right") != nil {
           
            image = UIImage(named: "Up Right-32")!
-           
         }
-        else if item.directionText.lowercaseString.rangeOfString("continue") != nil{
+        else if item.directionText.rangeOfString("Continue") != nil{
+            
             image = UIImage(named: "Up-32")
         }
-        else if item.directionText.lowercaseString.rangeOfString("turn left") != nil{
+        else if item.directionText.rangeOfString("left") != nil{
+            
             image = UIImage(named: "Up Left-32")
             
         }
-        else if item.directionText.lowercaseString.rangeOfString("U-turn") != nil{
+        else if item.directionText.rangeOfString("U-turn") != nil{
+            
             image = UIImage(named: "Undo-32")
         }
         
@@ -74,7 +76,7 @@ class DirectionsController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if(section > 0){
+        if directionsGrouped[section].count != 0 {
             //space before the to errandtext group title is to add padding. it's a total hack but if you can do it better be my guest..... NJK
         return "     " + directionsGrouped[section][0].errandGroupNumber
         }
