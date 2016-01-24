@@ -270,7 +270,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       
         var closestLocations: [Coordinates] = []
  
-            var maxResults: Int = 3
+            var maxResults: Int = 7
             if search.results.count > 0{
               
                 if(search.results.count < maxResults){
@@ -696,7 +696,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         do {
             //TODO: add loading overlay here
             
-            
+            _errandLocations.removeAll()
             closestLocationsPerErrand.removeAll()
             noResults.removeAll()
             
@@ -882,13 +882,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         let rejectBtn = UIButton()
         rejectBtn.setTitle("reject this location", forState: .Normal)
         rejectBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        rejectBtn.backgroundColor = UIColor(hexString: "#CC1100")
+        rejectBtn.backgroundColor = UIColor(hexString: "#FF6666")
         rejectBtn.layer.cornerRadius = 5
         rejectBtn.layer.borderWidth = 1
-        rejectBtn.layer.borderColor = UIColor(hexString: "#660000").CGColor
-        rejectBtn.frame = CGRectMake(12, mapView!.bounds.minY + 120, 200, 40)
+        rejectBtn.layer.borderColor = UIColor(hexString: "#FF6666").CGColor
+        rejectBtn.frame = CGRectMake(12, mapView!.bounds.minY + 110, 200, 40)
         rejectBtn.tag = 23
-        rejectBtn.addTarget(self, action: "rejectLocation:", forControlEvents: .TouchUpInside)
+        rejectBtn.addTarget(self, action: "onRejectLocation:", forControlEvents: .TouchUpInside)
         
         self.view.addSubview(rejectBtn)
         return false
