@@ -692,10 +692,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if (locationResults[i].errandTermId == rejected.errandTermId) {
                     //Add the next 3 locations for the rejected errand
                     locationResults[i].usedPlaceIds.append(placeId)
-                    var excludedPlaceIds: [String] = locationResults[i].usedPlaceIds
+                    let excludedPlaceIds: [String] = locationResults[i].usedPlaceIds
                     
                     //Get next top locations for rejected errand
-                    var closestLocations: [Coordinates] = GetClosestLocationsForErrand(locationResults[i].locationSearchResults!, errandTermId: rejected.errandTermId, errandText: locationResults[i].errandText, excludedPlaceIds: excludedPlaceIds)
+                    let closestLocations: [Coordinates] = GetClosestLocationsForErrand(locationResults[i].locationSearchResults!, errandTermId: rejected.errandTermId, errandText: locationResults[i].errandText, excludedPlaceIds: excludedPlaceIds)
                     if (closestLocations.count > 0) {
                         closestLocationsPerErrand.append(closestLocations)
                     } else {
@@ -856,15 +856,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         selectedMarker = marker as! GoogleMapMarker
         
         let rejectBtn = UIButton()
-        rejectBtn.setTitle("Reject this location", forState: .Normal)
+        rejectBtn.setTitle("reject this location", forState: .Normal)
         rejectBtn.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        rejectBtn.backgroundColor = UIColor(hexString: "#CC1100")
+        rejectBtn.backgroundColor = UIColor(hexString: "#FF6666")
         rejectBtn.layer.cornerRadius = 5
         rejectBtn.layer.borderWidth = 1
-        rejectBtn.layer.borderColor = UIColor(hexString: "#660000").CGColor
-        rejectBtn.frame = CGRectMake(12, mapView!.bounds.minY + 120, 200, 40)
+        rejectBtn.layer.borderColor = UIColor(hexString: "#FF6666").CGColor
+        rejectBtn.frame = CGRectMake(12, mapView!.bounds.minY + 110, 200, 40)
         rejectBtn.tag = 23
-        rejectBtn.addTarget(self, action: "rejectLocation:", forControlEvents: .TouchUpInside)
+        rejectBtn.addTarget(self, action: "onRejectLocation:", forControlEvents: .TouchUpInside)
         
         self.view.addSubview(rejectBtn)
         return false
