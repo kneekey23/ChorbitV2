@@ -58,6 +58,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
              self.durationSeconds = 0
              self.totalDistanceMeters = 0
         }
+        self.directionsGrouped.removeAll()
         self._errandLocations.removeAll()
         self.currentRouteLocations.removeAll()
         self.CreateRoute()
@@ -104,6 +105,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.durationSeconds = 0
             self.totalDistanceMeters = 0
             }
+            self.directionsGrouped.removeAll()
             self._errandLocations.removeAll()
             self.currentRouteLocations.removeAll()
             self.CreateRoute()
