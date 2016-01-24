@@ -29,6 +29,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var currentRouteLocations: [Coordinates?] = []
     var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
+    var directionsGrouped: [[DirectionStep]] = [[]]
     var temp: [DirectionStep] = []
     var selectedMarker: GoogleMapMarker = GoogleMapMarker()
     var errandAddress: Coordinates?
@@ -107,10 +108,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.currentRouteLocations.removeAll()
             self.CreateRoute()
     }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "mapToDirectionsSegue"{
             let directionsViewController = segue.destinationViewController as! DirectionsController
             directionsViewController.directions = temp
+            directionsViewController.directionsGrouped = self.directionsGrouped
             
         }
         
@@ -566,8 +569,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         //removes loading view from screen NJK
                         self.dismissViewControllerAnimated(false, completion: nil)
                         
+                    
+                           var legIndex: Int = 1;
                         for leg in route.legs {
-                            //directionStep.errandGroupNumber = String(format: "%02d %02d", "To", _errandLocations [i + 1].errandText)
+                            
+                           
 //                            if (leg.distance != nil) {
                                 self.totalDistanceMeters += leg.distance.value
 //                            }
@@ -579,12 +585,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //                            }
                             
                             var instructionIndex: Int = 1;
-                          
-
+                         
+                            var directionsList: [DirectionStep] = []
+                            
                             for step in leg.steps {
-                                let directionStep: DirectionStep = DirectionStep()
-                                
-                                
+                            let directionStep: DirectionStep = DirectionStep()
+                                if legIndex <= self._errandLocations.count{
+                                    if self._errandLocations[legIndex].errandText.isEmpty{
+                                         directionStep.errandGroupNumber = "To " + (self.destination?.subtitle)!
+                                    }else{
+                                         directionStep.errandGroupNumber = "To " + self._errandLocations[legIndex].errandText
+                                    }
+                               
+                                }
                                  directionStep.directionText = step.html_instructions.stringByReplacingOccurrencesOfString("<[^>]+>", withString: " ", options: .RegularExpressionSearch, range: nil);
 
                             
@@ -595,15 +608,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                     directionStep.duration = step.duration.text
                                 }
                                 
-                                self.temp.append(directionStep);
+                                directionsList.append(directionStep);
                                 instructionIndex++;
                             }
+                            self.directionsGrouped.append(directionsList)
+                            legIndex++
                         }
                         
                         
                         // accomplishing 1 decimal place with * 10 / 10
                         self.totalDistanceMiles = Double(round(Double(self.totalDistanceMeters) * 0.000621371 * 10)/10)
-//                        let timeInt: Int = round(self.durationSeconds / 60)
+                        // let timeInt: Int = round(self.durationSeconds / 60)
                         let timeInt: Int = self.durationSeconds / 60
                         var timeText: String = ""
                         var hrs: Int = 0
