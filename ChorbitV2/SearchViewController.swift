@@ -54,7 +54,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         clickedChangeStartingLocation = true
         
         let segmentedControl: UISegmentedControl = sender as! UISegmentedControl
-        if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Use New Location"{
+        if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "use new location"{
             if((parentViewController?.parentViewController as! MainViewController).errandSelection.count > 0){
             (parentViewController?.parentViewController as! MainViewController).errandSelection.removeFirst()
             }
@@ -264,9 +264,9 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     func DisplayErrorAlert(errorMessage: String)
     {
         
-        let alertController = UIAlertController(title: "Error", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: "error", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
         
-        let okAction = UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+        let okAction = UIAlertAction(title: "try again", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
             print("Okay was clicked")
         })
         alertController.addAction(okAction)
@@ -278,7 +278,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
         if(parentViewController?.parentViewController as! MainViewController).errandSelection.count < 2 || (parentViewController?.parentViewController as! MainViewController).errandSelection.count < 3 && !self.destinationToggle.on
             {
-            DisplayErrorAlert("Please enter at least one errand to launch your route.")
+            DisplayErrorAlert("please enter at least one errand to launch your route.")
             return false
             
         }
@@ -301,9 +301,9 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
     //when you pick something on autocomplete this gets called. NJK
     func placeSelected(place: Place) {
         var error: Bool = false
-       let alertController = UIAlertController(title: "Error", message: "No more than 5 locations can be routed at this time. Coming soon!", preferredStyle: UIAlertControllerStyle.Alert)
+       let alertController = UIAlertController(title: "error", message: "no more than 5 locations can be routed at this time. coming soon!", preferredStyle: UIAlertControllerStyle.Alert)
         
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+        let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
             print("Okay was clicked")
         })
         
