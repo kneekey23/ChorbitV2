@@ -9,7 +9,7 @@
         <!--Profile-->
         <scene sceneID="LbE-eX-z2G">
             <objects>
-                <viewController id="em6-87-u9w" userLabel="Profile" customClass="UserProfileViewController" customModule="ChorbitV2" sceneMemberID="viewController">
+                <viewController id="em6-87-u9w" userLabel="Profile" customClass="UserProfileViewController" customModule="Chorbit" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MJI-af-UQE"/>
                         <viewControllerLayoutGuide type="bottom" id="OWc-dT-MdN"/>
@@ -28,7 +28,7 @@
         <!--choose your city-->
         <scene sceneID="Log-kb-cNo">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="Weh-Xb-tpC" customClass="CityListViewController" customModule="ChorbitV2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="Weh-Xb-tpC" customClass="CityListViewController" customModule="Chorbit" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="72i-TK-qAB"/>
                         <viewControllerLayoutGuide type="bottom" id="dBW-HY-nXx"/>
@@ -96,7 +96,7 @@
         <!--themed routes-->
         <scene sceneID="hA0-RQ-Q0t">
             <objects>
-                <viewController id="S7u-Zu-UGZ" customClass="FeaturedRouteViewController" customModule="ChorbitV2" sceneMemberID="viewController">
+                <viewController id="S7u-Zu-UGZ" customClass="FeaturedRouteViewController" customModule="Chorbit" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="inQ-Ar-cms"/>
                         <viewControllerLayoutGuide type="bottom" id="wQk-5N-Ebm"/>
@@ -181,7 +181,7 @@
         <!--Route Details-->
         <scene sceneID="GfB-KV-ckk">
             <objects>
-                <viewController title="Route Details" id="AbK-M7-Kym" customClass="ThemedRouteDetailViewController" customModule="ChorbitV2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Route Details" id="AbK-M7-Kym" customClass="ThemedRouteDetailViewController" customModule="Chorbit" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Vw0-6S-wIg"/>
                         <viewControllerLayoutGuide type="bottom" id="izh-tj-5fS"/>
@@ -348,7 +348,7 @@
         <!--Search-->
         <scene sceneID="V3V-VL-5H9">
             <objects>
-                <viewController storyboardIdentifier="SearchViewController" automaticallyAdjustsScrollViewInsets="NO" id="2Z4-X0-iNg" userLabel="Search" customClass="SearchViewController" customModule="ChorbitV2" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SearchViewController" automaticallyAdjustsScrollViewInsets="NO" id="2Z4-X0-iNg" userLabel="Search" customClass="SearchViewController" customModule="Chorbit" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sRG-xc-xNu"/>
                         <viewControllerLayoutGuide type="bottom" id="Kvg-kV-G3k"/>
@@ -534,7 +534,7 @@
         <!--Map ViewController-->
         <scene sceneID="7Ic-uo-S5w">
             <objects>
-                <viewController title="Map ViewController" id="1vX-gY-hQA" customClass="MapViewController" customModule="ChorbitV2" sceneMemberID="viewController">
+                <viewController title="Map ViewController" id="1vX-gY-hQA" customClass="MapViewController" customModule="Chorbit" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="a3w-on-0JT"/>
                         <viewControllerLayoutGuide type="bottom" id="0p2-cr-CvV"/>
@@ -604,7 +604,7 @@
         <!--directions-->
         <scene sceneID="MUv-iM-xtw">
             <objects>
-                <viewController title="directions" automaticallyAdjustsScrollViewInsets="NO" id="Hdw-6G-Q59" customClass="DirectionsController" customModule="ChorbitV2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="directions" automaticallyAdjustsScrollViewInsets="NO" id="Hdw-6G-Q59" customClass="DirectionsController" customModule="Chorbit" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ZcB-lO-j1L"/>
                         <viewControllerLayoutGuide type="bottom" id="0cA-h3-Lt5"/>
@@ -675,7 +675,7 @@
         <!--Main View Controller-->
         <scene sceneID="z95-xf-70g">
             <objects>
-                <tabBarController storyboardIdentifier="Main" id="uqh-U5-e7V" customClass="MainViewController" customModule="ChorbitV2" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="Main" id="uqh-U5-e7V" customClass="MainViewController" customModule="Chorbit" customModuleProvider="target" sceneMemberID="viewController">
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="g6b-Xb-rBb">

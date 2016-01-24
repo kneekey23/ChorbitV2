@@ -211,7 +211,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         if newLocation.horizontalAccuracy >= 0 {
             myGeoLocatedCoords = CLLocation(latitude: newLocation.coordinate.latitude, longitude: newLocation.coordinate.longitude)
             
-            print(String(myGeoLocatedCoords.coordinate.latitude) + " " + String(myGeoLocatedCoords.coordinate.longitude));
+           // print(String(myGeoLocatedCoords.coordinate.latitude) + " " + String(myGeoLocatedCoords.coordinate.longitude));
             
             geocoder.reverseGeocodeLocation(myGeoLocatedCoords,
                 completionHandler: { (array:[CLPlacemark]?, error:NSError?) -> Void in
