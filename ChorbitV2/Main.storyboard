@@ -25,7 +25,7 @@
             </objects>
             <point key="canvasLocation" x="-65.5" y="716.5"/>
         </scene>
-        <!--Choose Your City-->
+        <!--choose your city-->
         <scene sceneID="Log-kb-cNo">
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="Weh-Xb-tpC" customClass="CityListViewController" customModule="ChorbitV2" customModuleProvider="target" sceneMemberID="viewController">
@@ -82,8 +82,8 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Choose Your City" id="Sig-tj-b9k">
-                        <barButtonItem key="backBarButtonItem" title="Cities" id="9vB-Us-kbK"/>
+                    <navigationItem key="navigationItem" title="choose your city" id="Sig-tj-b9k">
+                        <barButtonItem key="backBarButtonItem" title="cities" id="9vB-Us-kbK"/>
                     </navigationItem>
                     <connections>
                         <outlet property="cityTable" destination="g38-CK-PLs" id="QF6-HJ-cPi"/>
@@ -93,7 +93,7 @@
             </objects>
             <point key="canvasLocation" x="591.5" y="-139.5"/>
         </scene>
-        <!--Themed Routes-->
+        <!--themed routes-->
         <scene sceneID="hA0-RQ-Q0t">
             <objects>
                 <viewController id="S7u-Zu-UGZ" customClass="FeaturedRouteViewController" customModule="ChorbitV2" sceneMemberID="viewController">
@@ -168,7 +168,7 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationItem key="navigationItem" title="Themed Routes" id="bZ3-nj-BwO"/>
+                    <navigationItem key="navigationItem" title="themed routes" id="bZ3-nj-BwO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="featuredRouteTable" destination="Wzk-VK-JTm" id="zEI-Pj-VAM"/>
@@ -214,12 +214,12 @@
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Zq-jw-XWO">
                                         <rect key="frame" x="21" y="1029" width="333" height="47"/>
-                                        <color key="backgroundColor" red="0.21960784310000001" green="0.83529411760000005" blue="0.75294117650000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="47" id="HjF-Gy-dda"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="AvenirNextCondensed-DemiBold" family="Avenir Next Condensed" pointSize="29"/>
-                                        <state key="normal" title="LAUNCH THIS ROUTE!">
+                                        <state key="normal" title="launch">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" red="0.21960784310000001" green="0.83529411760000005" blue="0.75294117650000003" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
@@ -327,7 +327,7 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Details" id="zAA-Tl-Vj3"/>
+                    <navigationItem key="navigationItem" title="details" id="zAA-Tl-Vj3"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="1200"/>
@@ -343,7 +343,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c1x-rr-FLP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2625.5" y="-153"/>
+            <point key="canvasLocation" x="1833.5" y="-153"/>
         </scene>
         <!--Search-->
         <scene sceneID="V3V-VL-5H9">
@@ -357,7 +357,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Roundtrip?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcB-SU-H2P">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="roundtrip?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcB-SU-H2P">
                                 <rect key="frame" x="16" y="506" width="115" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="115" id="dkH-7p-WuZ"/>
@@ -432,7 +432,7 @@
                                     <constraint firstAttribute="height" constant="47" id="oqE-WF-r5w"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="AvenirNextCondensed-DemiBold" family="Avenir Next Condensed" pointSize="30"/>
-                                <state key="normal" title="Launch">
+                                <state key="normal" title="launch">
                                     <color key="titleColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" red="0.21960784310000001" green="0.83529411760000005" blue="0.75294117650000003" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
@@ -449,8 +449,8 @@
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="xJc-RE-ReQ">
                                 <rect key="frame" x="46" y="87" width="313" height="29"/>
                                 <segments>
-                                    <segment title="Use Current Location"/>
-                                    <segment title="Use New Location"/>
+                                    <segment title="use current location"/>
+                                    <segment title="use new location"/>
                                 </segments>
                                 <connections>
                                     <action selector="chooseStartingPoint:" destination="2Z4-X0-iNg" eventType="valueChanged" id="QEg-Vu-5MY"/>
@@ -477,7 +477,7 @@
                                 <rect key="frame" x="211" y="495" width="148" height="43"/>
                                 <color key="backgroundColor" red="0.21960784310000001" green="0.83529411760000005" blue="0.75294117650000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="Add a Stop">
+                                <state key="normal" title="add a stop">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -547,9 +547,9 @@
                                 <rect key="frame" x="7" y="72" width="362" height="29"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <segments>
-                                    <segment title="Drive"/>
-                                    <segment title="Walk"/>
-                                    <segment title="Cycle"/>
+                                    <segment title="drive"/>
+                                    <segment title="walk"/>
+                                    <segment title="cycle"/>
                                 </segments>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -557,10 +557,10 @@
                                 </connections>
                             </segmentedControl>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JZt-Do-ToM">
-                                <rect key="frame" x="0.0" y="575" width="375" height="43"/>
+                                <rect key="frame" x="0.0" y="571" width="375" height="47"/>
                                 <color key="backgroundColor" red="0.21960784310000001" green="0.83529411760000005" blue="0.75294117650000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="AvenirNextCondensed-DemiBold" family="Avenir Next Condensed" pointSize="29"/>
-                                <state key="normal" title="DIRECTIONS">
+                                <state key="normal" title="directions">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" red="0.21960784310000001" green="0.83529411760000005" blue="0.75294117650000003" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
@@ -572,7 +572,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="BnJ-7E-njw" firstAttribute="leading" secondItem="AU2-AG-oJz" secondAttribute="leadingMargin" constant="-9" id="1h2-W8-W5U"/>
-                            <constraint firstItem="JZt-Do-ToM" firstAttribute="top" secondItem="a3w-on-0JT" secondAttribute="bottom" constant="511" id="ANx-BX-CDx"/>
+                            <constraint firstItem="JZt-Do-ToM" firstAttribute="top" secondItem="a3w-on-0JT" secondAttribute="bottom" constant="507" id="ANx-BX-CDx"/>
                             <constraint firstItem="JZt-Do-ToM" firstAttribute="leading" secondItem="AU2-AG-oJz" secondAttribute="leading" id="HeL-rB-4gX"/>
                             <constraint firstAttribute="trailing" secondItem="JZt-Do-ToM" secondAttribute="trailing" id="VCE-W0-ioz"/>
                             <constraint firstItem="BnJ-7E-njw" firstAttribute="top" secondItem="a3w-on-0JT" secondAttribute="bottom" constant="8" symbolic="YES" id="Ycr-ea-U7P"/>
@@ -580,8 +580,8 @@
                             <constraint firstItem="BnJ-7E-njw" firstAttribute="centerX" secondItem="JZt-Do-ToM" secondAttribute="centerX" id="uLd-v6-ntr"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Route" id="af6-K9-jiO">
-                        <barButtonItem key="backBarButtonItem" title="Back" id="zAr-hO-cw4">
+                    <navigationItem key="navigationItem" title="route" id="af6-K9-jiO">
+                        <barButtonItem key="backBarButtonItem" title="back" id="zAr-hO-cw4">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="TMW-Mc-F1V">
@@ -601,10 +601,10 @@
             </objects>
             <point key="canvasLocation" x="444.5" y="-1005.5"/>
         </scene>
-        <!--Directions-->
+        <!--directions-->
         <scene sceneID="MUv-iM-xtw">
             <objects>
-                <viewController title="Directions" automaticallyAdjustsScrollViewInsets="NO" id="Hdw-6G-Q59" customClass="DirectionsController" customModule="ChorbitV2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="directions" automaticallyAdjustsScrollViewInsets="NO" id="Hdw-6G-Q59" customClass="DirectionsController" customModule="ChorbitV2" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ZcB-lO-j1L"/>
                         <viewControllerLayoutGuide type="bottom" id="0cA-h3-Lt5"/>

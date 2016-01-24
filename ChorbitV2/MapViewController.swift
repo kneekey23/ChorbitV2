@@ -54,6 +54,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
             infoOverlay = nil
+             self.durationSeconds = 0
+             self.totalDistanceMeters = 0
         }
         self._errandLocations.removeAll()
         self.currentRouteLocations.removeAll()
@@ -80,12 +82,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         //code to change from driving to walking to transit goes here.NJK
         let segmentedControl: UISegmentedControl = sender as! UISegmentedControl
         
-        if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Drive"{
+        if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "drive"{
             //default is here. possibly do nothing? NJK
             modeOfTransportation = "driving"
         
         }
-        else if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Walk"{
+        else if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "walk"{
             //code for walking goes here. NJK
             modeOfTransportation = "walking"
            
@@ -98,6 +100,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
             infoOverlay = nil
+            self.durationSeconds = 0
+            self.totalDistanceMeters = 0
             }
             self._errandLocations.removeAll()
             self.currentRouteLocations.removeAll()
@@ -118,7 +122,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         var subtitle:String? = ""
         let segmentedControl = (firstViewController!.startingLocationControl)! as UISegmentedControl
         
-         if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "Use New Location"{
+         if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "use new location"{
             
             let startingLocation: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[0]
             let result: Coordinates = GetLatLng(startingLocation.errandString)
@@ -136,7 +140,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             
         }
         //latlng = String(format: "%02d,%02d", lat, lng)
-        origin = Coordinates(lat: lat, long: lng, title: "My starting location", subtitle: subtitle!, errandTermId: -1, placeId: "", errandText: "", errandOrder: nil)
+        origin = Coordinates(lat: lat, long: lng, title: "my starting location", subtitle: subtitle!, errandTermId: -1, placeId: "", errandText: "", errandOrder: nil)
         
         if(firstViewController!.destinationToggle as UISwitch).on{
             destination = origin
@@ -146,7 +150,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let index: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
             let destinationLocation: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[index - 1]
                 destination = GetLatLng(destinationLocation.errandString)
-                destination!.title = "My Final Destination"
+                destination!.title = "my final destination"
           
         }
         
@@ -219,7 +223,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                     }
                                     
                                     if !haveFoundLocations {
-                                        let locationsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
+                                        let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
                                         self.mapErroredOut = true
                                         self.DisplayErrorAlert(locationsNotFound)
                                         return
@@ -391,7 +395,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             }
                             
                             if(self.currentRouteLocations.count < 1) {
-                                let errandsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
+                                let errandsNotFound: String = "unable to find locations for your errands. please go back and try again."
                                 self.DisplayErrorAlert(errandsNotFound)
                                 self.mapErroredOut = true;
                                 return;
@@ -432,13 +436,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                     
                                 }
                                 
-                                noresultsAlertController = UIAlertController(title: "No Results Found", message: noResultsMsg, preferredStyle: UIAlertControllerStyle.Alert)
-                                let tryAgainAction = UIAlertAction(title: "Go Back and Re-enter", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                                noresultsAlertController = UIAlertController(title: "no results found", message: noResultsMsg, preferredStyle: UIAlertControllerStyle.Alert)
+                                let tryAgainAction = UIAlertAction(title: "go back and re-enter", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
                                     self.navigationController?.popToRootViewControllerAnimated(true)
                                 })
                                 //Add Actions
                                 if (self.noResults.count != self.numErrands) {
-                                    let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                                    let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
                                         print("Okay was clicked")
                                     })
                                     
@@ -483,7 +487,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             }
                             
                             if (self._errandLocations.count == 0) {
-                                let locationsNotFound: String = "Unable to find locations for your errands. Please go back and try again."
+                                let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
                                 self.DisplayErrorAlert(locationsNotFound)
                                 self.mapErroredOut = true
                                 return
@@ -618,11 +622,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         let fontAttr = [NSFontAttributeName:font]
                     
                         let styledString = NSMutableAttributedString()
-                        let distTitle: NSMutableAttributedString = NSMutableAttributedString(string:"Total Distance: ", attributes: fontAttr)
+                        let distTitle: NSMutableAttributedString = NSMutableAttributedString(string:"total distance: ", attributes: fontAttr)
                         distTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor(hexString: "#40e0d0"), range: NSRange(location:0, length: distTitle.length))
-                        let timeTitle: NSMutableAttributedString = NSMutableAttributedString(string:"Total Travel Time: ", attributes: fontAttr)
+                        let timeTitle: NSMutableAttributedString = NSMutableAttributedString(string:"total travel time: ", attributes: fontAttr)
                         timeTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor(hexString: "#40e0d0"), range: NSRange(location:0, length: timeTitle.length))
-                        let totalDistTxt: NSMutableAttributedString = NSMutableAttributedString(string: String(self.totalDistanceMiles) + "miles", attributes: fontAttr)
+                        let totalDistTxt: NSMutableAttributedString = NSMutableAttributedString(string: String(self.totalDistanceMiles) + " miles", attributes: fontAttr)
                         totalDistTxt.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSRange(location: 0, length: totalDistTxt.length))
                         let timeTextMutable: NSMutableAttributedString = NSMutableAttributedString(string: timeText)
                         timeTextMutable.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSRange(location: 0, length:timeTextMutable.length))
@@ -705,8 +709,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
                       
                         if (excludedPlaceIds.count > 0) {
-                            let title: String = "No more alternative locations"
-                            let msg: String = "Would you like to start over at the top of the list?"
+                            let title: String = "no more alternative locations"
+                            let msg: String = "would you like to start over at the top of the list?"
                             noresultsAlertController = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
                             let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
                                 //If yes, clear out UsedPlaceIds for this errand and re-map:
@@ -734,10 +738,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             noresultsAlertController.addAction(noAction)
                         } else {
                             //Inform user we have no alternative locations to provide
-                            let title2: String = "No more alternative locations"
-                            let msg2: String = "Unfortunately there are no more alternative locations to offer you for this errand."
+                            let title2: String = "no more alternative locations"
+                            let msg2: String = "unfortunately there are no more alternative locations to offer you for this errand."
                             noresultsAlertController = UIAlertController(title: title2, message: msg2, preferredStyle: UIAlertControllerStyle.Alert)
-                            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                            let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
                                 self.noResults.removeAll()
                                 for (index, value) in self.locationResults[i].usedPlaceIds.enumerate() {
                                     if(value == placeId) {
@@ -787,12 +791,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     {
         if(errorMessage.isEmpty){
             mapErroredOut = true
-            errorMessage = "We are sorry. It seems a meteorite hit the app at an unexpected pace. Please try landing your spaceship and relaunching."
+            errorMessage = "we are sorry. it seems a meteorite hit the app at an unexpected pace. please try landing your spaceship and relaunching."
         }
         
-        let alertController = UIAlertController(title: "Error", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: "error", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
         
-        let tryAgainAction = UIAlertAction(title: "Try Again", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+        let tryAgainAction = UIAlertAction(title: "try again", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
             self.navigationController?.popToRootViewControllerAnimated(true)
         })
         alertController.addAction(tryAgainAction)
@@ -826,7 +830,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             iterations = "9,375,000"
         }
         
-        let message = "Testing " + iterations + " route combinations..."
+        let message = "testing " + iterations + " route combinations..."
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .Alert)
         
         alert.view.tintColor = UIColor.blackColor()
