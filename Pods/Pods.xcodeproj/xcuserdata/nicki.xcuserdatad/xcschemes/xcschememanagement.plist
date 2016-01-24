@@ -74,12 +74,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>GooglePlacesAutocomplete.xcscheme</key>
+		<key>ObjectMapper.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>ObjectMapper.xcscheme</key>
+		<key>Pods-Chorbit-Chorbit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -88,21 +88,6 @@
 		<dict>
 			<key>isShown</key>
 			<false/>
-		</dict>
-		<key>Pods-ChorbitV2-Chorbit.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods-ChorbitV2-ChorbitV2.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<true/>
-		</dict>
-		<key>Pods-ChorbitV2.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<true/>
 		</dict>
 		<key>Polyline.xcscheme</key>
 		<dict>
@@ -127,17 +112,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0A58A06E901FEDDCAA6B5AFD26C8C0B1</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>108CB98FE2926893B1E8D043EFAC94DE</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>1A3FC75C0C37E6C5C99A6A35E81B1CF7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -147,17 +122,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>23C1A73054B449A7DCCF1A4021D6D629</key>
+		<key>2EAC3A88BDDA8A647D67B8B95CC2BC09</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>242A6CBA14E43D8E8565F18ADC5B0BD9</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>323D5BED5BE6F454397F292C8781CC7F</key>
+		<key>3940426344504CEF841E3F239F4B0903</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -177,17 +147,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>43E01A311046408137843C7D761E30A7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>7051517F12CD2BBD8AE2AD214DB4EC0C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>755FAA830323D0932705962E24D80B6E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>8D2BEBF3393F32D0F0CD1BF0F5092E8E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -202,22 +167,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B620569E47D4DA1C258ABCB969F99EF9</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>BC279E1A4A79751E826180F63A851E07</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>BD02CE344851D72142B287462B4106C0</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>BF17C1DD027614E318F7755CAD5B4526</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -237,17 +192,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D1C0A7D0A629A8DA14849FB4FBBBA177</key>
+		<key>F215B0B948CA70F0AF407946E827D9F4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E2F255F0670A8778A1464D7FD2B1832B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EF8A076215648D23EFE24CCBE3CF7EF1</key>
+		<key>F7A135481329465525412D9789F7BFB3</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -74,11 +74,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>GooglePlacesAutocomplete.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>KYCircularProgress.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -89,12 +84,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-ChorbitV2-ChorbitV2.xcscheme</key>
+		<key>Pods-Chorbit-Chorbit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-ChorbitV2.xcscheme</key>
+		<key>Pods-Chorbit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

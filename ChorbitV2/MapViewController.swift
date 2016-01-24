@@ -398,6 +398,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             }
                             
                             if(self.currentRouteLocations.count < 1) {
+                                self.dismissViewControllerAnimated(false, completion: nil)
                                 let errandsNotFound: String = "unable to find locations for your errands. please go back and try again."
                                 self.DisplayErrorAlert(errandsNotFound)
                                 self.mapErroredOut = true;
@@ -438,7 +439,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             locations.append(self.destination);
         }
         
-        var errandCount: Int = (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
         
         for (index, value) in locations.enumerate() {
             let errandText: String = value!.errandText.uppercaseString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -458,6 +458,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
         if (self.noResults.count > 0) {
+            
             var noResultsMsg: String = ""
             for nr in self.noResults {
                 //Create Alert
@@ -514,10 +515,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         do {
             self.GetDirections(url);
         } catch {
+            self.dismissViewControllerAnimated(false, completion: nil)
             self.DisplayErrorAlert("");
         }
         
         if (self._errandLocations.count == 0) {
+            self.dismissViewControllerAnimated(false, completion: nil)
             let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
             self.DisplayErrorAlert(locationsNotFound)
             self.mapErroredOut = true
@@ -526,6 +529,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         //Present Alert
         if (self.noResults.count > 0) {
+            self.dismissViewControllerAnimated(false, completion: nil)
             self.presentViewController(noresultsAlertController, animated: true, completion: nil)
         }
 
@@ -572,18 +576,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                            var legIndex: Int = 1;
                         for leg in route.legs {
-                            
-                           
-//                            if (leg.distance != nil) {
-                                self.totalDistanceMeters += leg.distance.value
-//                            }
-                            
-//                            if(leg.duration_in_traffic && leg.duration_in_traffic.value) {
-//                                durationSeconds += leg.duration_in_traffic.value
-//                            } else if(leg.duration && leg.duration.value) {
-                                self.durationSeconds += leg.duration.value
-//                            }
-                            
+
+                            self.totalDistanceMeters += leg.distance.value
+
+                            self.durationSeconds += leg.duration.value
+
                             var instructionIndex: Int = 1;
                          
                             var directionsList: [DirectionStep] = []
@@ -714,7 +711,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 }
             }
             
-            var button: Int = 0
+         
             for var i = 0; i < locationResults.count; i++ {
                 if (locationResults[i].errandTermId == rejected.errandTermId) {
                     //Add the next 3 locations for the rejected errand

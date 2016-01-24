@@ -73,11 +73,11 @@ public class Place: NSObject {
     
     public convenience init(prediction: [String: AnyObject], apiKey: String?, isAddressOnly: Bool = false) {
         var isTypeAddress: Bool = false
+        
         if(prediction["types"] != nil){
-            print(prediction["types"]!)
-          
          isTypeAddress = (prediction["types"]! as! Array).contains("street_address")
         }
+        
         if(isAddressOnly || isTypeAddress){
             self.init(
                 //id: prediction["place_id"] as! String,
