@@ -12,12 +12,14 @@ import UIKit
 class DirectionsController: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
     var directions: [DirectionStep] = []
+    var directionsGrouped: [[DirectionStep]] = []
     
     @IBOutlet weak var directionsTable: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         //directionsTable.rowHeight = UITableViewAutomaticDimension
         directionsTable.separatorInset = UIEdgeInsetsZero
+        directionsTable.contentInset = UIEdgeInsetsMake(-36, 0, 0, 0);
         directionsTable.reloadData()
     }
     override func viewWillAppear(animated: Bool) {
@@ -25,8 +27,15 @@ class DirectionsController: UIViewController, UITableViewDelegate, UITableViewDa
         directionsTable.reloadData()
     }
     
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        
+        return directionsGrouped.count
+        
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return directions.count
+        return directionsGrouped[section].count - 1
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -34,7 +43,7 @@ class DirectionsController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.textLabel!.numberOfLines = 0;
         cell.textLabel!.lineBreakMode = NSLineBreakMode.ByWordWrapping
 
-        let item = directions[indexPath.row]
+        let item = directionsGrouped[indexPath.section][indexPath.row + 1]
         
         cell.detailTextLabel?.text = item.distance
         cell.textLabel?.text = item.directionText
@@ -62,5 +71,29 @@ class DirectionsController: UIViewController, UITableViewDelegate, UITableViewDa
         
         
         return cell
+    }
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if(section > 0){
+            //space before the to errandtext group title is to add padding. it's a total hack but if you can do it better be my guest..... NJK
+        return "     " + directionsGrouped[section][0].errandGroupNumber
+        }
+        else{
+            return ""
+        }
+    }
+    
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView //recast your view as a UITableViewHeaderFooterView
+        header.contentView.backgroundColor = UIColor(hexString: "FF6666") //make the background color light blue
+        header.textLabel!.textColor = UIColor.whiteColor() //make the text white
+        header.textLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 13)!
+        //header.alpha = 0.5 //make the header transparent
+    }
+    
+    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        
+        // remove bottom extra 20px space.
+        return CGFloat.min
     }
 }
