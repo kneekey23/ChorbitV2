@@ -144,6 +144,9 @@ class ThemedRouteDetailViewController: UIViewController {
         }
       
         tabBarController?.selectedIndex = 0
+        let firstNavController: UINavigationController = tabBarController?.selectedViewController as! UINavigationController;
+        firstNavController.popToRootViewControllerAnimated(true)
+        
 
     }
 }
