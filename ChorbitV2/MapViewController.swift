@@ -860,7 +860,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         loadingIndicator.hidesWhenStopped = true
         loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
         loadingIndicator.startAnimating();
-        let cancelAction = UIAlertAction(title: "cancel", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+        let cancelAction = UIAlertAction(title: "cancel", style: UIAlertActionStyle.Cancel, handler: {(alertAction: UIAlertAction!) in
             self.navigationController?.popToRootViewControllerAnimated(true)
         })
         
