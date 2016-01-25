@@ -18,6 +18,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     var isAddressOnly: Bool = false;
     var addressString : String = ""
     var clickedChangeStartingLocation: Bool = false
+    var clickedDestinationToggle: Bool = false
   
     @IBAction func addErrand(sender: AnyObject) {
         let gpaViewController = GooglePlacesAutocomplete(
@@ -84,6 +85,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     }
     
     @IBAction func toggleEndingLocation(sender: AnyObject) {
+        clickedDestinationToggle = true
         //gets called when you toggle roundtrip switch and adds the ui text field if switched to off. NJK
         if !(sender as! UISwitch).on
         {
@@ -187,15 +189,33 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         return cell
     }
-    //this function gets called if you select one. not sure we need it for this page but leaving it here. NJK
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-       
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if !(parentViewController?.parentViewController as! MainViewController).errandSelection[indexPath.row].isStartingLocation{
+            return true
+        }
+        else{
+            return false
+        }
+
     }
+
     //so you can delete errands and locations NJK
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            (parentViewController?.parentViewController as! MainViewController).errandSelection.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            
+            if !(parentViewController?.parentViewController as! MainViewController).errandSelection[indexPath.row].isStartingLocation {
+                
+                if (parentViewController?.parentViewController as! MainViewController).errandSelection[indexPath.row].isEndingLocation{
+                    self.destinationToggle.on = true
+                }
+                
+                (parentViewController?.parentViewController as! MainViewController).errandSelection.removeAtIndex(indexPath.row)
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            }
+            
+         
+         
         }
     }
     
@@ -315,9 +335,9 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
         
   
         if( totalNumberOfErrands <= 5){
-            if(!place.isAddressOnly && !clickedChangeStartingLocation){
+            if(!place.isAddressOnly && !clickedChangeStartingLocation && !clickedDestinationToggle){
                 if(!self.destinationToggle.on){
-                    let lastErrandIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count - 1
+                    let lastErrandIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count
                     if(place.isContact){
                         let newAddress = Errand(errandString: place.contactAddress!, isAddress: true, isStartingLocation: false, isEndingLocation: false)
                         (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newAddress, atIndex: lastErrandIndex)
@@ -349,7 +369,7 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
             }
             else{
                 let lastIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count
-                if(!self.destinationToggle.on && !clickedChangeStartingLocation){
+                if(!self.destinationToggle.on && !clickedChangeStartingLocation && clickedDestinationToggle){
                     if(place.isContact){
                         let newEndingLocation: Errand = Errand(errandString: place.contactAddress!, isAddress: true, isStartingLocation: false, isEndingLocation: true)
                         (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newEndingLocation, atIndex: lastIndex)
@@ -387,6 +407,7 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
         
  
         clickedChangeStartingLocation = false
+        clickedDestinationToggle = false
         dismissViewControllerAnimated(true, completion: { if error {self.presentViewController(alertController, animated: true, completion: nil)}})
 
         
@@ -396,6 +417,10 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
         if(clickedChangeStartingLocation){
             clickedChangeStartingLocation = false
             startingLocationControl.selectedSegmentIndex = 0
+        }
+        if(clickedDestinationToggle){
+            clickedDestinationToggle = false
+            destinationToggle.on = true
         }
         
         self.dismissViewControllerAnimated(true, completion: nil)
