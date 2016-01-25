@@ -62,7 +62,7 @@ class DirectionsController: UIViewController, UITableViewDelegate, UITableViewDa
             image = UIImage(named: "Up Left-32")
             
         }
-        else if item.directionText.rangeOfString("U-turn") != nil{
+        else if item.directionText.rangeOfString("u-turn") != nil{
             
             image = UIImage(named: "Undo-32")
         }
