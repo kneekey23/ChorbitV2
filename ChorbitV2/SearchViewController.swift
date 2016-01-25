@@ -55,9 +55,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         let segmentedControl: UISegmentedControl = sender as! UISegmentedControl
         if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "use new location"{
-            if((parentViewController?.parentViewController as! MainViewController).errandSelection.count > 0){
-            (parentViewController?.parentViewController as! MainViewController).errandSelection.removeFirst()
-            }
+
             isAddressOnly = true
             let gpaViewController = GooglePlacesAutocomplete(
                 apiKey: "AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY",
@@ -77,10 +75,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
             
         }
         else{
-            //delete existing first location if there is one NJK
-            if((self.parentViewController?.parentViewController as! MainViewController).errandSelection.count > 0){
-             (self.parentViewController?.parentViewController as! MainViewController).errandSelection.removeFirst()
-            }
+
             //grab current location again NJK
             locMan.startUpdatingLocation()
             
@@ -120,7 +115,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         self.errandTableView.reloadData()
         
         
-        locMan.startUpdatingLocation()
+       // locMan.startUpdatingLocation()
     }
     
     override func viewDidLoad() {
@@ -234,13 +229,16 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
                     }
                     }
 
-                    if((self.parentViewController?.parentViewController as! MainViewController).errandSelection.count == 0){
-                        let newStartingLocation: Errand = Errand(errandString: self.addressString, isAddress: true, isStartingLocation: true, isEndingLocation: false)
+                    //delete existing first location if there is one NJK
+                    if((self.parentViewController?.parentViewController as! MainViewController).errandSelection.count > 0){
+                        (self.parentViewController?.parentViewController as! MainViewController).errandSelection.removeFirst()
+                    }
+                    
+                    let newStartingLocation: Errand = Errand(errandString: self.addressString, isAddress: true, isStartingLocation: true, isEndingLocation: false)
                        
                     (self.parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newStartingLocation, atIndex: 0)
-                        self.errandTableView.reloadData()
-                    }
-                  
+                    self.errandTableView.reloadData()
+                    
             
             })
               self.locMan.stopUpdatingLocation()
@@ -364,10 +362,16 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
                 }
                 else{
                     if(place.isContact){
+                        if((parentViewController?.parentViewController as! MainViewController).errandSelection.count > 0){
+                            (parentViewController?.parentViewController as! MainViewController).errandSelection.removeFirst()
+                        }
                         let newStartingLocation: Errand = Errand(errandString: place.contactAddress!, isAddress: true, isStartingLocation: true, isEndingLocation: false)
                         (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newStartingLocation, atIndex: 0)
                         
                     }else{
+                        if((parentViewController?.parentViewController as! MainViewController).errandSelection.count > 0){
+                            (parentViewController?.parentViewController as! MainViewController).errandSelection.removeFirst()
+                        }
                         let newStartingLocation: Errand = Errand(errandString: place.description, isAddress: true, isStartingLocation: true, isEndingLocation: false)
                         (parentViewController?.parentViewController as! MainViewController).errandSelection.insert(newStartingLocation, atIndex: 0)
                     }
@@ -380,12 +384,19 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
            
            error = true
         }
+        
+ 
+        clickedChangeStartingLocation = false
         dismissViewControllerAnimated(true, completion: { if error {self.presentViewController(alertController, animated: true, completion: nil)}})
 
         
     }
     //if you click the X on the autocomplete modal, this gets called NJK
     func placeViewClosed() {
+        if(clickedChangeStartingLocation){
+            clickedChangeStartingLocation = false
+            startingLocationControl.selectedSegmentIndex = 0
+        }
         
         self.dismissViewControllerAnimated(true, completion: nil)
     }
