@@ -398,6 +398,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             }
                             
                             if(self.currentRouteLocations.count < 1) {
+                                self.dismissViewControllerAnimated(false, completion: nil)
                                 let errandsNotFound: String = "unable to find locations for your errands. please go back and try again."
                                 self.DisplayErrorAlert(errandsNotFound)
                                 self.mapErroredOut = true;
@@ -515,10 +516,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.GetDirections(url);
         } catch {
             self.DisplayErrorAlert("");
+            self.dismissViewControllerAnimated(false, completion: nil)
         }
         
         if (self._errandLocations.count == 0) {
             let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
+            self.dismissViewControllerAnimated(false, completion: nil)
             self.DisplayErrorAlert(locationsNotFound)
             self.mapErroredOut = true
             return
@@ -527,6 +530,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         //Present Alert
         if (self.noResults.count > 0) {
             self.presentViewController(noresultsAlertController, animated: true, completion: nil)
+            self.dismissViewControllerAnimated(false, completion: nil)
         }
 
     }
