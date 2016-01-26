@@ -88,26 +88,36 @@
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>2</integer>
 		</dict>
 		<key>Pods-Chorbit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>1</integer>
 		</dict>
 		<key>Polyline.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>3</integer>
 		</dict>
 		<key>SwiftAddressBook.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>4</integer>
 		</dict>
 		<key>SwiftyJSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>5</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -152,7 +162,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>2EAC3A88BDDA8A647D67B8B95CC2BC09</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>323D5BED5BE6F454397F292C8781CC7F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3940426344504CEF841E3F239F4B0903</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -173,6 +193,11 @@
 			<true/>
 		</dict>
 		<key>43B42276BE0ED5F0B4557A09EFD66E17</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>43E01A311046408137843C7D761E30A7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -268,6 +293,16 @@
 			<true/>
 		</dict>
 		<key>EF8A076215648D23EFE24CCBE3CF7EF1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F215B0B948CA70F0AF407946E827D9F4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F7A135481329465525412D9789F7BFB3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
