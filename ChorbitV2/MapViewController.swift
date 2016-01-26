@@ -686,7 +686,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     {
         do {
             //TODO: add loading overlay here
-            
+         
             _errandLocations.removeAll()
             closestLocationsPerErrand.removeAll()
             noResults.removeAll()
@@ -777,12 +777,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
             
             //Remove route info textview
-//            for sub in map.subviews) {
-//                if (sub.tag == 99) {
-//                    sub.removeFromSuperview()
-//                }
-//            }
-            
+            if let viewWithTag = self.view.viewWithTag(99) {
+                viewWithTag.removeFromSuperview()
+                infoOverlay = nil
+                self.durationSeconds = 0
+                self.totalDistanceMeters = 0
+            }
             
             // Clear all map markers and polylines
             mapView?.clear()
@@ -869,10 +869,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool {
         if let viewWithTag = self.view.viewWithTag(23) {
-<<<<<<< HEAD
-            //print("found view with tag 23")
-=======
->>>>>>> master
+
             viewWithTag.removeFromSuperview()
         }
         
