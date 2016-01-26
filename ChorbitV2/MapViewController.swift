@@ -163,8 +163,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         closestLocationsPerErrand.removeAll()
         noResults.removeAll()
         var haveFoundLocations: Bool = false
-        
-        do{
             
             let totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
             numErrands = 0
@@ -259,11 +257,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 
             }
          
-        }
-        catch{
-            print(error)
-            DisplayErrorAlert(error as! String)
-        }
+
         
         
     }
@@ -377,7 +371,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         var locations: [Coordinates?] = []
         locations.append(origin)
         
-        do {
+
             //Only hit up mapquest api for optimized route if there are 2 or more errands
             if (closestLocationsPerErrand.count > 1) {
                 let routeServiceUrl = "https://b97482pu3h.execute-api.us-west-2.amazonaws.com/test/ChorbitAlgorithm"
@@ -395,7 +389,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             let routeServiceResponse: RouteServiceResponse = RouteServiceResponse(json as! [String : AnyObject])
                             
                             for r in routeServiceResponse.results {
-                                print(r)
+                                //print(r)
                                 self.currentRouteLocations.append(Coordinates?(r))
                             }
                             
@@ -427,10 +421,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 MapResults(locations)
                 
             }
-            
-        } catch {
-            DisplayErrorAlert("");
-        }
+
         
         
     }
@@ -514,12 +505,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         url = url.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
-        do {
+
             self.GetDirections(url);
-        } catch {
-            self.dismissViewControllerAnimated(false, completion: nil)
-            self.DisplayErrorAlert("");
-        }
+
         
         if (self._errandLocations.count == 0) {
             self.dismissViewControllerAnimated(false, completion: nil)
@@ -879,7 +867,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool {
         if let viewWithTag = self.view.viewWithTag(23) {
-            print("found view with tag 23")
+            //print("found view with tag 23")
             viewWithTag.removeFromSuperview()
         }
         
@@ -905,9 +893,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func mapView(mapView: GMSMapView!, didCloseInfoWindowOfMarker marker: GMSMarker!) -> Bool {
-        print("didCloseInfoWindowOfMarker")
+        //print("didCloseInfoWindowOfMarker")
         if let viewWithTag = self.view.viewWithTag(23) {
-            print("found view with tag 23")
+            //print("found view with tag 23")
             viewWithTag.removeFromSuperview()
         }
         return false
@@ -915,10 +903,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
         if let viewWithTag = self.view.viewWithTag(23) {
-            print("found view with tag 23")
+           // print("found view with tag 23")
             viewWithTag.removeFromSuperview()
         }
-        print("You tapped at \(coordinate.latitude), \(coordinate.longitude)")
+        //print("You tapped at \(coordinate.latitude), \(coordinate.longitude)")
     }
 
 }
