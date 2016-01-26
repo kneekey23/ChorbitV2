@@ -53,9 +53,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "816609D41BE0B6BD008B797E"
-            BuildableName = "ChorbitV2.app"
-            BlueprintName = "ChorbitV2"
-            ReferencedContainer = "container:ChorbitV2.xcodeproj">
+            BuildableName = "Chorbit.app"
+            BlueprintName = "Chorbit"
+            ReferencedContainer = "container:Chorbit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -76,9 +76,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "816609D41BE0B6BD008B797E"
-            BuildableName = "ChorbitV2.app"
-            BlueprintName = "ChorbitV2"
-            ReferencedContainer = "container:ChorbitV2.xcodeproj">
+            BuildableName = "Chorbit.app"
+            BlueprintName = "Chorbit"
+            ReferencedContainer = "container:Chorbit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>

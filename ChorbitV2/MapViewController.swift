@@ -368,6 +368,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func CreateRoute()
     {
+        currentRouteLocations = []
         var locations: [Coordinates?] = []
         locations.append(origin)
         
@@ -564,7 +565,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         self.dismissViewControllerAnimated(false, completion: nil)
                         
                     
-                           var legIndex: Int = 1;
+                        var legIndex: Int = 1;
                         for leg in route.legs {
 
                             self.totalDistanceMeters += leg.distance.value
@@ -628,7 +629,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         self.infoOverlay.backgroundColor = UIColor.blackColor()
                         self.infoOverlay.alpha = 0.7
                         self.infoOverlay.layer.cornerRadius = 5
-                         let font: UIFont = UIFont(name: "AvenirNext-DemiBold", size: 13)!
+                        let font: UIFont = UIFont(name: "AvenirNext-DemiBold", size: 13)!
                         let fontAttr = [NSFontAttributeName:font]
                     
                         let styledString = NSMutableAttributedString()
@@ -689,6 +690,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             _errandLocations.removeAll()
             closestLocationsPerErrand.removeAll()
             noResults.removeAll()
+            directionsGrouped.removeAll()
             
             //Identify rejected location within currentRouteLocations
             //and remove it from currentRouteLocations
@@ -867,7 +869,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func mapView(mapView: GMSMapView!, didTapMarker marker: GMSMarker!) -> Bool {
         if let viewWithTag = self.view.viewWithTag(23) {
+<<<<<<< HEAD
             //print("found view with tag 23")
+=======
+>>>>>>> master
             viewWithTag.removeFromSuperview()
         }
         
@@ -889,13 +894,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     func onRejectLocation(sender: UIButton!) {
+        if let viewWithTag = self.view.viewWithTag(23) {
+            viewWithTag.removeFromSuperview()
+        }
+        
         RejectLocation(selectedMarker.placeId)
     }
     
     func mapView(mapView: GMSMapView!, didCloseInfoWindowOfMarker marker: GMSMarker!) -> Bool {
-        //print("didCloseInfoWindowOfMarker")
+
         if let viewWithTag = self.view.viewWithTag(23) {
-            //print("found view with tag 23")
+
             viewWithTag.removeFromSuperview()
         }
         return false
@@ -905,8 +914,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         if let viewWithTag = self.view.viewWithTag(23) {
            // print("found view with tag 23")
             viewWithTag.removeFromSuperview()
+
         }
-        //print("You tapped at \(coordinate.latitude), \(coordinate.longitude)")
+
     }
 
 }
