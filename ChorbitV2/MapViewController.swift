@@ -130,13 +130,27 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
          if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "use new location"{
             
             let startingLocation: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[0]
-            let result: Coordinates = GetLatLng(startingLocation.errandString)
-            
-            if(result.lat > 0){
-                lat = result.lat
-                lng = result.long
-                subtitle = result.subtitle
+            let result: Coordinates = Coordinates()
+            GetLatLng(startingLocation.errandString) { placemarks, error in
+                if placemarks != nil {
+                    if(placemarks!.count > 0){
+                        let placemark: CLPlacemark = placemarks![0]
+                        
+                        
+                        result.lat = placemark.location!.coordinate.latitude
+                        result.long = placemark.location!.coordinate.longitude
+                        result.subtitle = placemark.name!
+                        
+                        if(result.lat > 0){
+                            lat = result.lat
+                            lng = result.long
+                            subtitle = result.subtitle
+                        }
+                    }
+                }
             }
+            
+            
         }
          else{
             lat = firstViewController!.myGeoLocatedCoords.coordinate.latitude
@@ -154,8 +168,22 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
               //geocode last item in errand selection array to find the coordinates NJK
             let index: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
             let destinationLocation: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[index - 1]
-                destination = GetLatLng(destinationLocation.errandString)
-                destination!.title = "my final destination"
+                GetLatLng(destinationLocation.errandString) { placemarks, error in
+                if placemarks != nil {
+                    if(placemarks!.count > 0){
+                        let placemark: CLPlacemark = placemarks![0]
+                        
+                        self.destination = Coordinates()
+                        self.destination!.lat = placemark.location!.coordinate.latitude
+                        self.destination!.long = placemark.location!.coordinate.longitude
+                        self.destination!.subtitle = placemark.name!
+                        
+                        self.destination!.title = "my final destination"
+                    }
+                }
+            }
+            
+            
           
         }
         
@@ -336,7 +364,20 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         sessionTask.resume()
         }
         else{
-            errandAddress = self.GetLatLng(errand.errandString)
+            GetLatLng(errand.errandString) { placemarks, error in
+        
+                    if(placemarks!.count > 0){
+                        let placemark: CLPlacemark = placemarks![0]
+                        
+                        self.errandAddress = Coordinates()
+                        self.errandAddress!.lat = placemark.location!.coordinate.latitude
+                        self.errandAddress!.long = placemark.location!.coordinate.longitude
+                        self.errandAddress!.subtitle = placemark.name!
+                        
+                       
+                    }
+                
+            }
             //do nothing becayse it's an address that has been entered as an errand NJK
             dispatch_async(dispatch_get_main_queue()) {
                     completionHandler(nil, nil, count: count)
@@ -346,24 +387,21 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
     }
     
-    func GetLatLng(address:String) -> Coordinates{
-         let geocoder: CLGeocoder = CLGeocoder()
-        let coords: Coordinates = Coordinates()
-        geocoder.geocodeAddressString(address, completionHandler: {(placemarks:[CLPlacemark]?, error:NSError?) -> Void in
-            
-            if(placemarks!.count > 0){
-            let placemark: CLPlacemark = placemarks![0]
-            
-                
-                coords.lat = placemark.location!.coordinate.latitude
-                coords.long = placemark.location!.coordinate.longitude
-                coords.subtitle = placemark.name!
+    
+    func GetLatLng(address: String, completionHandler: ([CLPlacemark]!, NSError?) -> ()) {
+        let geocoder: CLGeocoder = CLGeocoder()
+        
+        
+        geocoder.geocodeAddressString(address) { placemarks, error in
+            if error != nil {
+                print("geocoding error: \(error)")
+            } else if placemarks!.count == 0 {
+                print("no placemarks")
             }
-         
-        
-        })
-        
-        return coords
+             dispatch_async(dispatch_get_main_queue()) {
+            completionHandler(placemarks!, error)
+            }
+        }
     }
     
     func CreateRoute()
