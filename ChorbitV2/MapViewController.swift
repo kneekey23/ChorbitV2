@@ -22,10 +22,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //    var origin: Coordinates?
 //    var destination: Coordinates?
     var noResults: [String] = []
-    var locationResults: [ErrandResults] = []
+//    var locationResults: [ErrandResults] = []
     var numErrands: Int = 0
 //    var closestLocationsPerErrand:[[Coordinates]] = [[]]
-    var _errandLocations: [GoogleMapMarker] = []
+//    var _errandLocations: [GoogleMapMarker] = []
 //    var currentRouteLocations: [Coordinates?] = []
     var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
@@ -51,6 +51,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     struct Static {
         static var origin: Coordinates?
         static var destination: Coordinates?
+        static var _errandLocations: [GoogleMapMarker] = []
+        static let path = GMSMutablePath()
+        static var closestLocationsPerErrand:[[Coordinates]] = [[]]
+        static var currentRouteLocations: [Coordinates?] = []
+        static var locationResults: [ErrandResults] = []
     }
     
     @IBOutlet weak var transportationTyoe: UISegmentedControl!
@@ -66,9 +71,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
 //        self.directionsGrouped.removeAll()
         (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
-        self._errandLocations.removeAll()
-//        self.currentRouteLocations.removeAll()
-        (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.removeAll()
+        Static._errandLocations.removeAll()
+        Static.currentRouteLocations.removeAll()
+//        (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.removeAll()
         self.CreateRoute()
     }
     override func viewDidLoad() {
@@ -106,9 +111,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.view.addSubview(transportationTyoe)
         
         if !recalc {
-            locationResults = (firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedLocationResults
-            let cachedLocations = (firstViewController?.parentViewController?.parentViewController as! MainViewController)._cachedErrandLocations
-            for routeLocation in cachedLocations {
+//            locationResults = (firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedLocationResults
+            for routeLocation in Static._errandLocations {
                 // Add cached markers to map:
                 let marker = GoogleMapMarker()
                 marker.position = routeLocation.position
@@ -122,8 +126,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 marker.map = self.mapView
             }
             
-            let path = (firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedPolylinePath
-            let polyline = GMSPolyline(path: path)
+            let polyline = GMSPolyline(path: Static.path)
             polyline.map = self.mapView
             
             let padding = CGFloat(30)
@@ -165,9 +168,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
 //            self.directionsGrouped.removeAll()
             (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
-            self._errandLocations.removeAll()
-//            self.currentRouteLocations.removeAll()
-            (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.removeAll()
+            Static._errandLocations.removeAll()
+            Static.currentRouteLocations.removeAll()
+//            (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.removeAll()
             self.CreateRoute()
     }
     
@@ -220,9 +223,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
           
         }
         
-        locationResults.removeAll()
-//        closestLocationsPerErrand.removeAll()
-        (firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.removeAll()
+        Static.locationResults.removeAll()
+        Static.closestLocationsPerErrand.removeAll()
+//        (firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.removeAll()
         noResults.removeAll()
         var haveFoundLocations: Bool = false
             
@@ -278,11 +281,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                         let closestLocations: [Coordinates] = self.GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errand.errandString, excludedPlaceIds: nil )
                                         
                                         if closestLocations.count > 0{
-//                                            self.closestLocationsPerErrand.append(closestLocations)
-                                            (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.append(closestLocations)
+                                            Static.closestLocationsPerErrand.append(closestLocations)
+//                                            (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.append(closestLocations)
                                             let usedPlaceIds: [String] = []
-                                            self.locationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errand.errandString))
-                                            (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedLocationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errand.errandString))
+                                            Static.locationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errand.errandString))
+//                                            (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedLocationResults.append(ErrandResults(searchResults: l!, errandTermId: errandTermId, usedPlaceIds: usedPlaceIds, errandText: errand.errandString))
                                             haveFoundLocations = true
                                         }
                                     }
@@ -292,8 +295,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                         var addressArray: [Coordinates] = []
                                       
                                         addressArray.append(self.errandAddress!)
-//                                        self.closestLocationsPerErrand.append(addressArray)
-                                        (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.append(addressArray)
+                                        Static.closestLocationsPerErrand.append(addressArray)
+//                                        (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.append(addressArray)
                                         haveFoundLocations = true
                                     }
                                     
@@ -440,17 +443,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func CreateRoute()
     {
-//        currentRouteLocations = []
-        (firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations = []
+        Static.currentRouteLocations = []
+//        (firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations = []
         var locations: [Coordinates?] = []
         locations.append(Static.origin)
 
             //Only hit up mapquest api for optimized route if there are 2 or more errands
-            let closestLocationsPerErrand = (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand
-            if (closestLocationsPerErrand.count > 1) {
+//            let closestLocationsPerErrand = (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand
+            if (Static.closestLocationsPerErrand.count > 1) {
                 let routeServiceUrl = "https://b97482pu3h.execute-api.us-west-2.amazonaws.com/test/ChorbitAlgorithm"
                 
-                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: Static.origin!, errands: closestLocationsPerErrand, destination: Static.destination!, mode: modeOfTransportation)
+                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: Static.origin!, errands: Static.closestLocationsPerErrand, destination: Static.destination!, mode: modeOfTransportation)
                 
                 let requestObj: AnyObject = routeServiceRequest
                 let JSONString = Mapper().toJSONString(routeServiceRequest)
@@ -464,11 +467,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             
                             for r in routeServiceResponse.results {
                                 //print(r)
-//                                self.currentRouteLocations.append(Coordinates?(r))
-                                (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.append(Coordinates?(r))
+                                Static.currentRouteLocations.append(Coordinates?(r))
+//                                (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.append(Coordinates?(r))
                             }
                             
-                            if((self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.count < 1) {
+                            if(Static.currentRouteLocations.count < 1) {
                                 self.dismissViewControllerAnimated(false, completion: nil)
                                 let errandsNotFound: String = "unable to find locations for your errands. please go back and try again."
                                 self.DisplayErrorAlert(errandsNotFound)
@@ -476,8 +479,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 return;
                             }
                             
-//                            locations += self.currentRouteLocations;
-                            locations += (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations
+                            locations += Static.currentRouteLocations;
+//                            locations += (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations
                             
                            self.MapResults(locations)
                         }
@@ -487,11 +490,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 
             } else {
                 //This just means that there's only one errand
-                for locationList in closestLocationsPerErrand {
+                for locationList in Static.closestLocationsPerErrand {
                     if(locationList.count > 0) {
                         locations.append(locationList[0]);
-//                        currentRouteLocations = locations;
-                        (firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations = locations
+                        Static.currentRouteLocations = locations;
+//                        (firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations = locations
                         break;
                     }
                 }
@@ -523,8 +526,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
             // End Temporary fix
             
-            self._errandLocations.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
-            (firstViewController?.parentViewController?.parentViewController as! MainViewController)._cachedErrandLocations.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
+            Static._errandLocations.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
         }
         
         var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
@@ -562,8 +564,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         //Create Origin and Dest Place Marks and Map Items to use for directions
         //            var emptyDict = NSDictionary()
         
-        if (self._isRoundTrip && self._errandLocations.count > 0) {
-            self._errandLocations.append(self._errandLocations[0])
+        if (self._isRoundTrip && Static._errandLocations.count > 0) {
+            Static._errandLocations.append(Static._errandLocations[0])
         }
         
         //            let waypoints = _errandLocations[2..._errandLocations.count - 1]
@@ -572,11 +574,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.modeOfTransportation = "bicycling"
         }
         
-        var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(self._errandLocations[0].position.latitude),\(self._errandLocations[0].position.longitude)&destination=\(self._errandLocations[1].position.latitude),\(self._errandLocations[1].position.longitude)&mode=\(self.modeOfTransportation)&waypoints="
+        var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(Static._errandLocations[0].position.latitude),\(Static._errandLocations[0].position.longitude)&destination=\(Static._errandLocations[1].position.latitude),\(Static._errandLocations[1].position.longitude)&mode=\(self.modeOfTransportation)&waypoints="
         
-        for var i = 2; i < self._errandLocations.count; i++ {
-            url += "\(self._errandLocations[i].position.latitude),\(self._errandLocations[i].position.longitude)"
-            if(i != self._errandLocations.count - 1) {
+        for var i = 2; i < Static._errandLocations.count; i++ {
+            url += "\(Static._errandLocations[i].position.latitude),\(Static._errandLocations[i].position.longitude)"
+            if(i != Static._errandLocations.count - 1) {
                 url += "|"
             }
         }
@@ -587,7 +589,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.GetDirections(url);
 
         
-        if (self._errandLocations.count == 0) {
+        if (Static._errandLocations.count == 0) {
             self.dismissViewControllerAnimated(false, completion: nil)
             let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
             self.DisplayErrorAlert(locationsNotFound)
@@ -621,13 +623,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         if (!polylinePts.isEmpty) {
                             let polylineCoords: [CLLocationCoordinate2D]? = decodePolyline(polylinePts)
                             
-                            let path = GMSMutablePath()
+//                            let path = GMSMutablePath()
                             for polylineCoord in polylineCoords! {
-                                path.addCoordinate(polylineCoord)
-                                (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedPolylinePath.addCoordinate(polylineCoord)
+                                Static.path.addCoordinate(polylineCoord)
                             }
                             
-                            let polyline = GMSPolyline(path: path)
+                            let polyline = GMSPolyline(path: Static.path)
                             polyline.map = self.mapView
                         }
                         
@@ -657,11 +658,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             
                             for step in leg.steps {
                             let directionStep: DirectionStep = DirectionStep()
-                                if legIndex <= self._errandLocations.count{
-                                    if self._errandLocations[legIndex].errandText.isEmpty{
+                                if legIndex <= Static._errandLocations.count{
+                                    if Static._errandLocations[legIndex].errandText.isEmpty{
                                          directionStep.errandGroupNumber = "To " + (Static.destination?.subtitle)!
                                     }else{
-                                         directionStep.errandGroupNumber = "To " + self._errandLocations[legIndex].errandText
+                                         directionStep.errandGroupNumber = "To " + Static._errandLocations[legIndex].errandText
                                     }
                                
                                 }
@@ -738,7 +739,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         self.view.addSubview(self.infoOverlay)
                         
                         
-                        for routeLocation in self._errandLocations {
+                        for routeLocation in Static._errandLocations {
                             // Add markers to map:
                             let marker = GoogleMapMarker()  //GMSMarker()
                             marker.position = routeLocation.position
@@ -766,9 +767,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         do {
             //TODO: add loading overlay here
          
-            _errandLocations.removeAll()
-//            closestLocationsPerErrand.removeAll()
-            (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.removeAll()
+            Static._errandLocations.removeAll()
+            Static.closestLocationsPerErrand.removeAll()
+//            (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.removeAll()
             noResults.removeAll()
 //            directionsGrouped.removeAll()
             (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
@@ -776,26 +777,26 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             //Identify rejected location within currentRouteLocations
             //and remove it from currentRouteLocations
             var rejected: Coordinates = Coordinates()
-            for var i = 0; i < (firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.count; i++ {
-                if ((firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations[i]!.placeId == placeId) {
-                    rejected = (firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations[i]!
-                    (firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.removeAtIndex(i)
+            for var i = 0; i < Static.currentRouteLocations.count; i++ {
+                if (Static.currentRouteLocations[i]!.placeId == placeId) {
+                    rejected = Static.currentRouteLocations[i]!
+                    Static.currentRouteLocations.removeAtIndex(i)
                     break
                 }
             }
             
          
-            for var i = 0; i < locationResults.count; i++ {
-                if (locationResults[i].errandTermId == rejected.errandTermId) {
+            for var i = 0; i < Static.locationResults.count; i++ {
+                if (Static.locationResults[i].errandTermId == rejected.errandTermId) {
                     //Add the next 3 locations for the rejected errand
-                    locationResults[i].usedPlaceIds.append(placeId)
-                    let excludedPlaceIds: [String] = locationResults[i].usedPlaceIds
+                    Static.locationResults[i].usedPlaceIds.append(placeId)
+                    let excludedPlaceIds: [String] = Static.locationResults[i].usedPlaceIds
                     
                     //Get next top locations for rejected errand
-                    let closestLocations: [Coordinates] = GetClosestLocationsForErrand(locationResults[i].locationSearchResults!, errandTermId: rejected.errandTermId, errandText: locationResults[i].errandText, excludedPlaceIds: excludedPlaceIds)
+                    let closestLocations: [Coordinates] = GetClosestLocationsForErrand(Static.locationResults[i].locationSearchResults!, errandTermId: rejected.errandTermId, errandText: Static.locationResults[i].errandText, excludedPlaceIds: excludedPlaceIds)
                     if (closestLocations.count > 0) {
-//                        closestLocationsPerErrand.append(closestLocations)
-                        (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.append(closestLocations)
+                        Static.closestLocationsPerErrand.append(closestLocations)
+//                        (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.append(closestLocations)
                     } else {
                         //No more results, so can't provide a new location
                         
@@ -808,25 +809,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             noresultsAlertController = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
                             let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
                                 //If yes, clear out UsedPlaceIds for this errand and re-map:
-                                self.locationResults[i].usedPlaceIds.removeAll()
+                                Static.locationResults[i].usedPlaceIds.removeAll()
                                 self.noResults.removeAll()
-//                               self.closestLocationsPerErrand.append(self.GetClosestLocationsForErrand(self.locationResults[i].locationSearchResults!,
+                               Static.closestLocationsPerErrand.append(self.GetClosestLocationsForErrand(Static.locationResults[i].locationSearchResults!,
+                                    errandTermId: Static.locationResults[i].errandTermId, errandText: Static.locationResults[i].errandText, excludedPlaceIds: nil))
+//                                (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.append(self.GetClosestLocationsForErrand(self.locationResults[i].locationSearchResults!,
 //                                    errandTermId: self.locationResults[i].errandTermId, errandText: self.locationResults[i].errandText, excludedPlaceIds: nil))
-                                (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.append(self.GetClosestLocationsForErrand(self.locationResults[i].locationSearchResults!,
-                                    errandTermId: self.locationResults[i].errandTermId, errandText: self.locationResults[i].errandText, excludedPlaceIds: nil))
                             })
                             let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
                                 //If no, exit method and do nothing:
                                 self.noResults.removeAll()
                                 
-                                for (index, value) in self.locationResults[i].usedPlaceIds.enumerate() {
+                                for (index, value) in Static.locationResults[i].usedPlaceIds.enumerate() {
                                     if(value == placeId) {
-                                        self.locationResults[i].usedPlaceIds.removeAtIndex(index)
+                                        Static.locationResults[i].usedPlaceIds.removeAtIndex(index)
                                     }
                                 }
                                 
-//                                self.currentRouteLocations.append(rejected)
-                                (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.append(rejected)
+                                Static.currentRouteLocations.append(rejected)
+//                                (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.append(rejected)
                                 // _loadPop.hide()
                                 return
                             })
@@ -840,13 +841,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             noresultsAlertController = UIAlertController(title: title2, message: msg2, preferredStyle: UIAlertControllerStyle.Alert)
                             let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
                                 self.noResults.removeAll()
-                                for (index, value) in self.locationResults[i].usedPlaceIds.enumerate() {
+                                for (index, value) in Static.locationResults[i].usedPlaceIds.enumerate() {
                                     if(value == placeId) {
-                                        self.locationResults[i].usedPlaceIds.removeAtIndex(index)
+                                        Static.locationResults[i].usedPlaceIds.removeAtIndex(index)
                                     }
                                 }
-//                                self.currentRouteLocations.append(rejected)
-                                (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.append(rejected)
+                                Static.currentRouteLocations.append(rejected)
+//                                (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.append(rejected)
                                 // _loadPop.hide()
                                 return
                             })
@@ -857,10 +858,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                 } else {
                     //Get top locations for non-rejected 
-//                    closestLocationsPerErrand.append(GetClosestLocationsForErrand(locationResults[i].locationSearchResults!,
+                    Static.closestLocationsPerErrand.append(GetClosestLocationsForErrand(Static.locationResults[i].locationSearchResults!,
+                        errandTermId: Static.locationResults[i].errandTermId, errandText: Static.locationResults[i].errandText, excludedPlaceIds: Static.locationResults[i].usedPlaceIds))
+//                    (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.append(GetClosestLocationsForErrand(locationResults[i].locationSearchResults!,
 //                        errandTermId: locationResults[i].errandTermId, errandText: locationResults[i].errandText, excludedPlaceIds: locationResults[i].usedPlaceIds))
-                    (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand.append(GetClosestLocationsForErrand(locationResults[i].locationSearchResults!,
-                        errandTermId: locationResults[i].errandTermId, errandText: locationResults[i].errandText, excludedPlaceIds: locationResults[i].usedPlaceIds))
                 }
             }
             
