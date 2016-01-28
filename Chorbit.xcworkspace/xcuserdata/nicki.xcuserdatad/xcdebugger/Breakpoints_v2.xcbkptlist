@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             scope = "0"
-            stopOnStyle = "0">
+            stopOnStyle = "1">
             <Actions>
                <BreakpointActionProxy
                   ActionExtensionID = "Xcode.BreakpointAction.Log">
@@ -23,51 +23,11 @@
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.SwiftErrorBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChorbitV2/SearchViewController.swift"
-            timestampString = "475472635.750579"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "411"
-            endingLineNumber = "411"
-            landmarkName = "placeSelected(_:)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Chorbit.SearchViewController.placeSelected (Chorbit.SearchViewController)(Chorbit.Place) -&gt; ()"
-                  moduleName = "Chorbit"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nicki/Projects/ChorbitV2/ChorbitV2/ChorbitV2/SearchViewController.swift"
-                  timestampString = "475473016.863111"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "411"
-                  endingLineNumber = "411"
-                  offsetFromSymbolStart = "11576">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "function signature specialization &lt;Arg[0] = Dead, Arg[1] = Value Promoted from InOut&gt; of Chorbit.SearchViewController.(placeSelected (Chorbit.SearchViewController) -&gt; (Chorbit.Place) -&gt; ()).(closure #2)"
-                  moduleName = "Chorbit"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nicki/Projects/ChorbitV2/ChorbitV2/ChorbitV2/SearchViewController.swift"
-                  timestampString = "475473016.863335"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "411"
-                  endingLineNumber = "411"
-                  offsetFromSymbolStart = "28">
-               </Location>
-            </Locations>
+            continueAfterRunningActions = "No">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
