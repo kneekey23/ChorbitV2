@@ -296,7 +296,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         noResults.removeAll()
         var haveFoundLocations: Bool = false
         
-        let totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
+        var totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
+        if !Static._isRoundTrip {
+            totalNumberOfErrands -= 1
+        }
+        
         (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.removeAll()
         numErrands = 0
         placeResponsesAwaiting = 0;
@@ -318,9 +322,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.allPlaceRequestsSent = true
             }
             
-            if i == totalNumberOfErrands - 1 && !Static._isRoundTrip {
-                continue
-            }
+//            if i == totalNumberOfErrands - 1 && !Static._isRoundTrip {
+//                continue
+//            }
             
             numErrands++
             let location = CLLocationCoordinate2D(latitude: lat, longitude:lng)
@@ -632,9 +636,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             
         }
         
-        //Create Origin and Dest Place Marks and Map Items to use for directions
-        //            var emptyDict = NSDictionary()
-        
         if (Static._isRoundTrip && Static._errandLocations.count > 0) {
             Static._errandLocations.append(Static._errandLocations[0])
         }
@@ -645,9 +646,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.modeOfTransportation = "bicycling"
         }
         
-        var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(Static._errandLocations[0].position.latitude),\(Static._errandLocations[0].position.longitude)&destination=\(Static._errandLocations[1].position.latitude),\(Static._errandLocations[1].position.longitude)&mode=\(self.modeOfTransportation)&waypoints="
+        let destIdx = Static._errandLocations.count - 1;
         
-        for var i = 2; i < Static._errandLocations.count; i++ {
+        var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(Static._errandLocations[0].position.latitude),\(Static._errandLocations[0].position.longitude)&destination=\(Static._errandLocations[destIdx].position.latitude),\(Static._errandLocations[destIdx].position.longitude)&mode=\(self.modeOfTransportation)&waypoints="
+        
+        for var i = 1; i < Static._errandLocations.count - 1; i++ {
             url += "\(Static._errandLocations[i].position.latitude),\(Static._errandLocations[i].position.longitude)"
             if(i != Static._errandLocations.count - 1) {
                 url += "|"
@@ -727,18 +730,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             var directionsList: [DirectionStep] = []
                             
                             for step in leg.steps {
-                            let directionStep: DirectionStep = DirectionStep()
+                                let directionStep: DirectionStep = DirectionStep()
                                 if legIndex <= Static._errandLocations.count{
                                     if Static._errandLocations[legIndex].errandText.isEmpty{
-                                         directionStep.errandGroupNumber = "To " + (Static.destination?.subtitle)!
+                                        directionStep.errandGroupNumber = "To " + (Static.destination?.subtitle)!
                                     }else{
-                                         directionStep.errandGroupNumber = "To " + Static._errandLocations[legIndex].errandText
+                                        directionStep.errandGroupNumber = "To " + Static._errandLocations[legIndex].errandText
                                     }
-                               
+                                    
                                 }
-                                 directionStep.directionText = step.html_instructions.stringByReplacingOccurrencesOfString("<[^>]+>", withString: " ", options: .RegularExpressionSearch, range: nil);
-
-                            
+                                directionStep.directionText = step.html_instructions.stringByReplacingOccurrencesOfString("<[^>]+>", withString: " ", options: .RegularExpressionSearch, range: nil);
+                                
+                                
                                 directionStep.stepIndex = instructionIndex;
                                 if(instructionIndex != 1)
                                 {
@@ -749,7 +752,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 directionsList.append(directionStep);
                                 instructionIndex++;
                             }
-//                            self.directionsGrouped.append(directionsList)
+                            //                            self.directionsGrouped.append(directionsList)
                             (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.append(directionsList)
                             legIndex++
                         }
