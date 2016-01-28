@@ -21,7 +21,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var mapView: GMSMapView?
     var noResults: [String] = []
     var numErrands: Int = 0
-    var mapErroredOut: Bool = false
 //    var directionsGrouped: [[DirectionStep]] = [[]]
     var temp: [DirectionStep] = []
     var selectedMarker: GoogleMapMarker = GoogleMapMarker()
@@ -50,6 +49,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         static var locationResults: [ErrandResults] = []
         static var _isRoundTrip: Bool = true
         static var infoOverlay: UITextView!
+        static var mapErroredOut: Bool = false
     }
     
     @IBOutlet weak var transportationTyoe: UISegmentedControl!
@@ -76,7 +76,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         let totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
         let prevNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.count
         
-        if totalNumberOfErrands != prevNumberOfErrands || prevNumberOfErrands == 0 {
+        if totalNumberOfErrands != prevNumberOfErrands || prevNumberOfErrands == 0 || Static.mapErroredOut {
             recalc = true;
         }
         
@@ -142,6 +142,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
             Static._errandLocations.removeAll()
             Static.currentRouteLocations.removeAll()
+            Static.mapErroredOut = false
             
             configureLoadingMessage()
             GetLocationInformation()
@@ -373,7 +374,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             
                             if !haveFoundLocations {
                                 let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
-                                self.mapErroredOut = true
+                                Static.mapErroredOut = true
                                 self.DisplayErrorAlert(locationsNotFound)
                                 return
                             }
@@ -551,7 +552,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 self.dismissViewControllerAnimated(false, completion: nil)
                                 let errandsNotFound: String = "unable to find locations for your errands. please go back and try again."
                                 self.DisplayErrorAlert(errandsNotFound)
-                                self.mapErroredOut = true;
+                                Static.mapErroredOut = true;
                                 return;
                             }
                             
@@ -629,7 +630,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 noresultsAlertController.addAction(tryAgainAction)
                 
             } else {
-                self.mapErroredOut = true;
+                Static.mapErroredOut = true;
                 noresultsAlertController.addAction(tryAgainAction)
             }
             
@@ -666,7 +667,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.dismissViewControllerAnimated(false, completion: nil)
             let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
             self.DisplayErrorAlert(locationsNotFound)
-            self.mapErroredOut = true
+            Static.mapErroredOut = true
             return
         }
         
@@ -953,7 +954,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func DisplayErrorAlert(var errorMessage: String)
     {
         if(errorMessage.isEmpty){
-            mapErroredOut = true
+            Static.mapErroredOut = true
             errorMessage = "we are sorry. it seems a meteorite hit the app at an unexpected pace. please try landing your spaceship and relaunching."
         }
         
@@ -1025,6 +1026,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
         
         selectedMarker = marker as! GoogleMapMarker
+        if selectedMarker.placeId == "" {
+            return false
+        }
         
         let rejectBtn = UIButton()
         rejectBtn.setTitle("reject this location", forState: .Normal)
