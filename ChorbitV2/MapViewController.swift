@@ -21,7 +21,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var mapView: GMSMapView?
     var noResults: [String] = []
     var numErrands: Int = 0
-    var _isRoundTrip: Bool = true
     var mapErroredOut: Bool = false
 //    var directionsGrouped: [[DirectionStep]] = [[]]
     var temp: [DirectionStep] = []
@@ -50,6 +49,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         static var closestLocationsPerErrand:[[Coordinates]] = [[]]
         static var currentRouteLocations: [Coordinates?] = []
         static var locationResults: [ErrandResults] = []
+        static var _isRoundTrip: Bool = true
     }
     
     @IBOutlet weak var transportationTyoe: UISegmentedControl!
@@ -91,6 +91,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 }
             }
         }
+        
+        var isRoundTrip = false;
+        if(self.firstViewController!.destinationToggle as UISwitch).on{
+            isRoundTrip = true;
+        }
+        if isRoundTrip != Static._isRoundTrip {
+            recalc = true
+        }
+        
         // End caching
         
         let myLocation: CLLocation = (firstViewController!.myGeoLocatedCoords) as CLLocation!
@@ -129,6 +138,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.dismissViewControllerAnimated(false, completion: nil)
         } else {
             Static.path = GMSMutablePath()
+            (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
+            Static._errandLocations.removeAll()
+            Static.currentRouteLocations.removeAll()
+            
             configureLoadingMessage()
             GetLocationInformation()
         }
@@ -163,7 +176,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
         Static._errandLocations.removeAll()
         Static.currentRouteLocations.removeAll()
-        //            (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations.removeAll()
         self.CreateRoute()
     }
     
@@ -216,6 +228,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             //geocode last item in errand selection array to find the coordinates NJK
                             let index: Int = (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
                             let destinationLocation: Errand = (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[index - 1]
+                            Static._isRoundTrip = false
                             self.GetLatLng(destinationLocation.errandString) { placemarks, error in
                                 if placemarks != nil {
                                     if(placemarks!.count > 0){
@@ -253,6 +266,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 //geocode last item in errand selection array to find the coordinates NJK
                 let index: Int = (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
                 let destinationLocation: Errand = (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[index - 1]
+                Static._isRoundTrip = false
                 self.GetLatLng(destinationLocation.errandString) { placemarks, error in
                     if placemarks != nil {
                         if(placemarks!.count > 0){
@@ -298,18 +312,22 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 continue
             }
             
+            // Keeping track of async requests and responses
+            placeResponsesAwaiting++
+            if i == totalNumberOfErrands - 1{
+                self.allPlaceRequestsSent = true
+            }
+            
+            if i == totalNumberOfErrands - 1 && !Static._isRoundTrip {
+                continue
+            }
+            
             numErrands++
             let location = CLLocationCoordinate2D(latitude: lat, longitude:lng)
             var l: NearbySearch?
             
             // Add errands text for caching
             (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.append(errand.errandString)
-            
-            // Keeping track of async requests and responses
-            placeResponsesAwaiting++
-            if i == totalNumberOfErrands - 1{
-                self.allPlaceRequestsSent = true
-            }
             
             
             //if the errand is not an address and something like Target, fetch closest locations using Google Places API NJK
@@ -561,7 +579,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func MapResults(var locations: [Coordinates?]){
         
-        if (!self._isRoundTrip) {
+        if (!Static._isRoundTrip) {
             locations.append(Static.destination);
         }
         
@@ -617,7 +635,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         //Create Origin and Dest Place Marks and Map Items to use for directions
         //            var emptyDict = NSDictionary()
         
-        if (self._isRoundTrip && Static._errandLocations.count > 0) {
+        if (Static._isRoundTrip && Static._errandLocations.count > 0) {
             Static._errandLocations.append(Static._errandLocations[0])
         }
         
