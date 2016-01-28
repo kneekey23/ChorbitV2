@@ -21,13 +21,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var mapView: GMSMapView?
     var noResults: [String] = []
     var numErrands: Int = 0
-    var mapErroredOut: Bool = false
 //    var directionsGrouped: [[DirectionStep]] = [[]]
     var temp: [DirectionStep] = []
     var selectedMarker: GoogleMapMarker = GoogleMapMarker()
     var errandAddress: Coordinates?
     var modeOfTransportation: String = "driving"
-    var infoOverlay: UITextView!
     var recalc = false
     
     var placeResponsesAwaiting: Int = 0;
@@ -50,6 +48,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         static var currentRouteLocations: [Coordinates?] = []
         static var locationResults: [ErrandResults] = []
         static var _isRoundTrip: Bool = true
+        static var infoOverlay: UITextView!
+        static var mapErroredOut: Bool = false
     }
     
     @IBOutlet weak var transportationTyoe: UISegmentedControl!
@@ -59,7 +59,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         mapView?.clear()
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
-            infoOverlay = nil
+            Static.infoOverlay = nil
              self.durationSeconds = 0
              self.totalDistanceMeters = 0
         }
@@ -76,7 +76,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         let totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
         let prevNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.count
         
-        if totalNumberOfErrands != prevNumberOfErrands || prevNumberOfErrands == 0 {
+        if totalNumberOfErrands != prevNumberOfErrands || prevNumberOfErrands == 0 || Static.mapErroredOut {
             recalc = true;
         }
         
@@ -134,6 +134,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let bounds = (firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedBounds
             let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
             self.mapView!.animateWithCameraUpdate(fitBounds)
+            self.mapView?.addSubview(Static.infoOverlay)
             //removes loading view from screen NJK
             self.dismissViewControllerAnimated(false, completion: nil)
         } else {
@@ -141,6 +142,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
             Static._errandLocations.removeAll()
             Static.currentRouteLocations.removeAll()
+            Static.mapErroredOut = false
             
             configureLoadingMessage()
             GetLocationInformation()
@@ -168,7 +170,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         mapView?.clear()
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
-            infoOverlay = nil
+            Static.infoOverlay = nil
             self.durationSeconds = 0
             self.totalDistanceMeters = 0
         }
@@ -221,6 +223,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                          Static.origin = Coordinates(lat: lat, long: lng, title: "my starting location", subtitle: subtitle!, errandTermId: -1, placeId: "", errandText: "", errandOrder: nil)
                         
                         if(self.firstViewController!.destinationToggle as UISwitch).on{
+                            Static._isRoundTrip = true
                             Static.destination = Static.origin
                             self.BuildRoute(lat, lng: lng)
                         }
@@ -259,6 +262,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
            
             
             if(self.firstViewController!.destinationToggle as UISwitch).on{
+                Static._isRoundTrip = true
                 Static.destination = Static.origin
                 self.BuildRoute(lat, lng: lng)
             }
@@ -296,8 +300,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         noResults.removeAll()
         var haveFoundLocations: Bool = false
         
-        let totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
+        // Add errands text for caching
+        var totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
         (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.removeAll()
+        for(var i = 0; i < totalNumberOfErrands; i++){
+            let errand: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[i]
+            (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.append(errand.errandString)
+        }
+        
+        if !Static._isRoundTrip {
+            totalNumberOfErrands -= 1
+        }
+        
         numErrands = 0
         placeResponsesAwaiting = 0;
         self.allPlaceRequestsSent = false;
@@ -307,8 +321,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let errand: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[i]
             
             if totalNumberOfErrands == 0 || i == 0 {
-                // Add errands text for caching
-                (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.append(errand.errandString)
                 continue
             }
             
@@ -318,17 +330,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.allPlaceRequestsSent = true
             }
             
-            if i == totalNumberOfErrands - 1 && !Static._isRoundTrip {
-                continue
-            }
-            
             numErrands++
             let location = CLLocationCoordinate2D(latitude: lat, longitude:lng)
             var l: NearbySearch?
-            
-            // Add errands text for caching
-            (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.append(errand.errandString)
-            
             
             //if the errand is not an address and something like Target, fetch closest locations using Google Places API NJK
             
@@ -370,7 +374,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             
                             if !haveFoundLocations {
                                 let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
-                                self.mapErroredOut = true
+                                Static.mapErroredOut = true
                                 self.DisplayErrorAlert(locationsNotFound)
                                 return
                             }
@@ -548,7 +552,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 self.dismissViewControllerAnimated(false, completion: nil)
                                 let errandsNotFound: String = "unable to find locations for your errands. please go back and try again."
                                 self.DisplayErrorAlert(errandsNotFound)
-                                self.mapErroredOut = true;
+                                Static.mapErroredOut = true;
                                 return;
                             }
                             
@@ -626,14 +630,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 noresultsAlertController.addAction(tryAgainAction)
                 
             } else {
-                self.mapErroredOut = true;
+                Static.mapErroredOut = true;
                 noresultsAlertController.addAction(tryAgainAction)
             }
             
         }
-        
-        //Create Origin and Dest Place Marks and Map Items to use for directions
-        //            var emptyDict = NSDictionary()
         
         if (Static._isRoundTrip && Static._errandLocations.count > 0) {
             Static._errandLocations.append(Static._errandLocations[0])
@@ -645,9 +646,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.modeOfTransportation = "bicycling"
         }
         
-        var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(Static._errandLocations[0].position.latitude),\(Static._errandLocations[0].position.longitude)&destination=\(Static._errandLocations[1].position.latitude),\(Static._errandLocations[1].position.longitude)&mode=\(self.modeOfTransportation)&waypoints="
+        let destIdx = Static._errandLocations.count - 1;
         
-        for var i = 2; i < Static._errandLocations.count; i++ {
+        var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(Static._errandLocations[0].position.latitude),\(Static._errandLocations[0].position.longitude)&destination=\(Static._errandLocations[destIdx].position.latitude),\(Static._errandLocations[destIdx].position.longitude)&mode=\(self.modeOfTransportation)&waypoints="
+        
+        for var i = 1; i < Static._errandLocations.count - 1; i++ {
             url += "\(Static._errandLocations[i].position.latitude),\(Static._errandLocations[i].position.longitude)"
             if(i != Static._errandLocations.count - 1) {
                 url += "|"
@@ -664,7 +667,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.dismissViewControllerAnimated(false, completion: nil)
             let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
             self.DisplayErrorAlert(locationsNotFound)
-            self.mapErroredOut = true
+            Static.mapErroredOut = true
             return
         }
         
@@ -727,18 +730,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             var directionsList: [DirectionStep] = []
                             
                             for step in leg.steps {
-                            let directionStep: DirectionStep = DirectionStep()
+                                let directionStep: DirectionStep = DirectionStep()
                                 if legIndex <= Static._errandLocations.count{
                                     if Static._errandLocations[legIndex].errandText.isEmpty{
-                                         directionStep.errandGroupNumber = "To " + (Static.destination?.subtitle)!
+                                        directionStep.errandGroupNumber = "To " + (Static.destination?.subtitle)!
                                     }else{
-                                         directionStep.errandGroupNumber = "To " + Static._errandLocations[legIndex].errandText
+                                        directionStep.errandGroupNumber = "To " + Static._errandLocations[legIndex].errandText
                                     }
-                               
+                                    
                                 }
-                                 directionStep.directionText = step.html_instructions.stringByReplacingOccurrencesOfString("<[^>]+>", withString: " ", options: .RegularExpressionSearch, range: nil);
-
-                            
+                                directionStep.directionText = step.html_instructions.stringByReplacingOccurrencesOfString("<[^>]+>", withString: " ", options: .RegularExpressionSearch, range: nil);
+                                
+                                
                                 directionStep.stepIndex = instructionIndex;
                                 if(instructionIndex != 1)
                                 {
@@ -749,7 +752,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 directionsList.append(directionStep);
                                 instructionIndex++;
                             }
-//                            self.directionsGrouped.append(directionsList)
+                            //                            self.directionsGrouped.append(directionsList)
                             (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.append(directionsList)
                             legIndex++
                         }
@@ -773,13 +776,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             timeText = String(mins) + " min";
                         }
 
-                        self.infoOverlay = UITextView()
-                        self.infoOverlay.frame = CGRect(x: CGFloat(9), y: (self.buttonRect.frame.minY) - 60, width: CGFloat(boxWidth), height: CGFloat(50))
-                        self.infoOverlay.tag = 99
-                        self.infoOverlay.editable = false
-                        self.infoOverlay.backgroundColor = UIColor.blackColor()
-                        self.infoOverlay.alpha = 0.7
-                        self.infoOverlay.layer.cornerRadius = 5
+                        Static.infoOverlay = UITextView()
+                        Static.infoOverlay.frame = CGRect(x: CGFloat(9), y: (self.buttonRect.frame.minY) - 60, width: CGFloat(boxWidth), height: CGFloat(50))
+                        Static.infoOverlay.tag = 99
+                        Static.infoOverlay.editable = false
+                        Static.infoOverlay.backgroundColor = UIColor.blackColor()
+                        Static.infoOverlay.alpha = 0.7
+                        Static.infoOverlay.layer.cornerRadius = 5
                         let font: UIFont = UIFont(name: "AvenirNext-DemiBold", size: 13)!
                         let fontAttr = [NSFontAttributeName:font]
                     
@@ -805,8 +808,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         // Apply paragraph styles to paragraph
                         styledString.addAttribute(NSParagraphStyleAttributeName, value: paraStyle, range: NSRange(location: 0,length: styledString.length))
                         
-                        self.infoOverlay.attributedText = styledString
-                        self.view.addSubview(self.infoOverlay)
+                        Static.infoOverlay.attributedText = styledString
+                        self.view.addSubview(Static.infoOverlay)
                         
                         
                         for routeLocation in Static._errandLocations {
@@ -930,7 +933,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             //Remove route info textview
             if let viewWithTag = self.view.viewWithTag(99) {
                 viewWithTag.removeFromSuperview()
-                infoOverlay = nil
+                Static.infoOverlay = nil
                 self.durationSeconds = 0
                 self.totalDistanceMeters = 0
             }
@@ -951,7 +954,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func DisplayErrorAlert(var errorMessage: String)
     {
         if(errorMessage.isEmpty){
-            mapErroredOut = true
+            Static.mapErroredOut = true
             errorMessage = "we are sorry. it seems a meteorite hit the app at an unexpected pace. please try landing your spaceship and relaunching."
         }
         
@@ -1023,6 +1026,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
         
         selectedMarker = marker as! GoogleMapMarker
+        if selectedMarker.placeId == "" {
+            return false
+        }
         
         let rejectBtn = UIButton()
         rejectBtn.setTitle("reject this location", forState: .Normal)
