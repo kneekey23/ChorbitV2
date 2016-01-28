@@ -39,7 +39,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         self.parentViewController!.presentViewController(gpaViewController, animated: true, completion: nil)
     }
 
-    @IBOutlet weak var destinationToggle: UISwitch!
+    @IBOutlet var destinationToggle: UISwitch!
     @IBOutlet weak var startingLocationControl: UISegmentedControl!
     @IBOutlet weak var errandTableView: UITableView!
     let locMan: CLLocationManager = CLLocationManager()

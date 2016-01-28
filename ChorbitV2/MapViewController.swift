@@ -27,7 +27,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var selectedMarker: GoogleMapMarker = GoogleMapMarker()
     var errandAddress: Coordinates?
     var modeOfTransportation: String = "driving"
-    var infoOverlay: UITextView!
     var recalc = false
     
     var placeResponsesAwaiting: Int = 0;
@@ -50,6 +49,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         static var currentRouteLocations: [Coordinates?] = []
         static var locationResults: [ErrandResults] = []
         static var _isRoundTrip: Bool = true
+        static var infoOverlay: UITextView!
     }
     
     @IBOutlet weak var transportationTyoe: UISegmentedControl!
@@ -59,7 +59,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         mapView?.clear()
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
-            infoOverlay = nil
+            Static.infoOverlay = nil
              self.durationSeconds = 0
              self.totalDistanceMeters = 0
         }
@@ -134,6 +134,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let bounds = (firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedBounds
             let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
             self.mapView!.animateWithCameraUpdate(fitBounds)
+            self.mapView?.addSubview(Static.infoOverlay)
             //removes loading view from screen NJK
             self.dismissViewControllerAnimated(false, completion: nil)
         } else {
@@ -168,7 +169,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         mapView?.clear()
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
-            infoOverlay = nil
+            Static.infoOverlay = nil
             self.durationSeconds = 0
             self.totalDistanceMeters = 0
         }
@@ -221,6 +222,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                          Static.origin = Coordinates(lat: lat, long: lng, title: "my starting location", subtitle: subtitle!, errandTermId: -1, placeId: "", errandText: "", errandOrder: nil)
                         
                         if(self.firstViewController!.destinationToggle as UISwitch).on{
+                            Static._isRoundTrip = true
                             Static.destination = Static.origin
                             self.BuildRoute(lat, lng: lng)
                         }
@@ -259,6 +261,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
            
             
             if(self.firstViewController!.destinationToggle as UISwitch).on{
+                Static._isRoundTrip = true
                 Static.destination = Static.origin
                 self.BuildRoute(lat, lng: lng)
             }
@@ -296,12 +299,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         noResults.removeAll()
         var haveFoundLocations: Bool = false
         
+        // Add errands text for caching
         var totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
+        (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.removeAll()
+        for(var i = 0; i < totalNumberOfErrands; i++){
+            let errand: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[i]
+            (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.append(errand.errandString)
+        }
+        
         if !Static._isRoundTrip {
             totalNumberOfErrands -= 1
         }
         
-        (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.removeAll()
         numErrands = 0
         placeResponsesAwaiting = 0;
         self.allPlaceRequestsSent = false;
@@ -311,8 +320,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let errand: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[i]
             
             if totalNumberOfErrands == 0 || i == 0 {
-                // Add errands text for caching
-                (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.append(errand.errandString)
                 continue
             }
             
@@ -322,17 +329,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.allPlaceRequestsSent = true
             }
             
-//            if i == totalNumberOfErrands - 1 && !Static._isRoundTrip {
-//                continue
-//            }
-            
             numErrands++
             let location = CLLocationCoordinate2D(latitude: lat, longitude:lng)
             var l: NearbySearch?
-            
-            // Add errands text for caching
-            (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.append(errand.errandString)
-            
             
             //if the errand is not an address and something like Target, fetch closest locations using Google Places API NJK
             
@@ -776,13 +775,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             timeText = String(mins) + " min";
                         }
 
-                        self.infoOverlay = UITextView()
-                        self.infoOverlay.frame = CGRect(x: CGFloat(9), y: (self.buttonRect.frame.minY) - 60, width: CGFloat(boxWidth), height: CGFloat(50))
-                        self.infoOverlay.tag = 99
-                        self.infoOverlay.editable = false
-                        self.infoOverlay.backgroundColor = UIColor.blackColor()
-                        self.infoOverlay.alpha = 0.7
-                        self.infoOverlay.layer.cornerRadius = 5
+                        Static.infoOverlay = UITextView()
+                        Static.infoOverlay.frame = CGRect(x: CGFloat(9), y: (self.buttonRect.frame.minY) - 60, width: CGFloat(boxWidth), height: CGFloat(50))
+                        Static.infoOverlay.tag = 99
+                        Static.infoOverlay.editable = false
+                        Static.infoOverlay.backgroundColor = UIColor.blackColor()
+                        Static.infoOverlay.alpha = 0.7
+                        Static.infoOverlay.layer.cornerRadius = 5
                         let font: UIFont = UIFont(name: "AvenirNext-DemiBold", size: 13)!
                         let fontAttr = [NSFontAttributeName:font]
                     
@@ -808,8 +807,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         // Apply paragraph styles to paragraph
                         styledString.addAttribute(NSParagraphStyleAttributeName, value: paraStyle, range: NSRange(location: 0,length: styledString.length))
                         
-                        self.infoOverlay.attributedText = styledString
-                        self.view.addSubview(self.infoOverlay)
+                        Static.infoOverlay.attributedText = styledString
+                        self.view.addSubview(Static.infoOverlay)
                         
                         
                         for routeLocation in Static._errandLocations {
@@ -933,7 +932,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             //Remove route info textview
             if let viewWithTag = self.view.viewWithTag(99) {
                 viewWithTag.removeFromSuperview()
-                infoOverlay = nil
+                Static.infoOverlay = nil
                 self.durationSeconds = 0
                 self.totalDistanceMeters = 0
             }
