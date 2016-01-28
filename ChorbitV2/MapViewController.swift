@@ -19,8 +19,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var firstViewController : SearchViewController? = nil
     
     var mapView: GMSMapView?
-    var origin: Coordinates?
-    var destination: Coordinates?
+//    var origin: Coordinates?
+//    var destination: Coordinates?
     var noResults: [String] = []
     var locationResults: [ErrandResults] = []
     var numErrands: Int = 0
@@ -47,6 +47,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var listGroupDict = [Int: [DirectionStep]]()
     var progressBackground: UIImageView?
     var progress: UInt8 = 0
+    
+    struct Static {
+        static var origin: Coordinates?
+        static var destination: Coordinates?
+    }
     
     @IBOutlet weak var transportationTyoe: UISegmentedControl!
     @IBOutlet weak var buttonRect: UIButton!
@@ -201,17 +206,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             
         }
         //latlng = String(format: "%02d,%02d", lat, lng)
-        origin = Coordinates(lat: lat, long: lng, title: "my starting location", subtitle: subtitle!, errandTermId: -1, placeId: "", errandText: "", errandOrder: nil)
+        Static.origin = Coordinates(lat: lat, long: lng, title: "my starting location", subtitle: subtitle!, errandTermId: -1, placeId: "", errandText: "", errandOrder: nil)
         
         if(firstViewController!.destinationToggle as UISwitch).on{
-            destination = origin
+            Static.destination = Static.origin
         }
         else{
               //geocode last item in errand selection array to find the coordinates NJK
             let index: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
             let destinationLocation: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[index - 1]
-                destination = GetLatLng(destinationLocation.errandString)
-                destination!.title = "my final destination"
+                Static.destination = GetLatLng(destinationLocation.errandString)
+                Static.destination!.title = "my final destination"
           
         }
         
@@ -438,14 +443,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 //        currentRouteLocations = []
         (firstViewController?.parentViewController?.parentViewController as! MainViewController).currentRouteLocations = []
         var locations: [Coordinates?] = []
-        locations.append(origin)
+        locations.append(Static.origin)
 
             //Only hit up mapquest api for optimized route if there are 2 or more errands
             let closestLocationsPerErrand = (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).closestLocationsPerErrand
             if (closestLocationsPerErrand.count > 1) {
                 let routeServiceUrl = "https://b97482pu3h.execute-api.us-west-2.amazonaws.com/test/ChorbitAlgorithm"
                 
-                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: origin!, errands: closestLocationsPerErrand, destination: destination!, mode: modeOfTransportation)
+                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: Static.origin!, errands: closestLocationsPerErrand, destination: Static.destination!, mode: modeOfTransportation)
                 
                 let requestObj: AnyObject = routeServiceRequest
                 let JSONString = Mapper().toJSONString(routeServiceRequest)
@@ -501,7 +506,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func MapResults(var locations: [Coordinates?]){
         
         if (!self._isRoundTrip) {
-            locations.append(self.destination);
+            locations.append(Static.destination);
         }
         
         
@@ -654,7 +659,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             let directionStep: DirectionStep = DirectionStep()
                                 if legIndex <= self._errandLocations.count{
                                     if self._errandLocations[legIndex].errandText.isEmpty{
-                                         directionStep.errandGroupNumber = "To " + (self.destination?.subtitle)!
+                                         directionStep.errandGroupNumber = "To " + (Static.destination?.subtitle)!
                                     }else{
                                          directionStep.errandGroupNumber = "To " + self._errandLocations[legIndex].errandText
                                     }
