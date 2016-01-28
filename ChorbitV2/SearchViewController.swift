@@ -36,7 +36,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         gpaViewController.navigationBar.tintColor = UIColor.whiteColor()
         gpaViewController.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 16.0)!]
         
-        presentViewController(gpaViewController, animated: true, completion: nil)
+        self.parentViewController!.presentViewController(gpaViewController, animated: true, completion: nil)
     }
 
     @IBOutlet weak var destinationToggle: UISwitch!
@@ -72,7 +72,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
             gpaViewController.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 16.0)!]
             
             
-            presentViewController(gpaViewController, animated: true, completion: nil)
+            self.parentViewController!.presentViewController(gpaViewController, animated: true, completion: nil)
             
         }
         else{
@@ -104,7 +104,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
             gpaViewController.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 16.0)!]
             
             
-            presentViewController(gpaViewController, animated: true, completion: nil)
+            self.parentViewController!.presentViewController(gpaViewController, animated: true, completion: nil)
         }
 
     }
@@ -289,7 +289,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         })
         alertController.addAction(okAction)
         
-        self.presentViewController(alertController, animated: true, completion: nil)
+        self.parentViewController!.presentViewController(alertController, animated: true, completion: nil)
         
     }
     
@@ -334,7 +334,7 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
         }
         
   
-        if( totalNumberOfErrands <= 5){
+        if( totalNumberOfErrands < 5){
             if(!place.isAddressOnly && !clickedChangeStartingLocation && !clickedDestinationToggle){
                 if(!self.destinationToggle.on){
                     let lastErrandIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count
@@ -408,7 +408,7 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
  
         clickedChangeStartingLocation = false
         clickedDestinationToggle = false
-        dismissViewControllerAnimated(true, completion: { if error {self.presentViewController(alertController, animated: true, completion: nil)}})
+        self.parentViewController!.dismissViewControllerAnimated(true, completion: { if error {self.parentViewController!.presentViewController(alertController, animated: true, completion: nil)}})
 
         
     }
@@ -423,6 +423,6 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
             destinationToggle.on = true
         }
         
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.parentViewController!.dismissViewControllerAnimated(true, completion: nil)
     }
 }

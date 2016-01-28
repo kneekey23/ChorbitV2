@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GooglePlacesAutocompleteContainer" customModule="ChorbitV2" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GooglePlacesAutocompleteContainer" customModule="Chorbit" customModuleProvider="target">
             <connections>
                 <outlet property="searchBar" destination="24m-Y8-A7A" id="kjW-B6-Zvx"/>
                 <outlet property="tableView" destination="6Gg-TX-rba" id="qba-cB-o36"/>
