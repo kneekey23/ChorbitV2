@@ -499,18 +499,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func fetchPlacesNearCoordinate(coordinate: CLLocationCoordinate2D, errand: Errand, count: Int, completionHandler: ((NSData!, NSError!, count: Int) -> Void)){
         
         if !errand.isAddress{
-        
-        var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&location=\(coordinate.latitude),\(coordinate.longitude)&rankby=distance&sensor=true"
-        urlString += "&name=\(errand.errandString)"
-
-        urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-
-        let session = NSURLSession.sharedSession()
-    
-        let sessionTask = session.dataTaskWithURL(NSURL(string: urlString)!) { data, response, error in
-              
+            
+            var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&location=\(coordinate.latitude),\(coordinate.longitude)&rankby=distance&sensor=true"
+            urlString += "&name=\(errand.errandString)"
+            
+            urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+            
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            
+            let session = NSURLSession.sharedSession()
+            
+            let sessionTask = session.dataTaskWithURL(NSURL(string: urlString)!) { data, response, error in
+                
                 dispatch_async(dispatch_get_main_queue()) {
                     if(data != nil){
                         completionHandler(data, error, count: count)
@@ -521,30 +521,31 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                 }
             }
-    
-        sessionTask.resume()
+            
+            sessionTask.resume()
         }
         else{
             GetLatLng(errand.errandString) { placemarks, error in
-        
-                    if(placemarks!.count > 0){
-                        let placemark: CLPlacemark = placemarks![0]
-                        
-                        self.errandAddress = Coordinates()
-                        self.errandAddress!.lat = placemark.location!.coordinate.latitude
-                        self.errandAddress!.long = placemark.location!.coordinate.longitude
-                        self.errandAddress!.subtitle = placemark.name!
-                        
-                       
-                    }
                 
-            }
-            //do nothing becayse it's an address that has been entered as an errand NJK
-            dispatch_async(dispatch_get_main_queue()) {
+                if(placemarks!.count > 0){
+                    let placemark: CLPlacemark = placemarks![0]
+                    
+                    self.errandAddress = Coordinates()
+                    self.errandAddress!.lat = placemark.location!.coordinate.latitude
+                    self.errandAddress!.long = placemark.location!.coordinate.longitude
+                    self.errandAddress!.subtitle = placemark.name!
+                    
+                    
+                }
+                
+                //do nothing becayse it's an address that has been entered as an errand NJK
+                dispatch_async(dispatch_get_main_queue()) {
                     completionHandler(nil, nil, count: count)
-                
-                
+                    
+                    
+                }
             }
+            
         }
     }
     
