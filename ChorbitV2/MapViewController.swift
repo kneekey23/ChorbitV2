@@ -126,7 +126,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 marker.errandOrder = routeLocation.errandOrder
                 marker.errandText = routeLocation.errandText
                 marker.appearAnimation = kGMSMarkerAnimationPop
-                marker.icon = UIImage(named: "Marker Filled-25")
+                if routeLocation.placeId == "" {
+                    marker.icon = UIImage(named: "Marker-25-coral")
+                } else {
+                    marker.icon = UIImage(named: "Marker Filled-25")
+                }
                 marker.map = self.mapView
             }
             
@@ -182,7 +186,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 marker.errandOrder = routeLocation.errandOrder
                 marker.errandText = routeLocation.errandText
                 marker.appearAnimation = kGMSMarkerAnimationPop
-                marker.icon = UIImage(named: "Marker Filled-25")
+                if routeLocation.placeId == "" {
+                    marker.icon = UIImage(named: "Marker-25-coral")
+                } else {
+                    marker.icon = UIImage(named: "Marker Filled-25")
+                }
                 marker.map = self.mapView
             }
             
@@ -858,7 +866,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             marker.errandOrder = routeLocation.errandOrder
                             marker.errandText = routeLocation.errandText
                             marker.appearAnimation = kGMSMarkerAnimationPop
-                            marker.icon = UIImage(named: "Marker Filled-25")
+                            if routeLocation.placeId == "" {
+                                marker.icon = UIImage(named: "Marker-25-coral")
+                            } else {
+                                marker.icon = UIImage(named: "Marker Filled-25")
+                            }
                             marker.map = self.mapView
                         }
                         
