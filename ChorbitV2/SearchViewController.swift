@@ -342,8 +342,9 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
         }
         
   
-        if( totalNumberOfErrands < 5){
-            if(!place.isAddressOnly && !clickedChangeStartingLocation && !clickedDestinationToggle){
+   
+        if(!place.isAddressOnly && !clickedChangeStartingLocation && !clickedDestinationToggle){
+            if( totalNumberOfErrands < 5){
                 if(!self.destinationToggle.on){
                     let lastErrandIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count
                     if(place.isContact){
@@ -361,20 +362,27 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
                     
                     
                 }else{
-                if(place.isContact){
-                    let newAddress = Errand(errandString: place.contactAddress!, isAddress: true, isStartingLocation: false, isEndingLocation: false)
-                     (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newAddress)
-                }
-                else if(place.isErrandAddress){
-                    let newErrandAddress = Errand(errandString: place.description, isAddress: true, isStartingLocation: false, isEndingLocation: false)
-                    (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newErrandAddress)
-                }
-                else{
-                    let newErrand = Errand(errandString: place.description, isAddress: false, isStartingLocation: false, isEndingLocation: false)
-                     (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newErrand)
-                }
+                    
+                    if(place.isContact){
+                        let newAddress = Errand(errandString: place.contactAddress!, isAddress: true, isStartingLocation: false, isEndingLocation: false)
+                        (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newAddress)
+                    }
+                    else if(place.isErrandAddress){
+                        let newErrandAddress = Errand(errandString: place.description, isAddress: true, isStartingLocation: false, isEndingLocation: false)
+                        (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newErrandAddress)
+                    }
+                    else{
+                        let newErrand = Errand(errandString: place.description, isAddress: false, isStartingLocation: false, isEndingLocation: false)
+                        (parentViewController?.parentViewController as! MainViewController).errandSelection.append(newErrand)
+                    }
+                    
+                    
                 }
             }
+            else{
+                error = true
+            }
+        }
             else{
                 let lastIndex: Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count
                 if(!self.destinationToggle.on && !clickedChangeStartingLocation && clickedDestinationToggle){
@@ -407,11 +415,7 @@ extension SearchViewController: GooglePlacesAutocompleteDelegate {
                 }
                
             }
-        }
-        else{
-           
-           error = true
-        }
+      
         
  
         clickedChangeStartingLocation = false
