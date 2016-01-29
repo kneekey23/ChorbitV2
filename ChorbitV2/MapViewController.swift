@@ -876,10 +876,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         do {
             //TODO: add loading overlay here
          
-            Static.cachedRoutes[Static.modeOfTransportation] = nil
+            Static.cachedRoutes[Static.modeOfTransportation] = []
             Static.closestLocationsPerErrand.removeAll()
             noResults.removeAll()
-//            Static.directionsGrouped.removeAll()
             Static.cachedDirectionsGrouped[Static.modeOfTransportation] = [[]]
             
             //Identify rejected location within currentRouteLocations
