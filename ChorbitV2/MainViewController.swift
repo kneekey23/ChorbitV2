@@ -16,8 +16,6 @@ class MainViewController: UITabBarController, GMSMapViewDelegate{
     internal var errandSelection: Array<Errand> = []
     internal var prevErrandSelection: Array<String> = []
     internal var prevModeOfTransportation : String = "driving"
-    internal var cachedBounds : GMSCoordinateBounds?
-    internal var directionsGrouped: [[DirectionStep]] = [[]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
