@@ -49,6 +49,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         static var _isRoundTrip: Bool = true
         static var cachedInfoOverlays = [String: UITextView!]()
         static var mapErroredOut: Bool = false
+        static var cachedDirectionsGrouped = [String: [[DirectionStep]]]()
+        static var cachedBounds = [String: GMSCoordinateBounds?]()
     }
     
     @IBOutlet weak var transportationTyoe: UISegmentedControl!
@@ -62,7 +64,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
              self.totalDistanceMeters = 0
         }
 
-        (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
+        Static.cachedDirectionsGrouped = [Static.modeOfTransportation: [[]]]
         Static.cachedRoutes = [Static.modeOfTransportation: []]
         Static.currentRouteLocations.removeAll()
         self.CreateRoute()
@@ -131,8 +133,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let polyline = GMSPolyline(path: Static.cachedPaths[Static.modeOfTransportation]!)
             polyline.map = self.mapView
             
-            let padding = CGFloat(30)
-            let bounds = (firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedBounds
+            let padding = CGFloat(90)
+            let bounds = Static.cachedBounds[Static.modeOfTransportation]!
             let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
             self.mapView!.animateWithCameraUpdate(fitBounds)
             self.mapView?.addSubview(Static.cachedInfoOverlays[Static.modeOfTransportation]!)
@@ -140,7 +142,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.dismissViewControllerAnimated(false, completion: nil)
         } else {
             Static.cachedPaths = ["driving": GMSMutablePath()]
-            (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
+            Static.cachedDirectionsGrouped = ["driving": [[]]]
             Static.cachedRoutes = ["driving": []]
             Static.currentRouteLocations.removeAll()
             Static.mapErroredOut = false
@@ -191,8 +193,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let polyline = GMSPolyline(path: Static.cachedPaths[Static.modeOfTransportation]!)
             polyline.map = self.mapView
             
-            let padding = CGFloat(30)
-            let bounds = (firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedBounds
+            let padding = CGFloat(90)
+            let bounds = Static.cachedBounds[Static.modeOfTransportation]!
             let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
             self.mapView!.animateWithCameraUpdate(fitBounds)
             self.mapView?.addSubview(Static.cachedInfoOverlays[Static.modeOfTransportation]!)
@@ -202,9 +204,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             Static.cachedRoutes[Static.modeOfTransportation] = []
             Static.mapErroredOut = false
             
-//            configureLoadingMessage()
-//            GetLocationInformation()
-            
             if let viewWithTag = self.view.viewWithTag(99) {
                 viewWithTag.removeFromSuperview()
                 Static.cachedInfoOverlays[Static.modeOfTransportation] = nil
@@ -212,8 +211,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.totalDistanceMeters = 0
             }
             
-            (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
-            //        Static._errandLocations.removeAll()
+//            Static.directionsGrouped.removeAll()
+            Static.cachedDirectionsGrouped[Static.modeOfTransportation] = [[]]
             Static.currentRouteLocations.removeAll()
             self.CreateRoute()
         }
@@ -223,8 +222,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         if segue.identifier == "mapToDirectionsSegue"{
             let directionsViewController = segue.destinationViewController as! DirectionsController
             directionsViewController.directions = temp
-//            directionsViewController.directionsGrouped = self.directionsGrouped
-            directionsViewController.directionsGrouped = (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped
+//            directionsViewController.directionsGrouped = Static.directionsGrouped
+            directionsViewController.directionsGrouped = Static.cachedDirectionsGrouped[Static.modeOfTransportation]!
             
         }
         
@@ -746,9 +745,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         let southwest = CLLocationCoordinate2DMake(route.bounds.southwest.lat, route.bounds.southwest.lng)
                         let northeast = CLLocationCoordinate2DMake(route.bounds.northeast.lat, route.bounds.northeast.lng)
                         let bounds = GMSCoordinateBounds(coordinate: southwest, coordinate: northeast)
-                        (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedBounds = bounds
+                        Static.cachedBounds[Static.modeOfTransportation] = bounds
                         
-                        let padding = CGFloat(30)
+                        let padding = CGFloat(90)
                         let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
                         self.mapView!.animateWithCameraUpdate(fitBounds)
                         //removes loading view from screen NJK
@@ -789,8 +788,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 directionsList.append(directionStep);
                                 instructionIndex++;
                             }
-                            //                            self.directionsGrouped.append(directionsList)
-                            (self.firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.append(directionsList)
+//                            Static.directionsGrouped.append(directionsList)
+                            Static.cachedDirectionsGrouped[Static.modeOfTransportation]!.append(directionsList)
                             legIndex++
                         }
                         
@@ -880,8 +879,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             Static.cachedRoutes[Static.modeOfTransportation] = nil
             Static.closestLocationsPerErrand.removeAll()
             noResults.removeAll()
-//            directionsGrouped.removeAll()
-            (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
+//            Static.directionsGrouped.removeAll()
+            Static.cachedDirectionsGrouped[Static.modeOfTransportation] = [[]]
             
             //Identify rejected location within currentRouteLocations
             //and remove it from currentRouteLocations
