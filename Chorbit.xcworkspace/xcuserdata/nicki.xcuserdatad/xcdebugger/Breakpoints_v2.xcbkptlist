@@ -122,7 +122,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "525"
             endingLineNumber = "525"
-            landmarkName = "GetLatLng(_:completionHandler:)"
+            landmarkName = "fetchPlacesNearCoordinate(_:errand:count:completionHandler:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -138,7 +138,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "467"
             endingLineNumber = "467"
-            landmarkName = "fetchPlacesNearCoordinate(_:errand:count:completionHandler:)"
+            landmarkName = "GetClosestLocationsForErrand(_:errandTermId:errandText:excludedPlaceIds:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -154,7 +154,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "470"
             endingLineNumber = "470"
-            landmarkName = "fetchPlacesNearCoordinate(_:errand:count:completionHandler:)"
+            landmarkName = "GetClosestLocationsForErrand(_:errandTermId:errandText:excludedPlaceIds:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -219,6 +219,22 @@
             startingLineNumber = "110"
             endingLineNumber = "110"
             landmarkName = "toggleEndingLocation(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ChorbitV2/SearchViewController.swift"
+            timestampString = "475729144.878051"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "345"
+            endingLineNumber = "345"
+            landmarkName = "placeSelected(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
