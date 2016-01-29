@@ -24,7 +24,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var temp: [DirectionStep] = []
     var selectedMarker: GoogleMapMarker = GoogleMapMarker()
     var errandAddress: Coordinates?
-    var recalc = false
     var transportModeHasChanged = false
     
     var placeResponsesAwaiting: Int = 0;
@@ -41,15 +40,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     struct Static {
         static var origin: Coordinates?
         static var destination: Coordinates?
-//        static var _errandLocations: [GoogleMapMarker] = []
         static var modeOfTransportation: String = "driving"
         static var cachedRoutes = [String: [GoogleMapMarker]]()
-        static var path = GMSMutablePath()
+        static var cachedPaths = [String: GMSMutablePath]()
         static var closestLocationsPerErrand:[[Coordinates]] = [[]]
         static var currentRouteLocations: [Coordinates?] = []
         static var locationResults: [ErrandResults] = []
         static var _isRoundTrip: Bool = true
-        static var infoOverlay: UITextView!
+        static var cachedInfoOverlays = [String: UITextView!]()
         static var mapErroredOut: Bool = false
     }
     
@@ -59,13 +57,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         mapView?.clear()
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
-            Static.infoOverlay = nil
+            Static.cachedInfoOverlays[Static.modeOfTransportation] = nil
              self.durationSeconds = 0
              self.totalDistanceMeters = 0
         }
 
         (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
-//        Static._errandLocations.removeAll()
         Static.cachedRoutes = [Static.modeOfTransportation: []]
         Static.currentRouteLocations.removeAll()
         self.CreateRoute()
@@ -77,6 +74,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         let totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
         let prevNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).prevErrandSelection.count
         
+        var recalc = false
         if totalNumberOfErrands != prevNumberOfErrands || prevNumberOfErrands == 0 || Static.mapErroredOut {
             recalc = true;
         }
@@ -130,20 +128,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 marker.map = self.mapView
             }
             
-            let polyline = GMSPolyline(path: Static.path)
+            let polyline = GMSPolyline(path: Static.cachedPaths[Static.modeOfTransportation]!)
             polyline.map = self.mapView
             
             let padding = CGFloat(30)
             let bounds = (firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedBounds
             let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
             self.mapView!.animateWithCameraUpdate(fitBounds)
-            self.mapView?.addSubview(Static.infoOverlay)
+            self.mapView?.addSubview(Static.cachedInfoOverlays[Static.modeOfTransportation]!)
             //removes loading view from screen NJK
             self.dismissViewControllerAnimated(false, completion: nil)
         } else {
-            Static.path = GMSMutablePath()
+            Static.cachedPaths = ["driving": GMSMutablePath()]
             (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
-//            Static._errandLocations.removeAll()
             Static.cachedRoutes = ["driving": []]
             Static.currentRouteLocations.removeAll()
             Static.mapErroredOut = false
@@ -156,37 +153,70 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     @IBAction func changeTransportationType(sender: AnyObject) {
         //code to change from driving to walking to transit goes here.NJK
         let segmentedControl: UISegmentedControl = sender as! UISegmentedControl
+        var recalc = false
         
         if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "drive"{
-            //default is here. possibly do nothing? NJK
             Static.modeOfTransportation = "driving"
-            
         }
         else if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "walk"{
-            //code for walking goes here. NJK
             Static.modeOfTransportation = "walking"
         }
         else{
-            //transit goes here NJK
             Static.modeOfTransportation = "cycling"
         }
         
         if Static.cachedRoutes[Static.modeOfTransportation] == nil {
-            Static.cachedRoutes[Static.modeOfTransportation] = []
+            recalc = true
         }
         
         mapView?.clear()
-        if let viewWithTag = self.view.viewWithTag(99) {
-            viewWithTag.removeFromSuperview()
-            Static.infoOverlay = nil
-            self.durationSeconds = 0
-            self.totalDistanceMeters = 0
+        if !recalc {
+            for routeLocation in Static.cachedRoutes[Static.modeOfTransportation]! {
+                let marker = GoogleMapMarker()
+                marker.position = routeLocation.position
+                marker.placeId = routeLocation.placeId
+                marker.title = routeLocation.title
+                marker.snippet = routeLocation.snippet
+                marker.errandOrder = routeLocation.errandOrder
+                marker.errandText = routeLocation.errandText
+                marker.appearAnimation = kGMSMarkerAnimationPop
+                marker.icon = UIImage(named: "Marker Filled-25")
+                marker.map = self.mapView
+            }
+            
+            if let viewWithTag = self.view.viewWithTag(99) {
+                viewWithTag.removeFromSuperview()
+            }
+            
+            let polyline = GMSPolyline(path: Static.cachedPaths[Static.modeOfTransportation]!)
+            polyline.map = self.mapView
+            
+            let padding = CGFloat(30)
+            let bounds = (firstViewController?.parentViewController?.parentViewController as! MainViewController).cachedBounds
+            let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
+            self.mapView!.animateWithCameraUpdate(fitBounds)
+            self.mapView?.addSubview(Static.cachedInfoOverlays[Static.modeOfTransportation]!)
+            self.dismissViewControllerAnimated(false, completion: nil)
+        } else {
+            Static.cachedPaths[Static.modeOfTransportation] = GMSMutablePath()
+            Static.cachedRoutes[Static.modeOfTransportation] = []
+            Static.mapErroredOut = false
+            
+//            configureLoadingMessage()
+//            GetLocationInformation()
+            
+            if let viewWithTag = self.view.viewWithTag(99) {
+                viewWithTag.removeFromSuperview()
+                Static.cachedInfoOverlays[Static.modeOfTransportation] = nil
+                self.durationSeconds = 0
+                self.totalDistanceMeters = 0
+            }
+            
+            (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
+            //        Static._errandLocations.removeAll()
+            Static.currentRouteLocations.removeAll()
+            self.CreateRoute()
         }
-        
-        (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
-//        Static._errandLocations.removeAll()
-        Static.currentRouteLocations.removeAll()
-        self.CreateRoute()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -609,7 +639,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
             // End Temporary fix
             
-//            Static._errandLocations.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
             Static.cachedRoutes[Static.modeOfTransportation]!.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
         }
         
@@ -649,13 +678,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             Static.cachedRoutes[Static.modeOfTransportation]!.append(Static.cachedRoutes[Static.modeOfTransportation]![0])
         }
         
+        var modeOfTransport = Static.modeOfTransportation
         if(Static.modeOfTransportation == "cycling"){
-            Static.modeOfTransportation = "bicycling"
+            modeOfTransport = "bicycling"
         }
         
         let destIdx = Static.cachedRoutes[Static.modeOfTransportation]!.count - 1;
         
-        var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(Static.cachedRoutes[Static.modeOfTransportation]![0].position.latitude),\(Static.cachedRoutes[Static.modeOfTransportation]![0].position.longitude)&destination=\(Static.cachedRoutes[Static.modeOfTransportation]![destIdx].position.latitude),\(Static.cachedRoutes[Static.modeOfTransportation]![destIdx].position.longitude)&mode=\(Static.modeOfTransportation)&waypoints="
+        var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(Static.cachedRoutes[Static.modeOfTransportation]![0].position.latitude),\(Static.cachedRoutes[Static.modeOfTransportation]![0].position.longitude)&destination=\(Static.cachedRoutes[Static.modeOfTransportation]![destIdx].position.latitude),\(Static.cachedRoutes[Static.modeOfTransportation]![destIdx].position.longitude)&mode=\(modeOfTransport)&waypoints="
         
         for var i = 1; i < Static.cachedRoutes[Static.modeOfTransportation]!.count - 1; i++ {
             url += "\(Static.cachedRoutes[Static.modeOfTransportation]![i].position.latitude),\(Static.cachedRoutes[Static.modeOfTransportation]![i].position.longitude)"
@@ -705,10 +735,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             let polylineCoords: [CLLocationCoordinate2D]? = decodePolyline(polylinePts)
                             
                             for polylineCoord in polylineCoords! {
-                                Static.path.addCoordinate(polylineCoord)
+                                Static.cachedPaths[Static.modeOfTransportation]!.addCoordinate(polylineCoord)
                             }
                             
-                            let polyline = GMSPolyline(path: Static.path)
+                            let polyline = GMSPolyline(path: Static.cachedPaths[Static.modeOfTransportation]!)
                             polyline.map = self.mapView
                         }
                         
@@ -783,13 +813,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             timeText = String(mins) + " min";
                         }
 
-                        Static.infoOverlay = UITextView()
-                        Static.infoOverlay.frame = CGRect(x: CGFloat(9), y: (self.buttonRect.frame.minY) - 60, width: CGFloat(boxWidth), height: CGFloat(50))
-                        Static.infoOverlay.tag = 99
-                        Static.infoOverlay.editable = false
-                        Static.infoOverlay.backgroundColor = UIColor.blackColor()
-                        Static.infoOverlay.alpha = 0.7
-                        Static.infoOverlay.layer.cornerRadius = 5
+                        Static.cachedInfoOverlays[Static.modeOfTransportation] = UITextView()
+                        Static.cachedInfoOverlays[Static.modeOfTransportation]!.frame = CGRect(x: CGFloat(9), y: (self.buttonRect.frame.minY) - 60, width: CGFloat(boxWidth), height: CGFloat(50))
+                        Static.cachedInfoOverlays[Static.modeOfTransportation]!.tag = 99
+                        Static.cachedInfoOverlays[Static.modeOfTransportation]!.editable = false
+                        Static.cachedInfoOverlays[Static.modeOfTransportation]!.backgroundColor = UIColor.blackColor()
+                        Static.cachedInfoOverlays[Static.modeOfTransportation]!.alpha = 0.7
+                        Static.cachedInfoOverlays[Static.modeOfTransportation]!.layer.cornerRadius = 5
                         let font: UIFont = UIFont(name: "AvenirNext-DemiBold", size: 13)!
                         let fontAttr = [NSFontAttributeName:font]
                     
@@ -815,8 +845,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         // Apply paragraph styles to paragraph
                         styledString.addAttribute(NSParagraphStyleAttributeName, value: paraStyle, range: NSRange(location: 0,length: styledString.length))
                         
-                        Static.infoOverlay.attributedText = styledString
-                        self.view.addSubview(Static.infoOverlay)
+                        Static.cachedInfoOverlays[Static.modeOfTransportation]!.attributedText = styledString
+                        self.view.addSubview(Static.cachedInfoOverlays[Static.modeOfTransportation]!)
                         
                         
                         for routeLocation in Static.cachedRoutes[Static.modeOfTransportation]! {
@@ -847,7 +877,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         do {
             //TODO: add loading overlay here
          
-//            Static._errandLocations.removeAll()
             Static.cachedRoutes[Static.modeOfTransportation] = nil
             Static.closestLocationsPerErrand.removeAll()
             noResults.removeAll()
@@ -941,7 +970,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             //Remove route info textview
             if let viewWithTag = self.view.viewWithTag(99) {
                 viewWithTag.removeFromSuperview()
-                Static.infoOverlay = nil
+                Static.cachedInfoOverlays[Static.modeOfTransportation] = nil
                 self.durationSeconds = 0
                 self.totalDistanceMeters = 0
             }
@@ -952,7 +981,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             CreateRoute()
             
             // Clear out old polylines from cached variable:
-            Static.path = GMSMutablePath()
+            Static.cachedPaths[Static.modeOfTransportation] = GMSMutablePath()
             
         } catch {
             DisplayErrorAlert("")
@@ -1071,7 +1100,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func mapView(mapView: GMSMapView!, didTapAtCoordinate coordinate: CLLocationCoordinate2D) {
         if let viewWithTag = self.view.viewWithTag(23) {
-           // print("found view with tag 23")
             viewWithTag.removeFromSuperview()
 
         }
