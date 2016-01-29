@@ -21,12 +21,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var mapView: GMSMapView?
     var noResults: [String] = []
     var numErrands: Int = 0
-//    var directionsGrouped: [[DirectionStep]] = [[]]
     var temp: [DirectionStep] = []
     var selectedMarker: GoogleMapMarker = GoogleMapMarker()
     var errandAddress: Coordinates?
-    var modeOfTransportation: String = "driving"
     var recalc = false
+    var transportModeHasChanged = false
     
     var placeResponsesAwaiting: Int = 0;
     var allPlaceRequestsSent: Bool = false;
@@ -42,7 +41,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     struct Static {
         static var origin: Coordinates?
         static var destination: Coordinates?
-        static var _errandLocations: [GoogleMapMarker] = []
+//        static var _errandLocations: [GoogleMapMarker] = []
+        static var modeOfTransportation: String = "driving"
+        static var cachedRoutes = [String: [GoogleMapMarker]]()
         static var path = GMSMutablePath()
         static var closestLocationsPerErrand:[[Coordinates]] = [[]]
         static var currentRouteLocations: [Coordinates?] = []
@@ -55,7 +56,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     @IBOutlet weak var transportationTyoe: UISegmentedControl!
     @IBOutlet weak var buttonRect: UIButton!
     @IBAction func refreshTrafficConditions(sender: AnyObject) {
-        //refresh route goes here NJK
         mapView?.clear()
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
@@ -63,9 +63,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
              self.durationSeconds = 0
              self.totalDistanceMeters = 0
         }
-//        self.directionsGrouped.removeAll()
+
         (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
-        Static._errandLocations.removeAll()
+//        Static._errandLocations.removeAll()
+        Static.cachedRoutes = [Static.modeOfTransportation: []]
         Static.currentRouteLocations.removeAll()
         self.CreateRoute()
     }
@@ -99,7 +100,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         if isRoundTrip != Static._isRoundTrip {
             recalc = true
         }
-        
+        if Static.cachedRoutes.isEmpty {
+            recalc = true
+        }
         // End caching
         
         let myLocation: CLLocation = (firstViewController!.myGeoLocatedCoords) as CLLocation!
@@ -113,7 +116,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         self.view.addSubview(transportationTyoe)
         
         if !recalc {
-            for routeLocation in Static._errandLocations {
+            for routeLocation in Static.cachedRoutes[Static.modeOfTransportation]! {
                 // Add cached markers to map:
                 let marker = GoogleMapMarker()
                 marker.position = routeLocation.position
@@ -140,7 +143,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         } else {
             Static.path = GMSMutablePath()
             (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
-            Static._errandLocations.removeAll()
+//            Static._errandLocations.removeAll()
+            Static.cachedRoutes = ["driving": []]
             Static.currentRouteLocations.removeAll()
             Static.mapErroredOut = false
             
@@ -155,18 +159,22 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "drive"{
             //default is here. possibly do nothing? NJK
-            modeOfTransportation = "driving"
+            Static.modeOfTransportation = "driving"
             
         }
         else if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "walk"{
             //code for walking goes here. NJK
-            modeOfTransportation = "walking"
-            
+            Static.modeOfTransportation = "walking"
         }
         else{
             //transit goes here NJK
-            modeOfTransportation = "cycling"
+            Static.modeOfTransportation = "cycling"
         }
+        
+        if Static.cachedRoutes[Static.modeOfTransportation] == nil {
+            Static.cachedRoutes[Static.modeOfTransportation] = []
+        }
+        
         mapView?.clear()
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
@@ -176,7 +184,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
         
         (firstViewController?.parentViewController?.parentViewController as! MainViewController).directionsGrouped.removeAll()
-        Static._errandLocations.removeAll()
+//        Static._errandLocations.removeAll()
         Static.currentRouteLocations.removeAll()
         self.CreateRoute()
     }
@@ -531,7 +539,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             if (Static.closestLocationsPerErrand.count > 1) {
                 let routeServiceUrl = "https://b97482pu3h.execute-api.us-west-2.amazonaws.com/test/ChorbitAlgorithm"
                 
-                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: Static.origin!, errands: Static.closestLocationsPerErrand, destination: Static.destination!, mode: modeOfTransportation)
+                let routeServiceRequest: RouteServiceRequest = RouteServiceRequest(origin: Static.origin!, errands: Static.closestLocationsPerErrand, destination: Static.destination!, mode: Static.modeOfTransportation)
                 
                 let requestObj: AnyObject = routeServiceRequest
                 let JSONString = Mapper().toJSONString(routeServiceRequest)
@@ -601,7 +609,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
             // End Temporary fix
             
-            Static._errandLocations.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
+//            Static._errandLocations.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
+            Static.cachedRoutes[Static.modeOfTransportation]!.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
         }
         
         var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
@@ -636,23 +645,21 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             
         }
         
-        if (Static._isRoundTrip && Static._errandLocations.count > 0) {
-            Static._errandLocations.append(Static._errandLocations[0])
+        if (Static._isRoundTrip && Static.cachedRoutes[Static.modeOfTransportation]!.count > 0) {
+            Static.cachedRoutes[Static.modeOfTransportation]!.append(Static.cachedRoutes[Static.modeOfTransportation]![0])
         }
         
-        //            let waypoints = _errandLocations[2..._errandLocations.count - 1]
-        
-        if(self.modeOfTransportation == "cycling"){
-            self.modeOfTransportation = "bicycling"
+        if(Static.modeOfTransportation == "cycling"){
+            Static.modeOfTransportation = "bicycling"
         }
         
-        let destIdx = Static._errandLocations.count - 1;
+        let destIdx = Static.cachedRoutes[Static.modeOfTransportation]!.count - 1;
         
-        var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(Static._errandLocations[0].position.latitude),\(Static._errandLocations[0].position.longitude)&destination=\(Static._errandLocations[destIdx].position.latitude),\(Static._errandLocations[destIdx].position.longitude)&mode=\(self.modeOfTransportation)&waypoints="
+        var url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY&origin=\(Static.cachedRoutes[Static.modeOfTransportation]![0].position.latitude),\(Static.cachedRoutes[Static.modeOfTransportation]![0].position.longitude)&destination=\(Static.cachedRoutes[Static.modeOfTransportation]![destIdx].position.latitude),\(Static.cachedRoutes[Static.modeOfTransportation]![destIdx].position.longitude)&mode=\(Static.modeOfTransportation)&waypoints="
         
-        for var i = 1; i < Static._errandLocations.count - 1; i++ {
-            url += "\(Static._errandLocations[i].position.latitude),\(Static._errandLocations[i].position.longitude)"
-            if(i != Static._errandLocations.count - 1) {
+        for var i = 1; i < Static.cachedRoutes[Static.modeOfTransportation]!.count - 1; i++ {
+            url += "\(Static.cachedRoutes[Static.modeOfTransportation]![i].position.latitude),\(Static.cachedRoutes[Static.modeOfTransportation]![i].position.longitude)"
+            if(i != Static.cachedRoutes[Static.modeOfTransportation]!.count - 1) {
                 url += "|"
             }
         }
@@ -663,7 +670,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.GetDirections(url);
 
         
-        if (Static._errandLocations.count == 0) {
+        if (Static.cachedRoutes[Static.modeOfTransportation]!.count == 0) {
             self.dismissViewControllerAnimated(false, completion: nil)
             let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
             self.DisplayErrorAlert(locationsNotFound)
@@ -731,11 +738,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             
                             for step in leg.steps {
                                 let directionStep: DirectionStep = DirectionStep()
-                                if legIndex <= Static._errandLocations.count{
-                                    if Static._errandLocations[legIndex].errandText.isEmpty{
+                                if legIndex <= Static.cachedRoutes[Static.modeOfTransportation]!.count{
+                                    if Static.cachedRoutes[Static.modeOfTransportation]![legIndex].errandText.isEmpty{
                                         directionStep.errandGroupNumber = "To " + (Static.destination?.subtitle)!
                                     }else{
-                                        directionStep.errandGroupNumber = "To " + Static._errandLocations[legIndex].errandText
+                                        directionStep.errandGroupNumber = "To " + Static.cachedRoutes[Static.modeOfTransportation]![legIndex].errandText
                                     }
                                     
                                 }
@@ -812,7 +819,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         self.view.addSubview(Static.infoOverlay)
                         
                         
-                        for routeLocation in Static._errandLocations {
+                        for routeLocation in Static.cachedRoutes[Static.modeOfTransportation]! {
                             // Add markers to map:
                             let marker = GoogleMapMarker()  //GMSMarker()
                             marker.position = routeLocation.position
@@ -840,7 +847,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         do {
             //TODO: add loading overlay here
          
-            Static._errandLocations.removeAll()
+//            Static._errandLocations.removeAll()
+            Static.cachedRoutes[Static.modeOfTransportation] = nil
             Static.closestLocationsPerErrand.removeAll()
             noResults.removeAll()
 //            directionsGrouped.removeAll()

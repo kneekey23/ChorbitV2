@@ -44,6 +44,7 @@
 		8B2BEADA1C42283300DB9710 /* RouteServiceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2BEAD91C42283300DB9710 /* RouteServiceRequest.swift */; };
 		8B85A26D1C2649290090B4D3 /* DirectionStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B85A26C1C2649290090B4D3 /* DirectionStep.swift */; };
 		8B85A26F1C2896E60090B4D3 /* GoogleDirectionsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B85A26E1C2896E60090B4D3 /* GoogleDirectionsResponse.swift */; };
+		8BA6A2E31C5AD8D7008BC3FD /* CachedRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA6A2E21C5AD8D7008BC3FD /* CachedRoutes.swift */; };
 		F486FA0536F313E10F32FB0D /* Pods_Chorbit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C6E41788E3A6F8D2A86BBC /* Pods_Chorbit.framework */; };
 		FB2CA563FCFC4F053D084C41 /* Pods_Chorbit_Chorbit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9F2812644A8CC4C4B1263EB /* Pods_Chorbit_Chorbit.framework */; };
 /* End PBXBuildFile section */
@@ -111,6 +112,7 @@
 		8B2BEAD91C42283300DB9710 /* RouteServiceRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteServiceRequest.swift; sourceTree = "<group>"; };
 		8B85A26C1C2649290090B4D3 /* DirectionStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionStep.swift; sourceTree = "<group>"; };
 		8B85A26E1C2896E60090B4D3 /* GoogleDirectionsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleDirectionsResponse.swift; sourceTree = "<group>"; };
+		8BA6A2E21C5AD8D7008BC3FD /* CachedRoutes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedRoutes.swift; sourceTree = "<group>"; };
 		D3C6E41788E3A6F8D2A86BBC /* Pods_Chorbit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Chorbit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9F2812644A8CC4C4B1263EB /* Pods_Chorbit_Chorbit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Chorbit_Chorbit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -257,6 +259,7 @@
 				8B2BEAD71C420E8F00DB9710 /* RouteServiceResponse.swift */,
 				8B2BEAD91C42283300DB9710 /* RouteServiceRequest.swift */,
 				81AF49111C4C28BA00309615 /* Errand.swift */,
+				8BA6A2E21C5AD8D7008BC3FD /* CachedRoutes.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -478,6 +481,7 @@
 				8146768F1C0B9C0500EA06F3 /* MainViewController.swift in Sources */,
 				81FD6AC21C1E2F15008A94DF /* NearbySearch.swift in Sources */,
 				814676931C0BA56000EA06F3 /* MapViewController.swift in Sources */,
+				8BA6A2E31C5AD8D7008BC3FD /* CachedRoutes.swift in Sources */,
 				81438E5D1C16989800551718 /* Constants.swift in Sources */,
 				8B2294371BF02A3C0067059C /* RouteTest.swift in Sources */,
 				8B2294311BF01E570067059C /* Location.swift in Sources */,
