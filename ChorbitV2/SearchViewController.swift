@@ -106,6 +106,14 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
             
             self.parentViewController!.presentViewController(gpaViewController, animated: true, completion: nil)
         }
+        else{
+            let lastIndex:Int = (parentViewController?.parentViewController as! MainViewController).errandSelection.count-1
+            
+            if (parentViewController?.parentViewController as! MainViewController).errandSelection[lastIndex].isEndingLocation{
+                (parentViewController?.parentViewController as! MainViewController).errandSelection.removeAtIndex(lastIndex)
+                errandTableView.reloadData()
+            }
+        }
 
     }
     
