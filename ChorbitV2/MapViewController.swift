@@ -208,6 +208,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.mapView?.addSubview(Static.cachedInfoOverlays[Static.modeOfTransportation]!)
             self.dismissViewControllerAnimated(false, completion: nil)
         } else {
+            Static.modeOfTransportation = "driving"
             Static.cachedPaths[Static.modeOfTransportation] = GMSMutablePath()
             Static.cachedRoutes[Static.modeOfTransportation] = []
             Static.mapErroredOut = false
@@ -219,7 +220,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.totalDistanceMeters = 0
             }
             
-//            Static.directionsGrouped.removeAll()
             Static.cachedDirectionsGrouped[Static.modeOfTransportation] = [[]]
             Static.currentRouteLocations.removeAll()
             self.CreateRoute()
@@ -230,7 +230,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         if segue.identifier == "mapToDirectionsSegue"{
             let directionsViewController = segue.destinationViewController as! DirectionsController
             directionsViewController.directions = temp
-//            directionsViewController.directionsGrouped = Static.directionsGrouped
             directionsViewController.directionsGrouped = Static.cachedDirectionsGrouped[Static.modeOfTransportation]!
             
         }
@@ -734,9 +733,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                     for route in directionsResponse.routes {
                         var polylinePts: String = ""
-//                        if (route.overview_polyline != nil) {
                             polylinePts = route.overview_polyline.points
-//                        }
                         
                         if (!polylinePts.isEmpty) {
                             let polylineCoords: [CLLocationCoordinate2D]? = decodePolyline(polylinePts)
@@ -796,7 +793,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 directionsList.append(directionStep);
                                 instructionIndex++;
                             }
-//                            Static.directionsGrouped.append(directionsList)
+
                             Static.cachedDirectionsGrouped[Static.modeOfTransportation]!.append(directionsList)
                             legIndex++
                         }
