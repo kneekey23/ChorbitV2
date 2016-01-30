@@ -793,7 +793,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 directionsList.append(directionStep);
                                 instructionIndex++;
                             }
-
+                            
                             Static.cachedDirectionsGrouped[Static.modeOfTransportation]!.append(directionsList)
                             legIndex++
                         }
