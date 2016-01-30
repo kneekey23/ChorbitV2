@@ -124,9 +124,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 marker.title = routeLocation.title
                 marker.snippet = routeLocation.snippet
                 marker.errandOrder = routeLocation.errandOrder
+                marker.isErrand = routeLocation.isErrand
                 marker.errandText = routeLocation.errandText
                 marker.appearAnimation = kGMSMarkerAnimationPop
-                marker.icon = UIImage(named: "Marker Filled-25")
+                if routeLocation.isErrand {
+                    marker.icon = UIImage(named: "Marker Filled-25")
+                } else {
+                    marker.icon = UIImage(named: "Marker-25-coral")
+                }
                 marker.map = self.mapView
             }
             
@@ -182,7 +187,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 marker.errandOrder = routeLocation.errandOrder
                 marker.errandText = routeLocation.errandText
                 marker.appearAnimation = kGMSMarkerAnimationPop
-                marker.icon = UIImage(named: "Marker Filled-25")
+                if routeLocation.isErrand {
+                    marker.icon = UIImage(named: "Marker Filled-25")
+                } else {
+                    marker.icon = UIImage(named: "Marker-25-coral")
+                }
                 marker.map = self.mapView
             }
             
@@ -200,6 +209,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.mapView?.addSubview(Static.cachedInfoOverlays[Static.modeOfTransportation]!)
             self.dismissViewControllerAnimated(false, completion: nil)
         } else {
+            Static.modeOfTransportation = "driving"
             Static.cachedPaths[Static.modeOfTransportation] = GMSMutablePath()
             Static.cachedRoutes[Static.modeOfTransportation] = []
             Static.mapErroredOut = false
@@ -211,7 +221,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 self.totalDistanceMeters = 0
             }
             
-//            Static.directionsGrouped.removeAll()
             Static.cachedDirectionsGrouped[Static.modeOfTransportation] = [[]]
             Static.currentRouteLocations.removeAll()
             self.CreateRoute()
@@ -222,7 +231,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         if segue.identifier == "mapToDirectionsSegue"{
             let directionsViewController = segue.destinationViewController as! DirectionsController
             directionsViewController.directions = temp
-//            directionsViewController.directionsGrouped = Static.directionsGrouped
             directionsViewController.directionsGrouped = Static.cachedDirectionsGrouped[Static.modeOfTransportation]!
             
         }
@@ -237,7 +245,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         lat = firstViewController!.myGeoLocatedCoords.coordinate.latitude
         lng = firstViewController!.myGeoLocatedCoords.coordinate.longitude
         subtitle = (firstViewController!.addressString)
-          Static.origin = Coordinates(lat: lat, long: lng, title: "my starting location", subtitle: subtitle!, errandTermId: -1, placeId: "", errandText: "", errandOrder: nil)
+        Static.origin = Coordinates(lat: lat, long: lng, title: "my starting location", subtitle: subtitle!, errandTermId: -1, placeId: "", errandText: "", errandOrder: nil, isErrand: false)
          if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "use new location"{
             
             let startingLocation: Errand = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection[0]
@@ -257,7 +265,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             lng = result.long
                             subtitle = result.subtitle
                         }
-                         Static.origin = Coordinates(lat: lat, long: lng, title: "my starting location", subtitle: subtitle!, errandTermId: -1, placeId: "", errandText: "", errandOrder: nil)
+                        Static.origin = Coordinates(lat: lat, long: lng, title: "my starting location", subtitle: subtitle!, errandTermId: -1, placeId: "", errandText: "", errandOrder: nil, isErrand: false)
                         
                         if(self.firstViewController!.destinationToggle as UISwitch).on{
                             Static._isRoundTrip = true
@@ -278,7 +286,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                         Static.destination!.lat = placemark.location!.coordinate.latitude
                                         Static.destination!.long = placemark.location!.coordinate.longitude
                                         Static.destination!.subtitle = placemark.name!
-                                        
+                                        Static.destination!.isErrand = false
                                         Static.destination!.title = "my final destination"
                                         
                                         self.BuildRoute(lat, lng: lng)
@@ -317,8 +325,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             Static.destination!.lat = placemark.location!.coordinate.latitude
                             Static.destination!.long = placemark.location!.coordinate.longitude
                             Static.destination!.subtitle = placemark.name!
-                            
                             Static.destination!.title = "my final destination"
+                            Static.destination!.isErrand = false
                             
                             self.BuildRoute(lat, lng: lng)
                         }
@@ -390,7 +398,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             let errandTermId: Int = count
                             
                             if !errand.errandString.isEmpty && !errand.isAddress{
-                                let closestLocations: [Coordinates] = self.GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errand.errandString, excludedPlaceIds: nil )
+                                let closestLocations: [Coordinates] = self.GetClosestLocationsForErrand(l!, errandTermId: errandTermId , errandText: errand.errandString, excludedPlaceIds: nil)
                                 
                                 if closestLocations.count > 0{
                                     Static.closestLocationsPerErrand.append(closestLocations)
@@ -448,37 +456,46 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       
         var closestLocations: [Coordinates] = []
  
-            var maxResults: Int = 7
-            if search.results.count > 0{
-              
-                if(search.results.count < maxResults){
-                    maxResults = search.results.count
-                }
-            }
-            //TODO: work on filtering with swift. NJK
-            let filteredResults: [Results] = search.results
+        var maxResults: Int = 7
+        if search.results.count > 0{
             
-            for result in filteredResults {
-                if maxResults < 1 {
-                    break
-                }
-                if excludedPlaceIds != nil && excludedPlaceIds!.count > 0 {
-                    var isExcluded: Bool = false
-                    for id in excludedPlaceIds!{
-                        if id == result.place_id{
-                            isExcluded = true
-                            continue
-                        }
-                    }
-                    if(isExcluded){
+            if(search.results.count < maxResults){
+                maxResults = search.results.count
+            }
+        }
+        // TODO: work on filtering with swift. NJK
+        
+        // TODO: filter out ones with duplicate addresses -> search.results.vicinity
+        var filteredResults: [Results] = []
+        var addresses: [String] = []
+        for result in search.results {
+            if !addresses.contains(result.vicinity) {
+                filteredResults.append(result)
+                addresses.append(result.vicinity)
+            }
+        }
+        
+        for result in filteredResults {
+            if maxResults < 1 {
+                break
+            }
+            if excludedPlaceIds != nil && excludedPlaceIds!.count > 0 {
+                var isExcluded: Bool = false
+                for id in excludedPlaceIds!{
+                    if id == result.place_id{
+                        isExcluded = true
                         continue
                     }
                 }
-                
-                closestLocations.append(Coordinates(lat: result.geometry.location.lat, long: result.geometry.location.lng, title: result.name, subtitle: result.vicinity, errandTermId: errandTermId, placeId: result.place_id, errandText: errandText, errandOrder: nil))
-                
-                maxResults--
-                
+                if(isExcluded){
+                    continue
+                }
+            }
+            
+            closestLocations.append(Coordinates(lat: result.geometry.location.lat, long: result.geometry.location.lng, title: result.name, subtitle: result.vicinity, errandTermId: errandTermId, placeId: result.place_id, errandText: errandText, errandOrder: nil, isErrand: true))
+            
+            maxResults--
+            
             
         }
         if closestLocations.count < 1{
@@ -492,18 +509,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     func fetchPlacesNearCoordinate(coordinate: CLLocationCoordinate2D, errand: Errand, count: Int, completionHandler: ((NSData!, NSError!, count: Int) -> Void)){
         
         if !errand.isAddress{
-        
-        var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&location=\(coordinate.latitude),\(coordinate.longitude)&rankby=distance&sensor=true"
-        urlString += "&name=\(errand.errandString)"
-
-        urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-
-        let session = NSURLSession.sharedSession()
-    
-        let sessionTask = session.dataTaskWithURL(NSURL(string: urlString)!) { data, response, error in
-              
+            
+            var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDouP4A3_XqFdHn05S0u-f6CxBX0256ZtU&location=\(coordinate.latitude),\(coordinate.longitude)&rankby=distance&sensor=true"
+            urlString += "&name=\(errand.errandString)"
+            
+            urlString = urlString.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+            
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            
+            let session = NSURLSession.sharedSession()
+            
+            let sessionTask = session.dataTaskWithURL(NSURL(string: urlString)!) { data, response, error in
+                
                 dispatch_async(dispatch_get_main_queue()) {
                     if(data != nil){
                         completionHandler(data, error, count: count)
@@ -511,33 +528,32 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     else{
                         completionHandler(nil, error, count: count)
                     }
-                    
                 }
             }
-    
-        sessionTask.resume()
+            
+            sessionTask.resume()
         }
         else{
             GetLatLng(errand.errandString) { placemarks, error in
-        
-                    if(placemarks!.count > 0){
-                        let placemark: CLPlacemark = placemarks![0]
-                        
-                        self.errandAddress = Coordinates()
-                        self.errandAddress!.lat = placemark.location!.coordinate.latitude
-                        self.errandAddress!.long = placemark.location!.coordinate.longitude
-                        self.errandAddress!.subtitle = placemark.name!
-                        
-                       
-                    }
                 
-            }
-            //do nothing becayse it's an address that has been entered as an errand NJK
-            dispatch_async(dispatch_get_main_queue()) {
+                if(placemarks!.count > 0){
+                    let placemark: CLPlacemark = placemarks![0]
+                    
+                    self.errandAddress = Coordinates()
+                    self.errandAddress!.lat = placemark.location!.coordinate.latitude
+                    self.errandAddress!.long = placemark.location!.coordinate.longitude
+                    self.errandAddress!.subtitle = placemark.name!
+                    self.errandAddress!.errandText = errand.errandString
+                }
+                
+                //do nothing becayse it's an address that has been entered as an errand NJK
+                dispatch_async(dispatch_get_main_queue()) {
                     completionHandler(nil, nil, count: count)
-                
-                
+                    
+                    
+                }
             }
+            
         }
     }
     
@@ -638,7 +654,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
             // End Temporary fix
             
-            Static.cachedRoutes[Static.modeOfTransportation]!.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index))
+            Static.cachedRoutes[Static.modeOfTransportation]!.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index, isErrand: value!.isErrand))
         }
         
         var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
@@ -726,9 +742,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     
                     for route in directionsResponse.routes {
                         var polylinePts: String = ""
-//                        if (route.overview_polyline != nil) {
                             polylinePts = route.overview_polyline.points
-//                        }
                         
                         if (!polylinePts.isEmpty) {
                             let polylineCoords: [CLLocationCoordinate2D]? = decodePolyline(polylinePts)
@@ -769,7 +783,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 let directionStep: DirectionStep = DirectionStep()
                                 if legIndex <= Static.cachedRoutes[Static.modeOfTransportation]!.count{
                                     if Static.cachedRoutes[Static.modeOfTransportation]![legIndex].errandText.isEmpty{
-                                        directionStep.errandGroupNumber = "To " + (Static.destination?.subtitle)!
+                                        directionStep.errandGroupNumber = "To " + Static.cachedRoutes[Static.modeOfTransportation]![legIndex].title
                                     }else{
                                         directionStep.errandGroupNumber = "To " + Static.cachedRoutes[Static.modeOfTransportation]![legIndex].errandText
                                     }
@@ -788,7 +802,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 directionsList.append(directionStep);
                                 instructionIndex++;
                             }
-//                            Static.directionsGrouped.append(directionsList)
+                            
                             Static.cachedDirectionsGrouped[Static.modeOfTransportation]!.append(directionsList)
                             legIndex++
                         }
@@ -850,7 +864,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         
                         for routeLocation in Static.cachedRoutes[Static.modeOfTransportation]! {
                             // Add markers to map:
-                            let marker = GoogleMapMarker()  //GMSMarker()
+                            let marker = GoogleMapMarker()
                             marker.position = routeLocation.position
                             marker.placeId = routeLocation.placeId
                             marker.title = routeLocation.title
@@ -858,7 +872,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             marker.errandOrder = routeLocation.errandOrder
                             marker.errandText = routeLocation.errandText
                             marker.appearAnimation = kGMSMarkerAnimationPop
-                            marker.icon = UIImage(named: "Marker Filled-25")
+                            if routeLocation.isErrand {
+                                marker.icon = UIImage(named: "Marker Filled-25")
+                            } else {
+                                marker.icon = UIImage(named: "Marker-25-coral")
+                            }
                             marker.map = self.mapView
                         }
                         
@@ -895,7 +913,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
          
             for var i = 0; i < Static.locationResults.count; i++ {
                 if (Static.locationResults[i].errandTermId == rejected.errandTermId) {
-                    //Add the next 3 locations for the rejected errand
                     Static.locationResults[i].usedPlaceIds.append(placeId)
                     let excludedPlaceIds: [String] = Static.locationResults[i].usedPlaceIds
                     

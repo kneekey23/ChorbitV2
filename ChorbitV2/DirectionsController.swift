@@ -35,7 +35,8 @@ class DirectionsController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return directionsGrouped[section].count - 1
+//        return directionsGrouped[section].count - 1
+        return directionsGrouped[section].count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -43,7 +44,8 @@ class DirectionsController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.textLabel!.numberOfLines = 0;
         cell.textLabel!.lineBreakMode = NSLineBreakMode.ByWordWrapping
 
-        let item = directionsGrouped[indexPath.section][indexPath.row + 1]
+//        let item = directionsGrouped[indexPath.section][indexPath.row + 1]
+        let item = directionsGrouped[indexPath.section][indexPath.row]
         
         cell.detailTextLabel?.text = item.distance
         cell.textLabel?.text = item.directionText

@@ -15,12 +15,13 @@ class GoogleMapMarker : GMSMarker {
     var placeId: String = ""
     var errandText: String = ""
     var errandOrder: Int? = 0
+    var isErrand: Bool = true
     
     override init () {
         
     }
     
-    init (coordinate: CLLocationCoordinate2D, title: String, snippet: String, placeId: String, errandText: String, errandOrder: Int?) {
+    init (coordinate: CLLocationCoordinate2D, title: String, snippet: String, placeId: String, errandText: String, errandOrder: Int?, isErrand: Bool) {
         super.init()
         self.position = coordinate
         self.title = title
@@ -28,6 +29,7 @@ class GoogleMapMarker : GMSMarker {
         self.placeId = placeId
         self.errandText = errandText
         self.errandOrder = errandOrder
+        self.isErrand = isErrand
     }
     
 }
