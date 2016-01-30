@@ -456,37 +456,46 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       
         var closestLocations: [Coordinates] = []
  
-            var maxResults: Int = 7
-            if search.results.count > 0{
-              
-                if(search.results.count < maxResults){
-                    maxResults = search.results.count
-                }
-            }
-            //TODO: work on filtering with swift. NJK
-            let filteredResults: [Results] = search.results
+        var maxResults: Int = 7
+        if search.results.count > 0{
             
-            for result in filteredResults {
-                if maxResults < 1 {
-                    break
-                }
-                if excludedPlaceIds != nil && excludedPlaceIds!.count > 0 {
-                    var isExcluded: Bool = false
-                    for id in excludedPlaceIds!{
-                        if id == result.place_id{
-                            isExcluded = true
-                            continue
-                        }
-                    }
-                    if(isExcluded){
+            if(search.results.count < maxResults){
+                maxResults = search.results.count
+            }
+        }
+        // TODO: work on filtering with swift. NJK
+        
+        // TODO: filter out ones with duplicate addresses -> search.results.vicinity
+        var filteredResults: [Results] = []
+        var addresses: [String] = []
+        for result in search.results {
+            if !addresses.contains(result.vicinity) {
+                filteredResults.append(result)
+                addresses.append(result.vicinity)
+            }
+        }
+        
+        for result in filteredResults {
+            if maxResults < 1 {
+                break
+            }
+            if excludedPlaceIds != nil && excludedPlaceIds!.count > 0 {
+                var isExcluded: Bool = false
+                for id in excludedPlaceIds!{
+                    if id == result.place_id{
+                        isExcluded = true
                         continue
                     }
                 }
-                
-                closestLocations.append(Coordinates(lat: result.geometry.location.lat, long: result.geometry.location.lng, title: result.name, subtitle: result.vicinity, errandTermId: errandTermId, placeId: result.place_id, errandText: errandText, errandOrder: nil, isErrand: true))
-                
-                maxResults--
-                
+                if(isExcluded){
+                    continue
+                }
+            }
+            
+            closestLocations.append(Coordinates(lat: result.geometry.location.lat, long: result.geometry.location.lng, title: result.name, subtitle: result.vicinity, errandTermId: errandTermId, placeId: result.place_id, errandText: errandText, errandOrder: nil, isErrand: true))
+            
+            maxResults--
+            
             
         }
         if closestLocations.count < 1{
