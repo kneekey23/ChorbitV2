@@ -19,12 +19,13 @@ class Coordinates: Mappable {
     var placeId: String = ""
     var errandText: String = ""
     var errandOrder: Int? = 0
+    var isErrand: Bool = true
     
     init () {
         
     }
     
-    init (lat: Double, long: Double, title: String, subtitle: String, errandTermId: Int, placeId: String, errandText: String, errandOrder: Int?) {
+    init (lat: Double, long: Double, title: String, subtitle: String, errandTermId: Int, placeId: String, errandText: String, errandOrder: Int?, isErrand: Bool) {
         self.lat = lat
         self.long = long
         self.title = title
@@ -33,6 +34,7 @@ class Coordinates: Mappable {
         self.placeId = placeId
         self.errandText = errandText
         self.errandOrder = errandOrder
+        self.isErrand = isErrand
     }
     
 //    init (_ json: [String: AnyObject]) {
@@ -58,6 +60,7 @@ class Coordinates: Mappable {
         placeId <- map["placeId"]
         errandText <- map["errandText"]
         errandOrder <- map["errandOrder"]
+        isErrand <- map["errand"]
     }
     
     init (_ json: [String: AnyObject]) {
@@ -82,5 +85,8 @@ class Coordinates: Mappable {
         
         if let lat = json["lat"] as? Double { self.lat = lat }
         else { self.lat = 0 }
+        
+        if let isErrand = json["isErrand"] as? Bool { self.isErrand = isErrand }
+        else { self.isErrand = true }
     }
 }
