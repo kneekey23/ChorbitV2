@@ -166,7 +166,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     @IBAction func changeTransportationType(sender: AnyObject) {
-        //code to change from driving to walking to transit goes here.NJK
+        // remove reject button if it happens to be displaying
+        if let viewWithTag = self.view.viewWithTag(23) {
+            viewWithTag.removeFromSuperview()
+        }
+        
         let segmentedControl: UISegmentedControl = sender as! UISegmentedControl
         var recalc = false
         
