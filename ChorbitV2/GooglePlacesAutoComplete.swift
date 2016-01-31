@@ -392,7 +392,7 @@ extension GooglePlacesAutocompleteContainer: UISearchBarDelegate {
                        
                         self.addContacts(searchString)
                         let place = Place(description: searchString, contactAddress: "", isContact: false)
-                        if !self.places.contains(place){
+                        if !self.places.contains(place) && !isAddressOnly{
                             self.places.append(place)
                         }
                         self.tableView.reloadData()
