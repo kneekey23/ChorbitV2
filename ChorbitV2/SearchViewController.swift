@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import GoogleMaps
 import CoreLocation
+import SystemConfiguration
 
 class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
     //any declarations of the class go up here like usual NJK
@@ -144,8 +145,13 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         //this gets rid of ui issue where image blocks line from showing up completely NJK
         if(self.errandTableView != nil){
             // self.errandTableView!.separatorInset = UIEdgeInsetsZero;
-               self.errandTableView.reloadData()
+            self.errandTableView.reloadData()
         }
+        if Reachability.isConnectedToNetwork() == false {
+                DisplayErrorAlert("you are not currently connected to any internet connection. please connect to a wifi network to use Chorbit.")
+        
+        } 
+     
        
         // Do any additional setup after loading the view, typically from a nib.
     }
@@ -303,14 +309,28 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
     }
     
+    
     override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
-        if(parentViewController?.parentViewController as! MainViewController).errandSelection.count < 2 || (parentViewController?.parentViewController as! MainViewController).errandSelection.count < 3 && !self.destinationToggle.on
-            {
-            DisplayErrorAlert("please enter at least one errand to launch your route.")
-            return false
+        
+        if Reachability.isConnectedToNetwork() == true {
             
+            if(parentViewController?.parentViewController as! MainViewController).errandSelection.count < 2 || (parentViewController?.parentViewController as! MainViewController).errandSelection.count < 3 && !self.destinationToggle.on
+            {
+                DisplayErrorAlert("please enter at least one errand to launch your route.")
+                return false
+                
+            }
+            else{
+                return true
+            }
+            
+            
+        } else {
+            
+            DisplayErrorAlert("You are not currently connected to any internet connection. Please connect to a wifi network to use Chorbit.")
+            return false
         }
-        return true
+        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
