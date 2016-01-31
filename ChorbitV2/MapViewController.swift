@@ -748,10 +748,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         //Present Alert
         if (self.noResults.count > 0) {
             if loadingAlertIsDisplayed {
-                self.dismissViewControllerAnimated(false, completion: nil)
+                self.dismissViewControllerAnimated(false, completion: {
+                    self.presentViewController(noresultsAlertController, animated: true, completion: nil)
+                })
                 loadingAlertIsDisplayed = false
             }
-            self.presentViewController(noresultsAlertController, animated: true, completion: nil)
+            
         }
 
     }
@@ -938,10 +940,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             
             //TODO: add loading overlay here
          
-//            Static.cachedRoutes[Static.modeOfTransportation] = []
-//            Static.closestLocationsPerErrand.removeAll()
-//            noResults.removeAll()
-//            Static.cachedDirectionsGrouped[Static.modeOfTransportation] = [[]]
             
             //Identify rejected location within currentRouteLocations
             //and remove it from currentRouteLocations
