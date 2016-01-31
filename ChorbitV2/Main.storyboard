@@ -590,7 +590,7 @@
                         <barButtonItem key="backBarButtonItem" title="back" id="zAr-hO-cw4">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="TMW-Mc-F1V">
+                        <barButtonItem key="rightBarButtonItem" title="refresh traffic" id="TMW-Mc-F1V">
                             <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="refreshTrafficConditions:" destination="1vX-gY-hQA" id="2sy-Be-cCC"/>
