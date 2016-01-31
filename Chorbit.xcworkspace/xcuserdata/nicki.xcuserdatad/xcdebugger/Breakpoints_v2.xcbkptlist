@@ -106,7 +106,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "495"
             endingLineNumber = "495"
-            landmarkName = "fetchPlacesNearCoordinate(_:errand:count:completionHandler:)"
+            landmarkName = "GetClosestLocationsForErrand(_:errandTermId:errandText:excludedPlaceIds:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -188,38 +188,6 @@
             endingLineNumber = "922"
             landmarkName = "RejectLocation(_:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Chorbit.MapViewController.RejectLocation (Chorbit.MapViewController)(Swift.String) -&gt; ()"
-                  moduleName = "Chorbit"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nicki/Projects/ChorbitV2/ChorbitV2/ChorbitV2/MapViewController.swift"
-                  timestampString = "475735479.591677"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "922"
-                  endingLineNumber = "922"
-                  offsetFromSymbolStart = "3148">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Chorbit.MapViewController.(RejectLocation (Chorbit.MapViewController) -&gt; (Swift.String) -&gt; ()).(closure #1)"
-                  moduleName = "Chorbit"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nicki/Projects/ChorbitV2/ChorbitV2/ChorbitV2/MapViewController.swift"
-                  timestampString = "475735479.591835"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "922"
-                  endingLineNumber = "922"
-                  offsetFromSymbolStart = "960">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
