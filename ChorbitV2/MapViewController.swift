@@ -45,7 +45,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         static var cachedRoutes = [String: [GoogleMapMarker]]()
         static var cachedPaths = [String: GMSMutablePath]()
         static var closestLocationsPerErrand:[[Coordinates]] = [[]]
-        static var currentRouteLocations: [Coordinates?] = []
+        static var cachedCurrentRouteLocations = [String: [Coordinates?]]()
         static var locationResults: [ErrandResults] = []
         static var _isRoundTrip: Bool = true
         static var cachedInfoOverlays = [String: UITextView!]()
@@ -69,11 +69,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         Static.mapErroredOut = false
         Static.cachedDirectionsGrouped = [Static.modeOfTransportation: [[]]]
         Static.cachedRoutes = [Static.modeOfTransportation: []]
-        Static.currentRouteLocations.removeAll()
+        Static.cachedCurrentRouteLocations = [Static.modeOfTransportation: []]
         self.CreateRoute()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Static.modeOfTransportation = "driving"
         
         // Caching
         let totalNumberOfErrands: Int = (firstViewController?.parentViewController?.parentViewController as! MainViewController).errandSelection.count
@@ -155,7 +157,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             Static.cachedPaths = ["driving": GMSMutablePath()]
             Static.cachedDirectionsGrouped = ["driving": [[]]]
             Static.cachedRoutes = ["driving": []]
-            Static.currentRouteLocations.removeAll()
+            Static.cachedCurrentRouteLocations = ["driving": []]
             Static.mapErroredOut = false
             
             configureLoadingMessage()
@@ -230,7 +232,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
             
             Static.cachedDirectionsGrouped[Static.modeOfTransportation] = [[]]
-            Static.currentRouteLocations.removeAll()
+            Static.cachedCurrentRouteLocations[Static.modeOfTransportation] = []
             self.CreateRoute()
         }
     }
@@ -592,7 +594,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     func CreateRoute()
     {
-        Static.currentRouteLocations = []
+        Static.cachedCurrentRouteLocations[Static.modeOfTransportation] = []
         var locations: [Coordinates?] = []
         locations.append(Static.origin)
 
@@ -614,10 +616,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             
                             for r in routeServiceResponse.results {
                                 //print(r)
-                                Static.currentRouteLocations.append(Coordinates?(r))
+                                Static.cachedCurrentRouteLocations[Static.modeOfTransportation]!.append(Coordinates?(r))
                             }
                             
-                            if(Static.currentRouteLocations.count < 1) {
+                            if(Static.cachedCurrentRouteLocations[Static.modeOfTransportation]!.count < 1) {
                                 if self.loadingAlertIsDisplayed {
                                     self.dismissViewControllerAnimated(false, completion: nil)
                                     self.loadingAlertIsDisplayed = false
@@ -628,7 +630,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                 return;
                             }
                             
-                            locations += Static.currentRouteLocations;
+                            locations += Static.cachedCurrentRouteLocations[Static.modeOfTransportation]!;
                             
                            self.MapResults(locations)
                         }
@@ -641,7 +643,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 for locationList in Static.closestLocationsPerErrand {
                     if(locationList.count > 0) {
                         locations.append(locationList[0]);
-                        Static.currentRouteLocations = locations;
+                        Static.cachedCurrentRouteLocations[Static.modeOfTransportation] = locations;
                         break;
                     }
                 }
@@ -946,10 +948,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             //Identify rejected location within currentRouteLocations
             //and remove it from currentRouteLocations
             var rejected: Coordinates = Coordinates()
-            for var i = 0; i < Static.currentRouteLocations.count; i++ {
-                if (Static.currentRouteLocations[i]!.placeId == placeId) {
-                    rejected = Static.currentRouteLocations[i]!
-                    Static.currentRouteLocations.removeAtIndex(i)
+            for var i = 0; i < Static.cachedCurrentRouteLocations[Static.modeOfTransportation]!.count; i++ {
+                if (Static.cachedCurrentRouteLocations[Static.modeOfTransportation]![i]!.placeId == placeId) {
+                    rejected = Static.cachedCurrentRouteLocations[Static.modeOfTransportation]![i]!
+                    Static.cachedCurrentRouteLocations[Static.modeOfTransportation]!.removeAtIndex(i)
                     break
                 }
             }
@@ -1001,7 +1003,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                     }
                                 }
                                 
-                                Static.currentRouteLocations.append(rejected)
+                                Static.cachedCurrentRouteLocations[Static.modeOfTransportation]!.append(rejected)
                                 return
                             })
                             
@@ -1023,7 +1025,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                     Static.locationResults[i].usedPlaceIds.removeAtIndex(index)
                                 }
                             }
-                            Static.currentRouteLocations.append(rejected)
+                            Static.cachedCurrentRouteLocations[Static.modeOfTransportation]!.append(rejected)
                             
                             noresultsAlertController.addAction(okAction)
                             self.presentViewController(noresultsAlertController, animated: true, completion: nil)
