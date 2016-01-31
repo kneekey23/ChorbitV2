@@ -25,6 +25,7 @@
 		817139761C012CEE00BA541F /* FeaturedRouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139751C012CEE00BA541F /* FeaturedRouteController.swift */; };
 		817139781C012D1C00BA541F /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817139771C012D1C00BA541F /* UserProfileViewController.swift */; };
 		817DD1321C3260BE0061AF7A /* DirectionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817DD1311C3260BD0061AF7A /* DirectionsController.swift */; };
+		81AA156D1C5E988C00BC471C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AA156C1C5E988C00BC471C /* Reachability.swift */; };
 		81AF49101C41EDC900309615 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AF490F1C41EDC900309615 /* Main.storyboard */; };
 		81AF49121C4C28BA00309615 /* Errand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AF49111C4C28BA00309615 /* Errand.swift */; };
 		81AF49141C4C9EFD00309615 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AF49131C4C9EFD00309615 /* MapKit.framework */; };
@@ -93,6 +94,7 @@
 		817139751C012CEE00BA541F /* FeaturedRouteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeaturedRouteController.swift; sourceTree = "<group>"; };
 		817139771C012D1C00BA541F /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		817DD1311C3260BD0061AF7A /* DirectionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionsController.swift; sourceTree = "<group>"; };
+		81AA156C1C5E988C00BC471C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		81AF490F1C41EDC900309615 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		81AF49111C4C28BA00309615 /* Errand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errand.swift; sourceTree = "<group>"; };
 		81AF49131C4C9EFD00309615 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -211,6 +213,7 @@
 				81438E601C16A1F400551718 /* ThemedRouteDetailViewController.swift */,
 				817DD1311C3260BD0061AF7A /* DirectionsController.swift */,
 				81AF49161C540BE000309615 /* CityListViewController.swift */,
+				81AA156C1C5E988C00BC471C /* Reachability.swift */,
 			);
 			path = ChorbitV2;
 			sourceTree = "<group>";
@@ -486,6 +489,7 @@
 				8B2294371BF02A3C0067059C /* RouteTest.swift in Sources */,
 				8B2294311BF01E570067059C /* Location.swift in Sources */,
 				8B2294331BF01F820067059C /* GoogleMapsGeocoderResult.swift in Sources */,
+				81AA156D1C5E988C00BC471C /* Reachability.swift in Sources */,
 				8B2BEADA1C42283300DB9710 /* RouteServiceRequest.swift in Sources */,
 				8B2294211BEFFA3A0067059C /* RouteService.swift in Sources */,
 				8B2BEAD81C420E8F00DB9710 /* RouteServiceResponse.swift in Sources */,
