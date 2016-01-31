@@ -1104,8 +1104,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         else if numberOfErrands == 5{
             iterations = "9,375,000"
         }
+        var message = ""
+        if iterations == "7" {
+            message = "testing 7 possible routes..."
+        }
+        else{
+            message = "testing " + iterations + " route combinations..."
+        }
         
-        let message = "testing " + iterations + " route combinations..."
+      
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .Alert)
         
         alert.view.tintColor = UIColor.blackColor()
