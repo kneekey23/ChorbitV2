@@ -301,6 +301,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                                         
                                         self.BuildRoute(lat, lng: lng)
                                     }
+                                } else {
+                                    // Yowsers! GetLatLng failed us! Handle that shit!
+                                    let destinationNotFound: String = "oh bummer! couldn't locate your final destination. please go back and try again."
+                                    Static.mapErroredOut = true
+                                    self.DisplayErrorAlert(destinationNotFound)
+                                    return
                                 }
                             }
                             
@@ -308,6 +314,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             
                         }
                     }
+                } else {
+                    // Yowsers! GetLatLng failed us! Handle that shit!
+                    let originNotFound: String = "oh bummer! couldn't locate your starting location. please go back and try again."
+                    Static.mapErroredOut = true
+                    self.DisplayErrorAlert(originNotFound)
+                    return
                 }
             }
             
@@ -340,6 +352,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             
                             self.BuildRoute(lat, lng: lng)
                         }
+                    } else {
+                        // Yowsers! GetLatLng failed us! Handle that shit!
+                        let destinationNotFound: String = "oh bummer! couldn't locate your final destination. please go back and try again."
+                        Static.mapErroredOut = true
+                        self.DisplayErrorAlert(destinationNotFound)
+                        return
                     }
                 }
 
@@ -370,6 +388,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         numErrands = 0
         placeResponsesAwaiting = 0;
         self.allPlaceRequestsSent = false;
+        
+        // Todo: allow for NO errands so that we can be like a full-on mapping app - v.2.1
+        if totalNumberOfErrands < 1 {
+            // Yowsers! You don't have any errands to map! Handle that shit!
+            let noErrandsEntered: String = "whoa! you need to enter some errands first! please go back and try again."
+            Static.mapErroredOut = true
+            self.DisplayErrorAlert(noErrandsEntered)
+            return
+        }
         
         for(var i = 0; i < totalNumberOfErrands; i++){
             
@@ -560,6 +587,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     self.errandAddress!.long = placemark.location!.coordinate.longitude
                     self.errandAddress!.subtitle = placemark.name!
                     self.errandAddress!.errandText = errand.errandString
+                } else {
+                    // Yowsers! GetLatLng failed us! Handle that shit!
+                    let errandNotLocated: String = "whoa! something went wrong locating " + errand.errandString + "! please go back and try again."
+                    Static.mapErroredOut = true
+                    self.DisplayErrorAlert(errandNotLocated)
+                    return
                 }
                 
                 //do nothing becayse it's an address that has been entered as an errand NJK
@@ -583,6 +616,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 print("geocoding error: \(error)")
             } else if placemarks!.count == 0 {
                 print("no placemarks")
+                // Yowsers! GetLatLng failed us! Handle that shit!
+                Static.mapErroredOut = true
+                self.DisplayErrorAlert("")
+                return
             }
             dispatch_async(dispatch_get_main_queue()) {
                 completionHandler(placemarks!, error)
@@ -926,9 +963,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             
             if placeId == "" {
                 // Inform user we have no alternative locations to provide
-                // because this is an address duh!
+                // because this is an address, duh!
                 let title: String = "no alternative locations"
-                let msg: String = "unfortunately there are no alternative locations to offer you for this place."
+                let msg: String = "oh bummer! there are no alternative locations to offer you for this place."
                 let noAltsAlertController = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
                 let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
                     return
@@ -1005,8 +1042,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 if hasZeroAlternatives {
                     
                     //Inform user we have no alternative locations to provide
-                    let title2: String = "no more alternative locations"
-                    let msg2: String = "unfortunately there are no more alternative locations to offer you for this errand."
+                    let title2: String = "no alternative locations"
+                    let msg2: String = "oh bummer! there are no alternative locations to offer you for this errand."
                     noresultsAlertController = UIAlertController(title: title2, message: msg2, preferredStyle: UIAlertControllerStyle.Alert)
                     let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
                         return
@@ -1027,7 +1064,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 } else {
                     
                     let title: String = "no more alternative locations"
-                    let msg: String = "would you like to start over at the top of the list?"
+                    let msg: String = "oh bummer! would you like to start over at the top of the list?"
                     noresultsAlertController = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
                     
                     let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
