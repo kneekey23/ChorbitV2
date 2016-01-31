@@ -260,22 +260,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ChorbitV2/SearchViewController.swift"
-            timestampString = "475952727.579692"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "348"
-            endingLineNumber = "348"
-            landmarkName = "placeSelected(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "ChorbitV2/MapViewController.swift"
             timestampString = "475896541.439731"
             startingColumnNumber = "9223372036854775807"
@@ -357,7 +341,7 @@
                   moduleName = "Chorbit"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/nicki/Projects/ChorbitV2/ChorbitV2/ChorbitV2/MapViewController.swift"
-                  timestampString = "475952727.80509"
+                  timestampString = "475953256.960413"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "931"
@@ -372,7 +356,7 @@
                   moduleName = "Chorbit"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/nicki/Projects/ChorbitV2/ChorbitV2/ChorbitV2/MapViewController.swift"
-                  timestampString = "475952727.805225"
+                  timestampString = "475953256.960567"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "932"
@@ -395,22 +379,6 @@
             startingLineNumber = "964"
             endingLineNumber = "964"
             landmarkName = "RejectLocation(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChorbitV2/SearchViewController.swift"
-            timestampString = "475952727.579692"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "349"
-            endingLineNumber = "349"
-            landmarkName = "placeSelected(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
