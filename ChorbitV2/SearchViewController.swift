@@ -88,10 +88,11 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     }
     
     @IBAction func toggleEndingLocation(sender: AnyObject) {
-        clickedDestinationToggle = true
+     
         //gets called when you toggle roundtrip switch and adds the ui text field if switched to off. NJK
         if !(sender as! UISwitch).on
         {
+               clickedDestinationToggle = true
             let gpaViewController = GooglePlacesAutocomplete(
                 apiKey: "AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY",
                 placeType: .Address,
