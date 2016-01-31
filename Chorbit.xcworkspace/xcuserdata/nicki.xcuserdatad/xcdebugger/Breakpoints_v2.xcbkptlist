@@ -122,7 +122,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "525"
             endingLineNumber = "525"
-            landmarkName = "fetchPlacesNearCoordinate(_:errand:count:completionHandler:)"
+            landmarkName = "GetClosestLocationsForErrand(_:errandTermId:errandText:excludedPlaceIds:)"
             landmarkType = "5">
             <Locations>
                <Location
@@ -170,7 +170,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "467"
             endingLineNumber = "467"
-            landmarkName = "GetClosestLocationsForErrand(_:errandTermId:errandText:excludedPlaceIds:)"
+            landmarkName = "BuildRoute(_:lng:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -186,7 +186,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "470"
             endingLineNumber = "470"
-            landmarkName = "GetClosestLocationsForErrand(_:errandTermId:errandText:excludedPlaceIds:)"
+            landmarkName = "BuildRoute(_:lng:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -218,8 +218,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "922"
             endingLineNumber = "922"
-            landmarkName = "RejectLocation(_:)"
-            landmarkType = "5">
+            landmarkName = "MapViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
