@@ -150,7 +150,23 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         if Reachability.isConnectedToNetwork() == false {
                 DisplayErrorAlert("you are not currently connected to any internet connection. please connect to a wifi network to use Chorbit.")
         
-        } 
+        }
+        
+        if CLLocationManager.locationServicesEnabled() {
+            switch(CLLocationManager.authorizationStatus()) {
+            case .NotDetermined, .Restricted, .Denied:
+              DisplayErrorAlert("Location services for Chorbit are not currently turned on. Please turn them on to allow Chorbit to grab your current location or start from another location.")
+                   startingLocationControl.selectedSegmentIndex = 1
+            case .AuthorizedAlways, .AuthorizedWhenInUse: break
+                
+            default: break
+                
+                
+            }
+        } else {
+             DisplayErrorAlert("Location services for Chorbit are not currently turned on. Please turn them on to allow Chorbit to grab your current location or start from another location.")
+               startingLocationControl.selectedSegmentIndex = 1
+        }
      
        
         // Do any additional setup after loading the view, typically from a nib.
@@ -314,7 +330,11 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
         
         if Reachability.isConnectedToNetwork() == true {
             
-            if(parentViewController?.parentViewController as! MainViewController).errandSelection.count < 2 || (parentViewController?.parentViewController as! MainViewController).errandSelection.count < 3 && !self.destinationToggle.on
+            if (parentViewController?.parentViewController as! MainViewController).errandSelection.count < 1{
+                DisplayErrorAlert("please enter a starting location to launch your route.")
+                return false
+            }
+            else if(parentViewController?.parentViewController as! MainViewController).errandSelection.count < 2 || (parentViewController?.parentViewController as! MainViewController).errandSelection.count < 3 && !self.destinationToggle.on
             {
                 DisplayErrorAlert("please enter at least one errand to launch your route.")
                 return false
