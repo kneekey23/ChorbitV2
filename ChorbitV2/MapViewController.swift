@@ -144,7 +144,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             self.mapView!.animateWithCameraUpdate(fitBounds)
             self.mapView?.addSubview(Static.cachedInfoOverlays[Static.modeOfTransportation]!)
             //removes loading view from screen NJK
-            self.dismissViewControllerAnimated(false, completion: nil)
+//            self.dismissViewControllerAnimated(false, completion: nil)
         } else {
             Static.cachedPaths = ["driving": GMSMutablePath()]
             Static.cachedDirectionsGrouped = ["driving": [[]]]
@@ -152,7 +152,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             Static.currentRouteLocations.removeAll()
             Static.mapErroredOut = false
             
-            configureLoadingMessage()
+//            configureLoadingMessage()
             GetLocationInformation()
         }
     }
@@ -207,7 +207,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
             self.mapView!.animateWithCameraUpdate(fitBounds)
             self.mapView?.addSubview(Static.cachedInfoOverlays[Static.modeOfTransportation]!)
-            self.dismissViewControllerAnimated(false, completion: nil)
+//            self.dismissViewControllerAnimated(false, completion: nil)
         } else {
             Static.modeOfTransportation = "driving"
             Static.cachedPaths[Static.modeOfTransportation] = GMSMutablePath()
@@ -425,10 +425,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             }
                             
                             if(self.allPlaceRequestsSent && self.placeResponsesAwaiting == 0){
-                                
                                 self.CreateRoute()
                             }
                             
+                        } else {
+                            // No results came back for this location
+                            self.noResults.append(errand.errandString)
+                            if(self.allPlaceRequestsSent && self.placeResponsesAwaiting == 0){
+                                self.CreateRoute()
+                            }
                         }
                         
                     }
@@ -465,7 +470,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         }
         // TODO: work on filtering with swift. NJK
         
-        // TODO: filter out ones with duplicate addresses -> search.results.vicinity
         var filteredResults: [Results] = []
         var addresses: [String] = []
         for result in search.results {
@@ -602,7 +606,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             }
                             
                             if(Static.currentRouteLocations.count < 1) {
-                                self.dismissViewControllerAnimated(false, completion: nil)
+//                                self.dismissViewControllerAnimated(false, completion: nil)
                                 let errandsNotFound: String = "unable to find locations for your errands. please go back and try again."
                                 self.DisplayErrorAlert(errandsNotFound)
                                 Static.mapErroredOut = true;
@@ -656,8 +660,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             
             Static.cachedRoutes[Static.modeOfTransportation]!.append(GoogleMapMarker(coordinate: CLLocationCoordinate2DMake(value!.lat, value!.long), title: locationTitle, snippet: value!.subtitle, placeId: value!.placeId, errandText: value!.errandText, errandOrder: index, isErrand: value!.isErrand))
         }
-        
-        var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+    
+        var noresultsAlertController = UIAlertController(title: nil, message: "", preferredStyle: .Alert)
         if (self.noResults.count > 0) {
             
             var noResultsMsg: String = ""
@@ -716,7 +720,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 
         
         if (Static.cachedRoutes[Static.modeOfTransportation]!.count == 0) {
-            self.dismissViewControllerAnimated(false, completion: nil)
+//            self.dismissViewControllerAnimated(false, completion: nil)
             let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
             self.DisplayErrorAlert(locationsNotFound)
             Static.mapErroredOut = true
@@ -725,7 +729,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         
         //Present Alert
         if (self.noResults.count > 0) {
-            self.dismissViewControllerAnimated(false, completion: nil)
+//            self.dismissViewControllerAnimated(false, completion: nil)
             self.presentViewController(noresultsAlertController, animated: true, completion: nil)
         }
 
@@ -764,8 +768,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         let padding = CGFloat(90)
                         let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
                         self.mapView!.animateWithCameraUpdate(fitBounds)
-                        //removes loading view from screen NJK
-                        self.dismissViewControllerAnimated(false, completion: nil)
+//                        self.dismissViewControllerAnimated(false, completion: nil)
                         
                     
                         var legIndex: Int = 1;
@@ -923,55 +926,61 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     } else {
                         //No more results, so can't provide a new location
                         
-                        
                         var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
                       
                         if (excludedPlaceIds.count > 0) {
                             let title: String = "no more alternative locations"
                             let msg: String = "would you like to start over at the top of the list?"
                             noresultsAlertController = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
+                            
+                            let capturedIdx = i
                             let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
                                 //If yes, clear out UsedPlaceIds for this errand and re-map:
-                                Static.locationResults[i].usedPlaceIds.removeAll()
+                                Static.locationResults[capturedIdx].usedPlaceIds.removeAll()
                                 self.noResults.removeAll()
-                               Static.closestLocationsPerErrand.append(self.GetClosestLocationsForErrand(Static.locationResults[i].locationSearchResults!,
-                                    errandTermId: Static.locationResults[i].errandTermId, errandText: Static.locationResults[i].errandText, excludedPlaceIds: nil))
+                               Static.closestLocationsPerErrand.append(self.GetClosestLocationsForErrand(Static.locationResults[capturedIdx].locationSearchResults!,
+                                    errandTermId: Static.locationResults[capturedIdx].errandTermId, errandText: Static.locationResults[capturedIdx].errandText, excludedPlaceIds: nil))
                             })
+                            
                             let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
                                 //If no, exit method and do nothing:
                                 self.noResults.removeAll()
                                 
-                                for (index, value) in Static.locationResults[i].usedPlaceIds.enumerate() {
+                                for (index, value) in Static.locationResults[capturedIdx].usedPlaceIds.enumerate() {
                                     if(value == placeId) {
-                                        Static.locationResults[i].usedPlaceIds.removeAtIndex(index)
+                                        Static.locationResults[capturedIdx].usedPlaceIds.removeAtIndex(index)
                                     }
                                 }
                                 
                                 Static.currentRouteLocations.append(rejected)
-                                // _loadPop.hide()
                                 return
                             })
                             
                             noresultsAlertController.addAction(yesAction)
                             noresultsAlertController.addAction(noAction)
+//                            dispatch_async(dispatch_get_main_queue()) {
+                                self.presentViewController(noresultsAlertController, animated: true, completion: nil)
+//                            }
+                            print("ok like im presenting the fucking alert")
                         } else {
                             //Inform user we have no alternative locations to provide
                             let title2: String = "no more alternative locations"
                             let msg2: String = "unfortunately there are no more alternative locations to offer you for this errand."
                             noresultsAlertController = UIAlertController(title: title2, message: msg2, preferredStyle: UIAlertControllerStyle.Alert)
                             let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
-                                self.noResults.removeAll()
-                                for (index, value) in Static.locationResults[i].usedPlaceIds.enumerate() {
-                                    if(value == placeId) {
-                                        Static.locationResults[i].usedPlaceIds.removeAtIndex(index)
-                                    }
-                                }
-                                Static.currentRouteLocations.append(rejected)
-                                // _loadPop.hide()
                                 return
                             })
                             
+                            self.noResults.removeAll()
+                            for (index, value) in Static.locationResults[i].usedPlaceIds.enumerate() {
+                                if(value == placeId) {
+                                    Static.locationResults[i].usedPlaceIds.removeAtIndex(index)
+                                }
+                            }
+                            Static.currentRouteLocations.append(rejected)
+                            
                             noresultsAlertController.addAction(okAction)
+                            self.presentViewController(noresultsAlertController, animated: true, completion: nil)
                         }
                     }
                     
@@ -1055,12 +1064,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
         loadingIndicator.startAnimating();
         let cancelAction = UIAlertAction(title: "cancel", style: UIAlertActionStyle.Cancel, handler: {(alertAction: UIAlertAction!) in
+            Static.mapErroredOut = true
             self.navigationController?.popToRootViewControllerAnimated(true)
         })
         
         alert.addAction(cancelAction)
         alert.view.addSubview(loadingIndicator)
         presentViewController(alert, animated: true, completion: nil)
+        
+    }
+    
+    func showAlert() {
         
     }
     
