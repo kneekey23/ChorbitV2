@@ -614,11 +614,26 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         geocoder.geocodeAddressString(address) { placemarks, error in
             if error != nil {
                 print("geocoding error: \(error)")
+                let errandsNotFound: String = "oh bummer! had a problem locating " + address + ". please go back and try again."
+                Static.mapErroredOut = true
+                
+                if self.loadingAlertIsDisplayed {
+                    self.dismissViewControllerAnimated(false, completion: {
+                        self.DisplayErrorAlert(errandsNotFound)
+                    })
+                    self.loadingAlertIsDisplayed = false
+                }
+                return;
             } else if placemarks!.count == 0 {
                 print("no placemarks")
                 // Yowsers! GetLatLng failed us! Handle that shit!
                 Static.mapErroredOut = true
-                self.DisplayErrorAlert("")
+                if self.loadingAlertIsDisplayed {
+                    self.dismissViewControllerAnimated(false, completion: {
+                        self.DisplayErrorAlert("")
+                    })
+                    self.loadingAlertIsDisplayed = false
+                }
                 return
             }
             dispatch_async(dispatch_get_main_queue()) {
@@ -655,13 +670,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             }
                             
                             if(Static.cachedCurrentRouteLocations[Static.modeOfTransportation]!.count < 1) {
+                                let errandsNotFound: String = "unable to find locations for your errands. please go back and try again."
                                 if self.loadingAlertIsDisplayed {
-                                    self.dismissViewControllerAnimated(false, completion: nil)
+                                    self.dismissViewControllerAnimated(false, completion: {
+                                        self.DisplayErrorAlert(errandsNotFound)
+                                    })
                                     self.loadingAlertIsDisplayed = false
                                 }
-                                let errandsNotFound: String = "unable to find locations for your errands. please go back and try again."
+                                
                                 Static.mapErroredOut = true
-                                self.DisplayErrorAlert(errandsNotFound)
                                 return;
                             }
                             
@@ -772,13 +789,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 
         
         if (Static.cachedRoutes[Static.modeOfTransportation]!.count == 0) {
-            if loadingAlertIsDisplayed {
-                self.dismissViewControllerAnimated(false, completion: nil)
-                loadingAlertIsDisplayed = false
-            }
             let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
+            if self.loadingAlertIsDisplayed {
+                self.dismissViewControllerAnimated(false, completion: {
+                    self.DisplayErrorAlert(locationsNotFound)
+                })
+                self.loadingAlertIsDisplayed = false
+            }
+            
             Static.mapErroredOut = true
-            self.DisplayErrorAlert(locationsNotFound)
             return
         }
         
