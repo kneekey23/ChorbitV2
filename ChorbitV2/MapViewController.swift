@@ -63,7 +63,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
              self.durationSeconds = 0
              self.totalDistanceMeters = 0
         }
-
+        
+        Static.cachedPaths = ["driving": GMSMutablePath()]
+        Static.mapErroredOut = false
         Static.cachedDirectionsGrouped = [Static.modeOfTransportation: [[]]]
         Static.cachedRoutes = [Static.modeOfTransportation: []]
         Static.currentRouteLocations.removeAll()
@@ -959,7 +961,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             noresultsAlertController.addAction(yesAction)
                             noresultsAlertController.addAction(noAction)
 //                            dispatch_async(dispatch_get_main_queue()) {
-                                self.presentViewController(noresultsAlertController, animated: true, completion: nil)
+//                                self.presentViewController(noresultsAlertController, animated: true, completion: nil)
 //                            }
                             print("ok like im presenting the fucking alert")
                         } else {
@@ -1071,10 +1073,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         alert.addAction(cancelAction)
         alert.view.addSubview(loadingIndicator)
         presentViewController(alert, animated: true, completion: nil)
-        
-    }
-    
-    func showAlert() {
         
     }
     
