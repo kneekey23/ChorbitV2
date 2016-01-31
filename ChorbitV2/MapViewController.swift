@@ -954,6 +954,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 }
             }
          
+            var hasAnymoreAlternatives = false
+            var hasZeroAlternatives = false
             var closestLocationsPerErrandTemp:[[Coordinates]] = [[]]
             closestLocationsPerErrandTemp.removeAll()
             
