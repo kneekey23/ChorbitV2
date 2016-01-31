@@ -388,6 +388,11 @@ extension GooglePlacesAutocompleteContainer: UISearchBarDelegate {
                         self.places = predictions.map { (prediction: [String: AnyObject]) -> Place in
                             return Place(prediction: prediction, apiKey: self.apiKey, isAddressOnly: isAddressOnly)
                         }
+                        let place = Place(description: searchString, contactAddress: "", isContact: false)
+                        if !self.places.contains(place){
+                             self.places.append(place)
+                        }
+                       
                         self.addContacts(searchString)
                         self.tableView.reloadData()
                         self.tableView.hidden = false
