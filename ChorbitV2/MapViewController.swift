@@ -464,8 +464,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             }
             
             
-            
-            
         }
         
         
@@ -956,8 +954,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 }
             }
          
+            var hasMoreAlternatives = false
+            var hasZeroAlternatives = false
             var closestLocationsPerErrandTemp:[[Coordinates]] = [[]]
             closestLocationsPerErrandTemp.removeAll()
+            var locationResultsIdx_ofRejected: Int = 0
             
             for var i = 0; i < Static.locationResults.count; i++ {
                 if (Static.locationResults[i].errandTermId == rejected.errandTermId) {
@@ -967,69 +968,21 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     //Get next top locations for rejected errand
                     let closestLocations: [Coordinates] = GetClosestLocationsForErrand(Static.locationResults[i].locationSearchResults!, errandTermId: rejected.errandTermId, errandText: Static.locationResults[i].errandText, excludedPlaceIds: excludedPlaceIds)
                     if (closestLocations.count > 0) {
-                        // Clear out variables:
-                        Static.cachedRoutes[Static.modeOfTransportation] = []
-                        Static.closestLocationsPerErrand.removeAll()
-                        noResults.removeAll()
-                        Static.cachedDirectionsGrouped[Static.modeOfTransportation] = [[]]
+                        
+                        hasMoreAlternatives = true
                         
                         // Add next top closest locations for the rejected errand
                         closestLocationsPerErrandTemp.append(closestLocations)
+                        
                     } else {
-                        //No more results, so can't provide a new location
-                        var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
-                      
+                        
+                        hasMoreAlternatives = false
+                        locationResultsIdx_ofRejected = i
+                        
                         if (excludedPlaceIds.count > 1) {
-                            let title: String = "no more alternative locations"
-                            let msg: String = "would you like to start over at the top of the list?"
-                            noresultsAlertController = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
-                            
-                            let capturedIdx = i
-                            let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
-                                //If yes, clear out UsedPlaceIds for this errand and re-map:
-                                Static.locationResults[capturedIdx].usedPlaceIds.removeAll()
-                                self.noResults.removeAll()
-                               Static.closestLocationsPerErrand.append(self.GetClosestLocationsForErrand(Static.locationResults[capturedIdx].locationSearchResults!,
-                                    errandTermId: Static.locationResults[capturedIdx].errandTermId, errandText: Static.locationResults[capturedIdx].errandText, excludedPlaceIds: nil))
-                            })
-                            
-                            let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
-                                //If no, exit method and do nothing:
-                                self.noResults.removeAll()
-                                
-                                for (index, value) in Static.locationResults[capturedIdx].usedPlaceIds.enumerate() {
-                                    if(value == placeId) {
-                                        Static.locationResults[capturedIdx].usedPlaceIds.removeAtIndex(index)
-                                    }
-                                }
-                                
-                                Static.cachedCurrentRouteLocations[Static.modeOfTransportation]!.append(rejected)
-                                return
-                            })
-                            
-                            noresultsAlertController.addAction(yesAction)
-                            noresultsAlertController.addAction(noAction)
-                            self.presentViewController(noresultsAlertController, animated: true, completion: nil)
+                            hasZeroAlternatives = false
                         } else {
-                            //Inform user we have no alternative locations to provide
-                            let title2: String = "no more alternative locations"
-                            let msg2: String = "unfortunately there are no more alternative locations to offer you for this errand."
-                            noresultsAlertController = UIAlertController(title: title2, message: msg2, preferredStyle: UIAlertControllerStyle.Alert)
-                            let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
-                                return
-                            })
-                            
-                            self.noResults.removeAll()
-                            for (index, value) in Static.locationResults[i].usedPlaceIds.enumerate() {
-                                if(value == placeId) {
-                                    Static.locationResults[i].usedPlaceIds.removeAtIndex(index)
-                                }
-                            }
-                            Static.cachedCurrentRouteLocations[Static.modeOfTransportation]!.append(rejected)
-                            
-                            noresultsAlertController.addAction(okAction)
-                            self.presentViewController(noresultsAlertController, animated: true, completion: nil)
-                            return
+                            hasZeroAlternatives = true
                         }
                     }
                     
@@ -1040,28 +993,107 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                 }
             }
             
-            // Don't want to call any of this until we get user response back:
             
-            //Remove route info textview
-            if let viewWithTag = self.view.viewWithTag(99) {
-                viewWithTag.removeFromSuperview()
-                Static.cachedInfoOverlays[Static.modeOfTransportation] = nil
-                self.durationSeconds = 0
-                self.totalDistanceMeters = 0
+            if hasMoreAlternatives {
+                
+                Static.closestLocationsPerErrand.removeAll()
+                Static.closestLocationsPerErrand = closestLocationsPerErrandTemp
+                RecalcRouteFromRejected()
+                
+            } else {
+                //No more results, so can't provide a new location
+                var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+                
+                if hasZeroAlternatives {
+                    
+                    //Inform user we have no alternative locations to provide
+                    let title2: String = "no more alternative locations"
+                    let msg2: String = "unfortunately there are no more alternative locations to offer you for this errand."
+                    noresultsAlertController = UIAlertController(title: title2, message: msg2, preferredStyle: UIAlertControllerStyle.Alert)
+                    let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                        return
+                    })
+                    
+                    self.noResults.removeAll()
+                    for (index, value) in Static.locationResults[locationResultsIdx_ofRejected].usedPlaceIds.enumerate() {
+                        if(value == placeId) {
+                            Static.locationResults[locationResultsIdx_ofRejected].usedPlaceIds.removeAtIndex(index)
+                        }
+                    }
+                    Static.cachedCurrentRouteLocations[Static.modeOfTransportation]!.append(rejected)
+                    
+                    noresultsAlertController.addAction(okAction)
+                    self.presentViewController(noresultsAlertController, animated: true, completion: nil)
+                    return
+                    
+                } else {
+                    
+                    let title: String = "no more alternative locations"
+                    let msg: String = "would you like to start over at the top of the list?"
+                    noresultsAlertController = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
+                    
+                    let yesAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                        
+                        //If yes, clear out UsedPlaceIds for this errand and re-map:
+                        Static.locationResults[locationResultsIdx_ofRejected].usedPlaceIds.removeAll()
+                        self.noResults.removeAll()
+                        Static.closestLocationsPerErrand.removeAll()
+                        Static.closestLocationsPerErrand = closestLocationsPerErrandTemp
+                        
+                        Static.closestLocationsPerErrand.append(self.GetClosestLocationsForErrand(Static.locationResults[locationResultsIdx_ofRejected].locationSearchResults!,
+                            errandTermId: Static.locationResults[locationResultsIdx_ofRejected].errandTermId, errandText: Static.locationResults[locationResultsIdx_ofRejected].errandText, excludedPlaceIds: nil))
+                        
+                        self.RecalcRouteFromRejected()
+                    })
+                    
+                    let noAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                        //If no, exit method and do nothing:
+                        self.noResults.removeAll()
+                        
+                        for (index, value) in Static.locationResults[locationResultsIdx_ofRejected].usedPlaceIds.enumerate() {
+                            if(value == placeId) {
+                                Static.locationResults[locationResultsIdx_ofRejected].usedPlaceIds.removeAtIndex(index)
+                            }
+                        }
+                        
+                        Static.cachedCurrentRouteLocations[Static.modeOfTransportation]!.append(rejected)
+                        return
+                    })
+                    
+                    noresultsAlertController.addAction(yesAction)
+                    noresultsAlertController.addAction(noAction)
+                    self.presentViewController(noresultsAlertController, animated: true, completion: nil)
+                    
+                }
+                
             }
-            
-            // Clear all map markers and polylines
-            mapView?.clear()
-            // Clear out old polylines from cached variable:
-            Static.cachedPaths[Static.modeOfTransportation] = GMSMutablePath()
-            Static.closestLocationsPerErrand = closestLocationsPerErrandTemp
-            
-            CreateRoute()
             
         } catch {
             Static.mapErroredOut = true
             DisplayErrorAlert("")
         }
+    }
+    
+    func RecalcRouteFromRejected() {
+        // Clear out variables:
+        Static.cachedRoutes[Static.modeOfTransportation] = []
+        noResults.removeAll()
+        Static.cachedDirectionsGrouped[Static.modeOfTransportation] = [[]]
+        
+        // Clear all map markers and polylines
+        mapView?.clear()
+        Static.cachedPaths[Static.modeOfTransportation] = GMSMutablePath()
+        
+        //Remove route info textview
+        if let viewWithTag = self.view.viewWithTag(99) {
+            viewWithTag.removeFromSuperview()
+            Static.cachedInfoOverlays[Static.modeOfTransportation] = nil
+            self.durationSeconds = 0
+            self.totalDistanceMeters = 0
+        }
+        
+        // Now map it!
+        CreateRoute()
     }
     
     func DisplayErrorAlert(var errorMessage: String)
@@ -1106,8 +1138,15 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         else if numberOfErrands == 5{
             iterations = "9,375,000"
         }
+        var message = ""
+        if iterations == "7" {
+            message = "testing 7 possible routes..."
+        }
+        else{
+            message = "testing " + iterations + " route combinations..."
+        }
         
-        let message = "testing " + iterations + " route combinations..."
+      
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .Alert)
         
         alert.view.tintColor = UIColor.blackColor()

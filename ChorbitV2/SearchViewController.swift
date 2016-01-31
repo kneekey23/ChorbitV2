@@ -52,11 +52,13 @@ class SearchViewController: UIViewController, UITextFieldDelegate, UITableViewDa
     }
     
     @IBAction func chooseStartingPoint(sender: AnyObject) {
-        clickedChangeStartingLocation = true
+       
         
         let segmentedControl: UISegmentedControl = sender as! UISegmentedControl
         if segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) == "use new location"{
 
+             clickedChangeStartingLocation = true
+            
             isAddressOnly = true
             let gpaViewController = GooglePlacesAutocomplete(
                 apiKey: "AIzaSyC6M9LV04OJ2mofUcX69tHaz5Aebdh8enY",
