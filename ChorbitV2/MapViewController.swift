@@ -26,8 +26,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     var errandAddress: Coordinates?
     var transportModeHasChanged = false
     
-    var placeResponsesAwaiting: Int = 0;
-    var allPlaceRequestsSent: Bool = false;
+    var placeResponsesAwaiting: Int = 0
+    var allPlaceRequestsSent: Bool = false
+    var loadingAlertIsDisplayed: Bool = false
     
     var totalDistanceMeters: Int = 0
     var totalDistanceMiles: Double = 0.0
@@ -64,7 +65,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
              self.totalDistanceMeters = 0
         }
         
-        Static.cachedPaths = ["driving": GMSMutablePath()]
+        Static.cachedPaths = [Static.modeOfTransportation: GMSMutablePath()]
         Static.mapErroredOut = false
         Static.cachedDirectionsGrouped = [Static.modeOfTransportation: [[]]]
         Static.cachedRoutes = [Static.modeOfTransportation: []]
@@ -145,8 +146,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
             self.mapView!.animateWithCameraUpdate(fitBounds)
             self.mapView?.addSubview(Static.cachedInfoOverlays[Static.modeOfTransportation]!)
-            //removes loading view from screen NJK
-//            self.dismissViewControllerAnimated(false, completion: nil)
+            
+            if loadingAlertIsDisplayed {
+                self.dismissViewControllerAnimated(false, completion: nil)
+                loadingAlertIsDisplayed = false
+            }
         } else {
             Static.cachedPaths = ["driving": GMSMutablePath()]
             Static.cachedDirectionsGrouped = ["driving": [[]]]
@@ -154,7 +158,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             Static.currentRouteLocations.removeAll()
             Static.mapErroredOut = false
             
-//            configureLoadingMessage()
+            configureLoadingMessage()
             GetLocationInformation()
         }
     }
@@ -209,9 +213,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
             self.mapView!.animateWithCameraUpdate(fitBounds)
             self.mapView?.addSubview(Static.cachedInfoOverlays[Static.modeOfTransportation]!)
-//            self.dismissViewControllerAnimated(false, completion: nil)
+            if loadingAlertIsDisplayed {
+                self.dismissViewControllerAnimated(false, completion: nil)
+                loadingAlertIsDisplayed = false
+            }
         } else {
-            Static.modeOfTransportation = "driving"
             Static.cachedPaths[Static.modeOfTransportation] = GMSMutablePath()
             Static.cachedRoutes[Static.modeOfTransportation] = []
             Static.mapErroredOut = false
@@ -440,13 +446,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         
                     }
                     else{
-                        print(error)
-                        
-                        
+                        self.placeResponsesAwaiting--
+                        self.noResults.append(errand.errandString)
+                        if(self.allPlaceRequestsSent && self.placeResponsesAwaiting == 0){
+                            self.CreateRoute()
+                        }
                     }
                     
                 } catch let error as NSError {
                     print(error.localizedDescription)
+                    Static.mapErroredOut = true
+                    self.DisplayErrorAlert("")
                 }
                 
             }
@@ -608,10 +618,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             }
                             
                             if(Static.currentRouteLocations.count < 1) {
-//                                self.dismissViewControllerAnimated(false, completion: nil)
+                                if self.loadingAlertIsDisplayed {
+                                    self.dismissViewControllerAnimated(false, completion: nil)
+                                    self.loadingAlertIsDisplayed = false
+                                }
                                 let errandsNotFound: String = "unable to find locations for your errands. please go back and try again."
+                                Static.mapErroredOut = true
                                 self.DisplayErrorAlert(errandsNotFound)
-                                Static.mapErroredOut = true;
                                 return;
                             }
                             
@@ -722,16 +735,22 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
 
         
         if (Static.cachedRoutes[Static.modeOfTransportation]!.count == 0) {
-//            self.dismissViewControllerAnimated(false, completion: nil)
+            if loadingAlertIsDisplayed {
+                self.dismissViewControllerAnimated(false, completion: nil)
+                loadingAlertIsDisplayed = false
+            }
             let locationsNotFound: String = "unable to find locations for your errands. please go back and try again."
-            self.DisplayErrorAlert(locationsNotFound)
             Static.mapErroredOut = true
+            self.DisplayErrorAlert(locationsNotFound)
             return
         }
         
         //Present Alert
         if (self.noResults.count > 0) {
-//            self.dismissViewControllerAnimated(false, completion: nil)
+            if loadingAlertIsDisplayed {
+                self.dismissViewControllerAnimated(false, completion: nil)
+                loadingAlertIsDisplayed = false
+            }
             self.presentViewController(noresultsAlertController, animated: true, completion: nil)
         }
 
@@ -770,7 +789,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         let padding = CGFloat(90)
                         let fitBounds = GMSCameraUpdate.fitBounds(bounds, withPadding: padding)
                         self.mapView!.animateWithCameraUpdate(fitBounds)
-//                        self.dismissViewControllerAnimated(false, completion: nil)
+                        if self.loadingAlertIsDisplayed {
+                            self.dismissViewControllerAnimated(false, completion: nil)
+                            self.loadingAlertIsDisplayed = false
+                        }
                         
                     
                         var legIndex: Int = 1;
@@ -888,21 +910,38 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                         // Only interested in routes[0] right now
                         break;
                     }
+                } else {
+                    Static.mapErroredOut = true
+                    self.DisplayErrorAlert("")
+                    return
                 }
-                
-                
         }
     }
     
     func RejectLocation(placeId: String)
     {
         do {
+            
+            if placeId == "" {
+                // Inform user we have no alternative locations to provide
+                // because this is an address duh!
+                let title: String = "no alternative locations"
+                let msg: String = "unfortunately there are no alternative locations to offer you for this place."
+                let noAltsAlertController = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
+                let okAction = UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
+                    return
+                })
+                noAltsAlertController.addAction(okAction)
+                self.presentViewController(noAltsAlertController, animated: true, completion: nil)
+                return
+            }
+            
             //TODO: add loading overlay here
          
-            Static.cachedRoutes[Static.modeOfTransportation] = []
-            Static.closestLocationsPerErrand.removeAll()
-            noResults.removeAll()
-            Static.cachedDirectionsGrouped[Static.modeOfTransportation] = [[]]
+//            Static.cachedRoutes[Static.modeOfTransportation] = []
+//            Static.closestLocationsPerErrand.removeAll()
+//            noResults.removeAll()
+//            Static.cachedDirectionsGrouped[Static.modeOfTransportation] = [[]]
             
             //Identify rejected location within currentRouteLocations
             //and remove it from currentRouteLocations
@@ -914,8 +953,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     break
                 }
             }
-            
          
+            var closestLocationsPerErrandTemp:[[Coordinates]] = [[]]
+            closestLocationsPerErrandTemp.removeAll()
+            
             for var i = 0; i < Static.locationResults.count; i++ {
                 if (Static.locationResults[i].errandTermId == rejected.errandTermId) {
                     Static.locationResults[i].usedPlaceIds.append(placeId)
@@ -924,13 +965,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                     //Get next top locations for rejected errand
                     let closestLocations: [Coordinates] = GetClosestLocationsForErrand(Static.locationResults[i].locationSearchResults!, errandTermId: rejected.errandTermId, errandText: Static.locationResults[i].errandText, excludedPlaceIds: excludedPlaceIds)
                     if (closestLocations.count > 0) {
-                        Static.closestLocationsPerErrand.append(closestLocations)
+                        // Clear out variables:
+                        Static.cachedRoutes[Static.modeOfTransportation] = []
+                        Static.closestLocationsPerErrand.removeAll()
+                        noResults.removeAll()
+                        Static.cachedDirectionsGrouped[Static.modeOfTransportation] = [[]]
+                        
+                        // Add next top closest locations for the rejected errand
+                        closestLocationsPerErrandTemp.append(closestLocations)
                     } else {
                         //No more results, so can't provide a new location
-                        
                         var noresultsAlertController = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.Alert)
                       
-                        if (excludedPlaceIds.count > 0) {
+                        if (excludedPlaceIds.count > 1) {
                             let title: String = "no more alternative locations"
                             let msg: String = "would you like to start over at the top of the list?"
                             noresultsAlertController = UIAlertController(title: title, message: msg, preferredStyle: UIAlertControllerStyle.Alert)
@@ -960,10 +1007,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             
                             noresultsAlertController.addAction(yesAction)
                             noresultsAlertController.addAction(noAction)
-//                            dispatch_async(dispatch_get_main_queue()) {
-//                                self.presentViewController(noresultsAlertController, animated: true, completion: nil)
-//                            }
-                            print("ok like im presenting the fucking alert")
+                            self.presentViewController(noresultsAlertController, animated: true, completion: nil)
                         } else {
                             //Inform user we have no alternative locations to provide
                             let title2: String = "no more alternative locations"
@@ -983,15 +1027,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
                             
                             noresultsAlertController.addAction(okAction)
                             self.presentViewController(noresultsAlertController, animated: true, completion: nil)
+                            return
                         }
                     }
                     
                 } else {
                     //Get top locations for non-rejected 
-                    Static.closestLocationsPerErrand.append(GetClosestLocationsForErrand(Static.locationResults[i].locationSearchResults!,
+                    closestLocationsPerErrandTemp.append(GetClosestLocationsForErrand(Static.locationResults[i].locationSearchResults!,
                         errandTermId: Static.locationResults[i].errandTermId, errandText: Static.locationResults[i].errandText, excludedPlaceIds: Static.locationResults[i].usedPlaceIds))
                 }
             }
+            
+            // Don't want to call any of this until we get user response back:
             
             //Remove route info textview
             if let viewWithTag = self.view.viewWithTag(99) {
@@ -1003,13 +1050,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             
             // Clear all map markers and polylines
             mapView?.clear()
+            // Clear out old polylines from cached variable:
+            Static.cachedPaths[Static.modeOfTransportation] = GMSMutablePath()
+            Static.closestLocationsPerErrand = closestLocationsPerErrandTemp
             
             CreateRoute()
             
-            // Clear out old polylines from cached variable:
-            Static.cachedPaths[Static.modeOfTransportation] = GMSMutablePath()
-            
         } catch {
+            Static.mapErroredOut = true
             DisplayErrorAlert("")
         }
     }
@@ -1021,7 +1069,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
             errorMessage = "we are sorry. it seems a meteorite hit the app at an unexpected pace. please try landing your spaceship and relaunching."
         }
         
-        let alertController = UIAlertController(title: "error", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: "yikes!", message: errorMessage, preferredStyle: UIAlertControllerStyle.Alert)
         
         let tryAgainAction = UIAlertAction(title: "try again", style: UIAlertActionStyle.Default, handler: {(alertAction: UIAlertAction!) in
             self.navigationController?.popToRootViewControllerAnimated(true)
@@ -1073,7 +1121,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
         alert.addAction(cancelAction)
         alert.view.addSubview(loadingIndicator)
         presentViewController(alert, animated: true, completion: nil)
-        
+        loadingAlertIsDisplayed = true
     }
     
     
