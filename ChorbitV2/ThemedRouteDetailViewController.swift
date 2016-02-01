@@ -128,6 +128,8 @@ class ThemedRouteDetailViewController: UIViewController {
                 break
             case 6: controller.errandSelection.removeRange(1...5)
                 break
+            case 7: controller.errandSelection.removeRange(1...6)
+                break
             default: controller.errandSelection.removeLast()
                 break
             }
